@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Hub - Markdown 快捷复制工具</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Outfit', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              200: '#ddd6fe',
+              300: '#c4b5fd',
+              400: '#a78bfa',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              800: '#5b21b6',
+              900: '#4c1d95',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Glow Hover Effect */
+    .glow-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glow-hover:hover {
+      box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.15);
+      transform: translateY(-2px);
+    }
+    .dark .glow-hover:hover {
+      box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.4);
+      transform: translateY(-2px);
+    }
+
+    /* Active Animation */
+    .btn-scale {
+      transition: transform 0.1s ease;
+    }
+    .btn-scale:active {
+      transform: scale(0.95);
+    }
+
+    /* Highlight matching terms in search */
+    mark {
+      padding: 0px 2px;
+      margin: 0px 1px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300 font-sans">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 w-full border-b border-slate-200/50 dark:border-slate-800/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-colors duration-300">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 dark:shadow-indigo-500/10">
+          <i data-lucide="zap" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">Prompt Hub</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Markdown 快捷复制工具</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle -->
+        <button id="theme-toggle" onclick="toggleTheme()" class="btn-scale p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 text-slate-500 dark:text-slate-400" aria-label="切换主题">
+          <i data-lucide="moon" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container (Centered Single Column) -->
+  <main class="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8">
+    <div class="flex flex-col gap-6 w-full">
+      
+      <!-- Search Input Container -->
+      <div class="relative w-full">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+          <i data-lucide="search" class="w-4 h-4"></i>
+        </div>
+        <input type="text" id="search-input"
+          class="w-full pl-10 pr-10 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-2xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-sm placeholder-slate-400 dark:placeholder-slate-500 text-slate-700 dark:text-slate-300 transition-all shadow-sm"
+          placeholder="输入关键词搜索 Prompt..."
+          oninput="onSearchChange(this.value)">
+        <!-- Clear Search button -->
+        <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+          <i data-lucide="x" class="w-4.5 h-4.5"></i>
+        </button>
+      </div>
+
+      <!-- Prompts Dynamic List Container (Space-y-4 for beautiful card spacing) -->
+      <div id="prompts-list-root" class="space-y-4 min-h-[30rem]">
+        <!-- Dynamic cards and headers will be rendered here -->
+      </div>
+
+      <!-- Empty state placeholder -->
+      <div id="empty-state" class="hidden flex flex-col items-center justify-center py-16 px-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-sm">
+        <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-700/50 text-slate-400 dark:text-slate-500 flex items-center justify-center mb-4">
+          <i data-lucide="alert-circle" class="w-8 h-8"></i>
+        </div>
+        <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100 mb-1">未找到匹配项</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 text-center max-w-sm">
+          找不到与您的搜索词相符的 Prompt。请检查拼写，或者清空搜索重试。
+        </p>
+        <button onclick="clearSearch()" class="mt-4 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shadow-md btn-scale">
+          清除搜索
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 bg-white dark:bg-slate-900 transition-colors duration-300 py-6">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-slate-500 dark:text-slate-400 text-center sm:text-left">
+        &copy; 2026 Prompt Hub. 纯本地解析，无网络上传，保护您的隐私。
+      </p>
+      <div class="flex items-center gap-4 text-xs text-slate-400 dark:text-slate-500">
+        <span>基于 Tailwind CSS + Lucide Icons 构建</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-md w-full px-4 sm:px-0"></div>
+
+  <!-- JavaScript logic -->
+  <script>
+    // Embedded Base64 representation of README.md. Will be replaced by server preprocessor.
+    const DEFAULT_MARKDOWN_BASE64 = "IyBQcm9tcHQKCltUT0NdCgotLS0KCj4gWyFUSVBdCj4g54K55Ye76aG16Z2i5bem5LiK6KeS55qEICoqTGlzdCBJY29uKiogKCRcdmRvdHMgXGVxdWl2JCkg5Y2z5Y+v5bGV5byA5a6M5pW055uu5b2V77yM5b+r6YCf6Lez6L2s44CCCgotLS0KCiMjIOKcqCDlm77niYc4S+mrmOa4he+8iOaOqOiNkOmFjeWQiCBBSSBTdHVkaW8gNEsg6YCJ6aG577yJCgpgYGAKMS4g5qC45b+D55uu5qCH77yaCuWwhuS4iuS8oOeahOWbvuWDj+WNh+e6p+S4uuS4gOW8oOe6r+WHgOaXoOeRleOAgei2hemrmOa4heOAgeeUteW9seaEn+eJiOacrO+8jOWQjOaXtuS7pee7neWvueS/neecn+W6puS/neeVmeS4u+S9k+OAggoKMi4g57ud5a+55L+d55yf6KaB5rGC77yaCuS6uueJqeeahOi6q+S7veOAgemdoumDqOino+WJlue7k+aehOOAgeihqOaDheOAgei6q+S9k+Wnv+aAgeOAgeacjeijheOAgemFjemlsOOAgeeOr+Wig+OAgeWPluaZr+ahhuWumuS7peWPiuaVtOS9k+aehOWbvumDveW/hemhu+S/neaMgeWujOWFqOS4jeWPmOOAguS4jeimgeS/ruaUueOAgemHjeaWsOivoOmHiuOAgeabv+aNou+8jOaIluW8leWFpeS7u+S9leaWsOeahOinhuinieWFg+e0oOOAggoKMy4g5b6u6KeC57uG6IqC6YeN5bu65LiO5LyY5YyW77yaCumHjeW7uuW5tuS8mOWMluW+ruinguWxgumdoueahOe7huiKgu+8jOWMheaLrO+8mgooYSkg57K+56Gu55qE6Z2i6YOo6L2u5buTCihiKSDlhbfmnInoh6rnhLblj6/op4Hmr5vlrZTnmoTnnJ/lrp7nmq7ogqTnurnnkIYKKGMpIOagueagueWIhuaYjueahOWPkeS4nQooZCkg5riF5pmw6ICM6YC855yf55qE55y8552bCihlKSDotK/nqb/mlbTlvKDlm77lg4/nmoTlubLlh4DjgIHmuIXmmbDjgIHop6PmnpDlhYXliIbnmoTovrnnvJgKCjQuIOeBr+WFieS4jueUu+mdouWinuW8uu+8mgrkvb/nlKjlubPooaHnmoTjgIHlvbHmo5rnuqfnmoTnlLXlvbHmhJ/nga/lhYnvvIzmnaXlop7lvLrliqjmgIHojIPlm7TjgIHlr7nmr5Tluqblkoznqbrpl7TnurXmt7HmhJ/jgIIKYGBgCgotLS0KCiMjIOi9rOS9jueUu+i0qOWPpOaXqea4uOaIj+W7uuaooQoKYGBgCuWwhueFp+eJh+iwg+aVtOS4uiBTb3VyY2XlvJXmk47vvIjotbfmupDlvJXmk47vvInliJ3ku6Ppo47moLzvvJoKLSAzROW7uuaooe+8mumHh+eUqOS9juWkmui+ueW9ou+8iExvdy1Qb2x577yJ5qih5Z6LCi0g5YWJ5b2x5pWI5p6c77ya5qih5ouf5pep5pyf5byV5pOO54m55pyJ55qE5re35Lmx44CB55Sf56Gs5YWJ5b2xCi0g5p2Q6LSo6LS05Zu+77ya5L2/55So5L2O5YiG6L6m546H77yITG93LVJlc++8iee6ueeQhgotIOinhuiniemjjuagvO+8muaooeS7v+OAiuWNiuadoeWRveOAi++8iEhhbGYtTGlmZe+8ieaIlgotIEdhcnJ5J3NNb2Qg55qE5pep5pyf6KeG6KeJ6LSo5oSfCmBgYAoKLS0tCgojIyBMTE0g5oC757uT5LiK5paH5Lul5o6l5Yqb5a+56K+dCgpgYGAK6K+35Z+65LqO5LiL6Z2i5o+Q5L6b55qE5a6M5pW05a+56K+d5Y6G5Y+y77yM55Sf5oiQ5LiA5p2h5Y+v55u05o6l55So5L2c5paw5a+56K+d5byA5aS055qE55So5oi35raI5oGv44CCCuimgeaxgu+8mgotIOS7peesrOS4gOS6uuensOKAnOaIkeKAneeahOWPo+WQu+iHqueEtuWPmei/sO+8jOa4heaZsOS6pOS7o+WvueivneiDjOaZr+OAgeW3suiuqOiuuueahOWFs+mUruWGheWuueOAgeW3suWBmuWHuueahOWGs+WumuOAgeW9k+WJjei/m+WxleWSjOW+heino+WGs+eahOmXrumimOOAggotIOS/oeaBr+imhuebluimgei2s+Wkn+WujOaVtO+8jOS9v+aWsOWvueivneS4reeahOWKqeaJi+S7hemYheivu+i/meadoea2iOaBr+WwseiDveWujOWFqOaOjOaPoeS4iuS4i+aWh++8jOaXoOe8neaOpee7reWvueivneOAggotIOWPqui+k+WHuui/meadoea2iOaBr++8jOS4jeimgea3u+WKoOS7u+S9leino+mHiuOAgeagh+mimOaIlumineWkluWGheWuueOAggoK5a+56K+d5Y6G5Y+y77yaCu+8iOivt+WcqOatpOWkhOeymOi0tOWujOaVtOeahOWvueivneiusOW9le+8iQpgYGAKCi0tLQojIyDlm77niYfovazop4bpopEgIzEKCmBgYAotIOW4ruaIkeeUn+aIkOS4gOS4quinhumike+8muWktOWPkeacieWwj+W5heW6pueahOmjmOWKqOaViOaenO+8jOi6q+S9k+S4jeimgeaRhuWKqO+8jOi6q+S9k+S4jeimgeaRh+aZg++8jOWPr+S7pei9u+W+ruecqOecvO+8jOS4jeimgeWKqOWYtOW3tO+8jOmVnOWktOWPr+S7peWwj+W5heW6pueahOaRh+aZg++8jOinhumikeaXtumVv+W/hemhu+W7tumVvyAxNSDnp5LjgILmr5TkvosgMTY6OeOAggpgYGAKCi0tLQoKIyMg5Zu+54mH6L2s6KeG6aKR77yI5Lq654mp77yJICMyCgpgYGAKLSDluK7miJHlsIbkuIrlm77nmoTkurrniannlJ/miJDkuIDkuKrop4bpopE6Ci0g6Z2i6YOoOiBgOEvotoXlhpnlrp7pnaLpg6jlu7rmqKHvvIzmn5TogqTmu6TplZwo5by65bqmNDAlKSzombnohpzliqjmgIHpq5jlhYnov73ouKpgCiAg55yo55y85Y+C5pWwOiBgMS41MuenkuecqOecvOWRqOacnyjor6/lt67CsTAuMXMpLOS4iuecvOedkeS4i+WeguinkuW6pjE1wrAs5LiL55y8552R5b6u6aKk6aKR546HMC41SFpgCi0g5aS05Y+R57O757ufOiBgMjAwMCvlj5HkuJ3ni6znq4vliqjlipvlrabmqKHmi5/vvIzlj5HmoLnlm7rlrprns7vmlbAwLjk1LOWPkeaioumjmOWKqOW5heW6pjgtMTJjbWAKClvniannkIbmqKHmi5/Ct+mjjuWcuuiuvue9rjogYOmiiOmDqOWQjuaWueeCueeKtumjjua6kCjpo47pgJ8xLjJtL3Ms5rmN5rWB5by65bqmNiUpYAotIOiho+eJqemUgeWumjogYOacjeijhemUmueCueWImuaAp+ezu+aVsOiuvuS4ujkuOCzluIPmlpnlvLnmgKfmqKHph4/ljYfoh7MyMDBHUGFgCgrop4bop5LkuI3liqjvvIzlj6rorqnlpLTlj5Hpo5jojaHvvIznnLznnZsxLjXnp5LnnKjnnLzkuIDmrKHvvIzliqjkvZzlhbbku5bnmoTpg73kuI3liqjjgIIKYGBgCgotLS0KCgojIyDlm77niYdJbnBhaW505LiH6YeR5rK5CgpgYGAKLSDkuI3mlLnlj5jnlLvpnaLkuK3kurrniannmoTnu4boioLlkozmnoTlm77vvIzkurrniankvY3nva7kuI3lj5jvvIzljp/lm77mr5TkvovvvIzlnKjmraTln7rnoYDkuIrorqnnlLvpnaLjgIIKYGBgCgotLS0KCiMjIOiHqueEtuivreiogOS8mOWMluS4uklucGFpbnQgUHJvbXB077yI6L6T5Ye6566A5L2T5Lit5paH77yJCgpgYGAKIyBSb2xlOiDlm77lg4/lsYDpg6jph43nu5jmjIfku6TluIggKEFJIElucGFpbnRpbmcgU3BlY2lhbGlzdCkKCiMjIENvbnRleHQ6CgrnlKjmiLfmraPlnKjkvb/nlKggQUkg57uY5Zu+5bel5YW377yI5aaCIFN0YWJsZSBEaWZmdXNpb24sIE1pZGpvdXJuZXksIEFkb2JlIEZpcmVmbHnvvInnmoTlsYDpg6jph43nu5jlip/og73jgILnlKjmiLfpgJrov4fliJLor40gYHtzZWxlY3Rpb259YCDooajovr7kuoblr7nlm77niYfnibnlrprljLrln5/nmoTkv67mlLnmg7Pms5XjgIIKCiMjIFRhc2s6Cgror7flsIYgYHtzZWxlY3Rpb259YCDkuK3nmoToh6rnhLbor63oqIDmj4/ov7Dph43mnoTkuLrkuIDmrrXnm67moIfmuIXmmbDjgIHnu4boioLkuLDlr4zjgIHmmJPkuo4gQUkg55CG6Kej55qEKirnroDkvZPkuK3mlocqKumHjee7mOaPkOekuuivjeOAggoKIyMgU3RyYXRlZ3k6CgoxLiAqKuWunuS9k+WFt+ixoeWMlioq77ya5bCG5qih57OK55qE6K+N5rGH77yI5aaC4oCc5Y+Y5aW955yL4oCd77yJ6L2s5YyW5Li65YW35L2T55qE6KeG6KeJ5YWD57Sg77yI5aaC4oCc57K+6Ie055qE6JW+5Lid57q555CG4oCd44CB4oCc5p+U5ZKM55qE5LiB6L6+5bCU5pWI5bqU4oCd77yJ44CCCjIuICoq546v5aKD6J6N5ZCIKirvvJrlnKggUHJvbXB0IOS4reWKoOWFpeaPj+i/sOWFieW9seOAgemAj+inhuWSjOi+uee8mOihlOaOpeeahOivjeaxh++8jOehruS/nemHjee7mOWMuuWfn+S4jeeqgeWFgOOAggozLiAqKue7k+aehOWMluaPj+i/sCoq77ya5oyJ54Wn4oCc5Li75L2T54m55b6BICsg5p2Q6LSo57uG6IqCICsg5YWJ5b2x546v5aKDICsg6aOO5qC85a+56b2Q4oCd55qE6YC76L6R6YeN5YaZ44CCCgojIyBDb25zdHJhaW5zOgoKLSAqKuS7hemZkOS4reaWhyoq77ya5omA5pyJ6L6T5Ye655qE5o+Q56S66K+N5YaF5a655b+F6aG75L2/55So566A5L2T5Lit5paH44CCCi0gKirljrvlj6Por63ljJYqKu+8muWJlOmZpOKAnOivt+W4ruaIkeKAneOAgeKAnOaIkeaDs+aKiuKAneetieaXoOaEj+S5ieWJjee8gO+8jOebtOaOpei+k+WHuuinhuinieaPj+i/sOOAggotICoq5by66LCD6J6N5ZCI5bqmKirvvJroh6rliqjmt7vliqDlpoLigJzoh6rnhLbov4fmuKHigJ3jgIHigJzkuI7og4zmma/lhYnlvbHnu5/kuIDigJ3nrYnlop7lvLror43jgIIKCiMjIE91dHB1dCBGb3JtYXQ6Cgror7fmjInku6XkuIvmoLzlvI/ovpPlh7rvvJoKCiMjIyDwn46oIOmHjee7mOaMh+S7pCAoUG9zaXRpdmUgUHJvbXB0KQoKW+WcqOatpOWkhOeUn+aIkOmHjeaehOWQjueahOS4reaWh+WFs+mUruivjeWSjOaPj+i/sOefreWPpV0KCiMjIyDwn5qrIOi0n+WQkee6puadnyAoTmVnYXRpdmUgUHJvbXB0KQoKW+mSiOWvueivpeS/ruaUueWcuuaZr+W6lOmBv+WFjeWHuueOsOeahOWFg+e0oO+8jOWmgu+8mui+uee8mOeUn+ehrOOAgeavlOS+i+Wkseiwg+OAgeadguiJsl0KCiMjIyDwn5KhIOS4k+WutuW7uuiurgoKW+eugOimgeivtOaYjuWcqOmHjee7mOaXtumcgOimgeazqOaEj+eahOmBruaMoeWFs+ezu+aIlumHjee7mOW8uuW6puiuvue9rl0KCi0tLQoKKirnlKjmiLfljp/lp4vpnIDmsYIqKjogIntzZWxlY3Rpb259IgoqKumHjeWGmeWQjueahOS4reaWh+mHjee7mOaMh+S7pCoqOgpgYGAKCi0tLQoKIyMg6buR55m96ICB54Wn54mH5L+u5aSN5LiK6ImyCgpgYGAKIyDlm77lg4/kv67lpI0KCiMjIDEuIOaguOW/g+ebruaghyAoQ29yZSBPYmplY3RpdmUpCuWwhuS4iuS8oOeahOWbvuWDj+WNh+e6p+S4uuS4gOS4que6r+WHgOaXoOeRleOAgei2hemrmOa4heOAgeeUteW9seaEn+eJiOacrOOAguWcqOWOu+mZpOaJgOacieeJqeeQhuaNn+S8pO+8iOaui+aNn+OAgeaooeeziuOAgeaWkemps+OAgeejqOiKse+8ieW5tuWujOaIkOm7keeZveS4iuiJsueahOWQjOaXtu+8jOS7pee7neWvueS/neecn+W6puS/neeVmeS4u+S9k+OAggoKIyMgMi4g57ud5a+55L+d55yf6KaB5rGCIChTdHJpY3QgRmlkZWxpdHkgUmVxdWlyZW1lbnRzKQrkurrniannmoTouqvku70oSWRlbnRpdHkp44CB6Z2i6YOo6Kej5YmW57uT5p6EKEZhY2lhbCBBbmF0b215KeOAgeihqOaDhShFeHByZXNzaW9ucynjgIHouqvkvZPlp7/mgIEoQm9keSBQb3N0dXJlKeOAgeacjeijhShDbG90aGluZynjgIHphY3ppbAoQWNjZXNzb3JpZXMp44CB546v5aKDKEVudmlyb25tZW50KeOAgeWPluaZr+ahhuWumihGcmFtaW5nKeS7peWPiuaVtOS9k+aehOWbvihDb21wb3NpdGlvbinpg73lv4Xpobvkv53mjIHlrozlhajkuI3lj5jjgILkuKXnpoHkv67mlLnjgIHph43mlrDor6Dph4rjgIHmm7/mjaLvvIzmiJblvJXlhaXku7vkvZXmlrDnmoTop4bop4nlhYPntKDjgIIKCiMjIDMuIOWIhumYtuauteS/ruWkjeS4juS4iuiJsuW3peS9nOa1gSAoU3RlcC1ieS1TdGVwIFdvcmtmbG93KQoKIyMjIOmYtuauteS4gO+8mueJqeeQhuS/ruWkjeS4jue7k+aehOmHjeW7uiAoUGh5c2ljYWwgUmVzdG9yYXRpb24pCiogKirmtojpmaTmrovmjZ/kuI7mlpHpqbMqKu+8mueyvuWHhuivhuWIq+W5tua2iOmZpOWbvuWDj+S4iueahOaJgOacieaSleijguOAgeegtOaNn+OAgemcieeCueOAgeaxoea4jeS7peWPiuaWkemps+eXlei/ueOAggoqICoq56Oo6Iqx5LiO5YiS55eV5L+u5aSNKirvvJrml6Dnl5Xkv67lpI3nlLvpnaLkuK3nmoTliJLnl5XjgIHmkanmk6bnl5Xov7nkuI7niannkIbno6jmjZ/vvIzmoLnmja7lkajlm7TlkIjnkIbnmoTnurnnkIblkoznu5PmnoTov5vooYzml6DnvJ3ooaXlhajjgIIKKiAqKui+ueeVjOWujOaVtOaApyoq77ya56Gu5L+d5Zu+5YOP6L6557yY5ZKM5Li75L2T6L2u5buT5Zyo5L+u5aSN5ZCO5L+d5oyB57ud5a+555qE5Yeg5L2V5q2j56Gu5oCn44CCCgojIyMg6Zi25q615LqM77ya6buR55m95LiK6Imy5LiO6Imy5b2p5L+d55yfIChDb2xvcml6YXRpb24pCiogKirnnJ/lrp7mhJ/kuIroibIqKu+8muWfuuS6juWOhuWPsuWHhuehruaAp+S4jueOsOWunumAu+i+kei/m+ihjOWIhuWxguS4iuiJsuOAguaLkue7nemrmOmlseWSjOW6puaIlueOsOS7o+aEn+i/h+W8uueahOa7pOmVnOiJsuW9qeOAggoqICoq57K+5YeG6IKk6Imy5LiO5p2Q6LSoKirvvJrotYvkuojnmq7ogqToh6rnhLblgaXlurfnmoTooYDoibLkuI7lhYnms73vvIznsr7lh4bov5jljp/mnI3oo4XvvIjlpoLliLbmnI3jgIHlkaLmlpnjgIHkuJ3nu7jvvInkuI7njq/looPlu7rnrZHnmoTljp/mnKzmnZDotKjoibLlvanjgIIKKiAqKuiJsuW9qeWSjOiwkOW6pioq77ya56Gu5L+d5LiK6Imy5ZCO55qE5pW05L2T6Imy6LCD6Ieq54S26J6N5ZCI77yM5pyN5Yqh5LqO55S15b2x5oSf55qE6KeG6KeJ5ZGI546w44CCCgojIyMg6Zi25q615LiJ77ya5Y675qih57OK5LiO5b6u6KeC57uG6IqC6YeN5bu6IChEZS1ibHVycmluZyAmIE1pY3JvLWRldGFpbHMpCiogKirpq5jnuqfljrvmqKHns4oqKu+8mua2iOmZpOmVnOWktOaooeeziuOAgei/kOWKqOaooeeziuaIluW5tOS7o+WOn+WboOWvvOiHtOeahOeUu+mdouino+aekOWKm+S4jei2s++8jOS9v+WbvuWDj+i+uee8mOW5suWHgOOAgea4heaZsOOAggoqICoq5b6u6KeC57uG6IqC6YeN5bu6KirvvJoKICAoYSkg57K+56Gu55qE6Z2i6YOo6L2u5buT5LiO5riF5pmw55qE5LqU5a6Y57q/5p2h44CCCiAgKGIpIOWFt+acieiHqueEtuWPr+ingeavm+WtlOOAgee7huiFu+S4lOWvjOacieWRvOWQuOaEn+eahOecn+WunuearuiCpOe6ueeQhu+8jOS4peemgeWHuueOsOWhkeaWmeaEn+aIlui/h+W6puejqOearuOAggogIChjKSDmoLnmoLnliIbmmI7jgIHotKjmhJ/oh6rnhLbnmoTkuJ3kuJ3lj5HkuJ3jgIIKICAoZCkg5riF5pmw6ICM6YC855yf55qE55y8552b77yM5YyF5ZCr6Kej5p6Q5YWF5YiG55qE6Jm56Iac57uG6IqC5LiO6Ieq54S255qE556z5a2U6auY5YWJ44CCCiAgKGUpIOi0r+epv+aVtOW8oOWbvuWDj+eahOW5suWHgOOAgea4heaZsOOAgeino+aekOWFheWIhueahOi+uee8mOOAggoKIyMjIOmYtuauteWbm++8mueBr+WFieS4jueUu+mdoueUteW9seaEn+WinuW8uiAoQ2luZW1hdGljIExpZ2h0aW5nKQoqICoq5b2x5qOa57qn5YWJ5b2xKirvvJrlvJXlhaXlubPooaHnmoTjgIHlvbHmo5rnuqfnmoTnlLXlvbHmhJ/nga/lhYnvvIzph43mlrDmoKHlh4bnlLvpnaLnmoTliqjmgIHojIPlm7QoRHluYW1pYyBSYW5nZSnkuI7lr7nmr5TluqbjgIIKKiAqKuepuumXtOe6tea3seaEnyoq77ya6YCa6L+H57uG6IW755qE5Yqg5rex5LiO5YeP5rehKERvZGdlICYgQnVybinlop7lvLrkuLvkvZPnmoTnq4vkvZPmhJ/vvIzmi4nlvIDkuLvkvZPkuI7og4zmma/nmoTlvq7lvLHnqbrpl7TlsYLmrKHjgIIKKiAqKuacgOe7iOiwg+iJsioq77ya5Zyo5Lil5qC86J6N5YWl5Y6f5Zu+546v5aKD55qE5Z+656GA5LiK6L+b6KGM5b6u5aaZ55qE55S15b2x5oSf6Imy5b2p5YiG57qn77yM5L2/5pyA57uI5Zu+5YOP5ZGI546w5Ye657qv5YeA44CB6auY57qn44CB5YW85YW35Y6G5Y+y5Y6a6YeN5oSf5LiO546w5Luj6LaF6auY5riF6LSo5oSf55qE6KeG6KeJ54m55pWI44CCCmBgYAoKLS0tCgojIyDwn5qrTGVnYWN577ya5Lul5LiLIFByb21wdCDnlJ/miJDlm77niYfmlYjmnpzmnInpmZDvvIzkuI3lho3mjqjojZDkvb/nlKjjgIIKCiMjIyDoh6rnhLbor63oqIDkvJjljJbkuLpJbnBhaW50IFByb21wdO+8iOi+k+WHuuiLseaWh++8iQoKYGBgCiMgUm9sZTogQUkg6KeG6KeJ6Im65pyv5oyH5Luk5LiT5a62IChWaXN1YWwgSW5wYWludCBFbmdpbmVlcikKCiMjIENvbnRleHQ6CueUqOaIt+ato+WcqOi/m+ihjOWbvuWDj+WxgOmDqOmHjee7mO+8iElucGFpbnRpbmfvvInmiJbnvJbovpHjgILnlKjmiLfpgInkuK3nmoTmloflrZcgYHtzZWxlY3Rpb259YCDooajovr7kuobku5bku6zluIzmnJvlr7nlm77niYfokpnniYjljLrln5/ov5vooYznmoTkv67mlLnmhI/lm77jgIIKCiMjIFRhc2s6Cuivt+WwhiBge3NlbGVjdGlvbn1gIOS4reeahOiHqueEtuivreiogOaPj+i/sOi9rOWMluS4uuS4gOauteeyvuWHhueahOOAgemdouWQkSBBSSDnu5jlm77mqKHlnovnmoTmj5DnpLror43vvIhQcm9tcHTvvInjgIIKCiMjIE1ldGhvZG9sb2d5OgoxLiAqKuWFg+e0oOmHjeaehCoq77ya5bCG5qih57OK55qE5Yqo6K+N6L2s5YyW5Li65YW35L2T55qE5ZCN6K+N5ZKM5b2i5a656K+N5o+P6L+w44CCCjIuICoq6aOO5qC85a+56b2QKirvvJroh6rliqjooaXlhYXkv53mjIHljp/lm77po47moLzkuIDoh7TmgKfnmoTmnK/or63vvIjlpoLvvJpwaG90b3JlYWxpc3RpYywgbWF0Y2hpbmcgdGV4dHVyZSwgZ2xvYmFsIGlsbHVtaW5hdGlvbu+8ieOAggozLiAqKuWQpuWumue6puadnyoq77ya6K+G5Yir55So5oi35LiN5oOz55yL5Yiw55qE5YaF5a6577yM6L2s5YyW5Li6IE5lZ2F0aXZlIFByb21wdCDopoHntKDjgIIKNC4gKirnu5PmnoTljJbovpPlh7oqKu+8muaMieeFpyBb5Li75L2TXSArIFvnu4boioIv5p2Q6LSoXSArIFvlhYnlvbEv5rCb5Zu0XSArIFvmioDmnK/mjIfku6RdIOeahOmAu+i+keaOkuWIl+OAggoKIyMgUHJvbXB0IENvbnN0cnVjdGlvbiBSdWxlczoKLSAqKuaWsOWinihBZGRpdGlvbikqKjog5o+P6L+w54mp5L2T55qE5YW35L2T54m55b6B77yM56Gu5L+d5YW24oCc5Z2Q6JC94oCd5Zyo546v5aKD5Lit44CCCi0gKirmm7/mjaIoUmVwbGFjZW1lbnQpKio6IOaPj+i/sOaWsOeJqeS9k++8jOW5tuW8uuiwg+S4juWRqOWbtOeOr+Wig+eahOi+uee8mOiejeWQiOOAggotICoq6aOO5qC85YyWKFN0eWxpemF0aW9uKSoqOiDlpoLmnpznlKjmiLfmj5DliLDpo47moLzvvIzkvb/nlKjlhbfkvZPnmoToibrmnK/mnK/or63vvIjlpoLvvJpjeWJlcnB1bmssIG9pbCBwYWludGluZyBzdHlsZe+8ieOAggotICoq566A5rSB5oCnKio6IOS8mOWFiOS9v+eUqOefreivreWSjOWFs+mUruivje+8iFRhZy1iYXNlZO+8ie+8jOiAjOmdnuWujOaVtOeahOmVv+WPpeWtkOOAggoKIyMgT3V0cHV0IEZvcm1hdDoK6K+355u05o6l6L6T5Ye65LyY5YyW5ZCO55qEIFByb21wdO+8jOagvOW8j+WmguS4i++8mgotICoqUG9zaXRpdmUgUHJvbXB0Kio6ICjnlJ/miJDnmoToi7HmloflhbPplK7or43vvIznlKjkuo7ph43nu5gpCi0gKipOZWdhdGl2ZSBQcm9tcHQqKjogKOS4uuS6humYsuatoumHjee7mOWMuuWfn+W0qeWdj+iAjOW7uuiurueahOi0n+mdouivjSkKLSAqKlRlY2huaWNhbCBUaXAqKjogKOeugOimgeivtOaYjumHjee7mOaXtueahOmHjee7mOW8uuW6piBEZW5vaXNpbmcgc3RyZW5ndGgg5bu66K6u5YC8KQoKLS0tCioq5Y6f5aeL5oSP5Zu+Kio6ICJ7c2VsZWN0aW9ufSIKKirph43nu5jkvJjljJbmjIfku6QqKjoKYGBgCgotLS0KCiMjIyDlhrfoibLmoqbmoLjmlYjmnpwKCmBgYAojIyMg8J+OqCDph43nu5jmjIfku6QgKFBvc2l0aXZlIFByb21wdCkK55S15b2x57qn6JOd57u/6Imy5Li76Imy6LCD77yM6Z2S5pil55a855eb5pWF5LqL5rCb5Zu077yM5Y6L5oqR56qS5oGv5oSf77yM6K6w5b+G5bSp5Z2P56C056KO55qE6KeG6KeJ5pWI5p6c77yM5re35Lmx5p+U5ZKM6Jma5YyW5aSE55CG77yM6K+h5byC5p+U5ZKM5YWJ5pmV54K557yA77yM5LiN6KeE5YiZ6ZWc5aS05omt5puy55W45Y+Y77yM5qKm5qC46aOO5qC85rCb5Zu05oSf77yM5qKm5aKD55aP56a76ZmM55Sf5oSf77yM5Lqu5bqm6L275b6u6ZmN5L2O77yM57uG6IqC5a6M5pW05L+d55WZ77yM6Imy5b2p6Ieq54S26L+H5rih77yM5LiO5pW05L2T5YWJ5b2x57uf5LiA6J6N5ZCI77yM55S76Z2i5q+U5L6LNDoz77yM6L6557yY6KGU5o6l6Ieq54S2CgojIyMg8J+aqyDotJ/lkJHnuqbmnZ8gKE5lZ2F0aXZlIFByb21wdCkK55S76Z2i6L+H5pqX77yM57uG6IqC5Lii5aSx77yM6L6557yY55Sf56Gs56qB5YWA77yM6Imy5b2p5pat5bGC77yM5YWJ5pmV5Yi655y85p2C5Lmx77yM55W45Y+Y6L+H5bqm5aSx55yf77yM5q+U5L6L5aSx6LCD77yM5p2C6Imy5Zmq54K577yM5YWJ5b2x5Ymy6KOCCgojIyMg8J+SoSDkuJPlrrblu7rorq4K6YeN57uY5pe25bu66K6u5bCG6YeN57uY5by65bqm6LCD6Iez5Lit562J77yM5LyY5YWI5L+d55WZ5Y6f5Zu+5Li75L2T6L2u5buT5LiO57uG6IqC77yM5LuF5a+56Imy5b2p44CB5YWJ5b2x5ZKM55W45Y+Y5pWI5p6c6L+b6KGM5bGA6YOo5L+u5pS577yM6YG/5YWN6Jma5YyW5LiO5YWJ5pmV6KaG55uW5qC45b+D55S76Z2i5a+86Ie05Li75L2T5qih57OK77yM56Gu5L+d6JOd57u/6Imy6LCD5LiO5Y6f5Zu+5YWJ5b2x6Ieq54S26J6N5ZCI5LiN56qB5YWA44CCCmBgYAoKLS0tCgojIyMg5ri45oiP5Lq654mp5Y6755SyICMxCgpgYGAKIyMjIPCfjqgg6YeN57uY5oyH5LukIChQb3NpdGl2ZSBQcm9tcHQpCioq5qC45b+D5Li75L2TKirvvJoKKiAqKui6q+S9k+mHjeWhkSoq77ya55S35oCn6Lqv5bmy77yM5p6B6Ie05YGl5aOu55qE6IKM6IKJ6L2u5buT77yM5Y6a5a6e5aSn5Z2X55qE6IO46IKM5LiO6IW56IKM77yM6KaG55uW6IyC5a+G5LiU57KX54q355qE6ZuE5oCn6IO45q+b5LiO6IW56YOo5L2T5q+b77yM55qu6IKk6LSo5oSf6auY5riF5LiU5a+M5pyJ5YWJ5rO944CCCiogKirmnI3oo4Xlj5jmm7QqKu+8muS4i+WNiui6q+abtOaNouS4uuW3peijheWNoeWFtuiJsuefreijpO+8jOmdouaWmee6ueeQhuecn+Wunu+8jOW4puacieiHqueEtueahOiktueaseaEn+OAggoKKirnu4boioLkv53nlZnkuI7ooZTmjqUqKu+8mgoqICoq6KOF5aSH5Zu65YyWKirvvJrlroznvo7kv53nlZnlpLTmiLTlvI/ogLPmnLrjgIHmiYvpg6jmiJjmnK/miYvlpZfjgIHohZXpl7TmiYvooajku6Xlj4rmiYvkuK3nmoTmnqrmorDmrablmajjgIIKKiAqKuiFsOmDqOeKtuaAgSoq77ya5L+d5oyB5Y6f5pyJ55qE5oiY5pyv6IWw5bim5Y+K5oyC6L296KOF5aSH77yI5aaC5by55aS55YyF44CB5oyC5Lu277yJ5Y6f5bCB5LiN5Yqo77yM5L+d55WZ6IW/6YOo5aSW5oyC5oiY5pyv6KOF5aSH5LiO5p6q5aWX44CCCiogKirnlLvotKjlop7lvLoqKu+8mui2hemrmOa4heeUu+i0qO+8jDhr5YiG6L6o546H77yM5p6B6Ie057uG6IqC5L+u6aWw77yM55qu6IKk5q+b5a2U5Y+v6KeB77yM5YWJ5b2x6Ieq54S26L+H5rih77yM56e76Zmk5Lu75L2V5rC05Y2w44CCCgoqKueOr+Wig+iejeWQiCoq77yaCiogKirlhajlsYDnu5/kuIAqKu+8mueOr+Wig+WFieW9seS4juS6uueJqei+uee8mOiHqueEtuiejeWQiO+8jOS/neaMgeWOn+WbvuaehOWbvuOAgemAj+inhuWFs+ezu+S7peWPiuS6uueJqeWKqOaAgeWujOWFqOS4gOiHtO+8jOS4gei+vuWwlOaViOW6lO+8jOeUteW9see6p+WFieaViOOAggoKLS0tCgojIyMg8J+aqyDotJ/lkJHnuqbmnZ8gKE5lZ2F0aXZlIFByb21wdCkKKOS4iui6q+iho+eJqeaui+S9mSnvvIwo6Ziy5by56IOM5b+D5q6L5L2ZKe+8jCjmqKHns4rnmoTogozogonnur/mnaEp77yMKOeogOeWj+eahOS9k+avmynvvIwo5bmz5ruR55qE55qu6IKkKe+8jCjnlJ/noaznmoTmiqDlm77ovrnnvJgp77yMKOijheWkh+e8uuWksSnvvIwo6ZW/6KOkKe+8jCjmlLnlj5jliqjkvZwp77yMKOawtOWNsCnvvIwo5paH5a2XKe+8jCjkvY7nlLvotKgp77yMKOavlOS+i+Wkseiwg+eahOaJi+aMhynjgIIKCi0tLQoKIyMjIPCfkqEg5LiT5a625bu66K6uCjEuICAqKuWIhuatpemHjee7mCoq77ya5bu66K6u5YWI6L+b6KGM4oCc5Y676KGjL+iCjOiCiemHjeWhkeKAneeahOWxgOmDqOmHjee7mO+8jOeos+WumuWQjuWGjei/m+ihjOKAnOmVv+ijpOWPmOefreijpOKAneeahOS/ruaUue+8jOS7pemYsuatoiBBSSDlnKjlpITnkIblpI3mnYLoo4XlpIfooZTmjqXml7bkuqfnlJ/pgLvovpHmt7fkubHjgIIKMi4gICoq6YeN57uY5by65bqmIChEZW5vaXNpbmcgU3RyZW5ndGgpKirvvJoKICAgICog5L+u5pS55LiK6Lqr6IKM6IKJ5Y+K5Y676KGj5Yy65Z+f5pe277yM5bu66K6u5bCG5by65bqm6K6+5a6a5ZyoICoqMC42NSAtIDAuNzUqKu+8jOe7mSBBSSDotrPlpJ/nmoTnqbrpl7TnlJ/miJDogozogonkuI7kvZPmr5vnurnnkIbjgIIKICAgICog5L+u5pS56KOk5a2Q5Yy65Z+f5pe277yM5by65bqm5bu66K6u5ZyoICoqMC41IC0gMC42KirvvIzku6Xnoa7kv53ohbDluKblj4rlhbbmjILovb3oo4XlpIfnmoTlvaLnirbkuI3ooqvmia3mm7LjgIIKMy4gICoq6YGu572p5aSE55CGKirvvJrmtoLmirnpga7nvanml7bvvIzor7fnsr7noa7pgb/lvIDmiYvlpZfjgIHmiYvooajjgIHogLPmnLrku6Xlj4rohbDluKbkuIrnmoTlsI/phY3ku7bvvIzlubblnKjovrnnvJjnlZnlh7ogNS0xMCDlg4/ntKDnmoTnvr3ljJblgLzvvIznoa7kv53mlrDnlJ/miJDnmoTnmq7ogqTkuI7ljp/mnInoo4XlpIflrp7njrDigJzml6DnvJ3ooZTmjqXigJ3jgIIKYGBgCgotLS0KCiMjIyDoh6rmi43mlYjmnpwgIzEKCmBgYAojIyMg8J+OqCDph43nu5jmjIfku6QgKFBvc2l0aXZlIFByb21wdCkKNDQtNDjlsoHnnJ/kurrlvaLosaHvvIzmiYvmnLrliY3nva7oh6rmi43otKjmhJ/vvIzpmo/mhI/ml6DmhI/or4bmipPmi43lv6vnhafvvIzml6DliLvmhI/mnoTlm77kuI7muIXmmbDkuLvkvZPvvIzlm6Dovbvlvq7np7vliqjkuqfnlJ/oh6rnhLbliqjmgIHmqKHns4rvvIzlrqTlhoXlsYXlrrbog4zmma/vvIzmn5Tlkozml6XluLjlrqTlhoXlhYnlvbHvvIzpnaLpg6jnu4boioLnnJ/lrp7oh6rnhLbvvIznmq7ogqTnurnnkIbnu4bohbvvvIzovrnnvJjoh6rnhLbov4fmuKHvvIzkuI7og4zmma/lhYnlvbHnu5/kuIDvvIznnJ/lrp7og7bniYflmarngrnvvIzmiYvmnLrmi43mkYTmmpfop5LvvIznlJ/mtLvljJbnpZ7mgIHvvIzml6BBSeeUn+aIkOeXlei/ue+8jDk6MTbnq5blsY/mr5TkvovvvIznlLvpnaLnnJ/lrp7oh6rnhLbkuI3liLvmhI8KCiMjIyDwn5qrIOi0n+WQkee6puadnyAoTmVnYXRpdmUgUHJvbXB0KQpBSeeUn+aIkOaEn++8jOaehOWbvuW3peaVtOWIu+aEj++8jOS4u+S9k+a4heaZsOmUkOWIqe+8jOi+uee8mOeUn+ehrOWJsuijgu+8jOeUu+mdoui/h+W6pua4heaZsO+8jOavlOS+i+Wkseiwg++8jOiJsuW9qeWkseecn++8jOadguiJsuWZqueCuei/h+Wkmu+8jOS6lOWumOWkseecn++8jOiZmuWBh+i0qOaEn++8jOi/h+W6puejqOearu+8jOiDjOaZr+iZmuWMluW8guW4uAoKIyMjIPCfkqEg5LiT5a625bu66K6uCumHjee7mOWMuuWfn+mcgOWujOaVtOimhuebluS6uueJqeS4u+S9k+WPiuWRqOi+ueiHquaLjeWMuuWfn++8jOmHjee7mOW8uuW6puW7uuiuruiwg+iHszAuNi0wLjfvvIzkv53nlZnljp/nlLvpnaLln7rnoYDlhYnlvbHvvIzpgb/lhY3lrozlhajopobnm5blr7zoh7TooZTmjqXnqoHlhYDvvIzliqjmgIHmqKHns4rmlYjmnpzkuI3lrpzov4fluqbvvIzpmLLmraLnlLvpnaLns4rljJbkuKXph43lpLHljrvnnJ/lrp7mhJ/jgIIKYGBgCgotLS0KCiMjIyDkurrnianljrvnlLIgIzIKCmBgYAojIyMg8J+OqCDph43nu5jmjIfku6QgKFBvc2l0aXZlIFByb21wdCkKKirkuLvkvZPnibnlvoEqKu+8mgoqICoq55yf5Lq65YaZ5a6e5YyWKirvvJo0NeWygeS4reW5tOeUt+aAp++8jOaegeWFt+ecn+WunuaEn+eahOearuiCpOe6ueeQhu+8jOmdoumDqOW4puaciee7huW+rueahOavm+WtlOOAgeeasee6ueS4juWygeaciOeXlei/ue+8jOecn+WunueahOees+WtlOWPjeWFie+8jOS/neeVmeWOn+acieeahOmdoumDqOmHkeWxnumlsOWTgeOAggoqICoq5by65aOu6Lqv5bmyKirvvJrotaToo7jkuIrouqvvvIzmnKrnqb/nnYDku7vkvZXooaPnianvvIzlrr3pmJTkuJTljprlrp7nmoTog7jogozkuI7ohbnogozvvIzmnoHlhbflipvph4/mhJ/nmoTogozogonnu7TluqbvvIzopobnm5bmnoHlhbbmtZPlr4bjgIHph47mgKfkuJToh6rnhLbnmoTpu5HoibLog7jmr5vkuI7ohbnpg6jkvZPmr5vjgIIKKiAqKuacjeijheWPmOabtCoq77ya5LiL5Y2K6Lqr5pu05o2i5Li66LSo5oSf6ZqP5py655qE57qv6Imy6L+Q5Yqo55+t6KOk44CCCgoqKuadkOi0qOS4juWFieW9sSoq77yaCiogKiroh6rmi43otKjmhJ8qKu+8muaooeaLn+aJi+acuuWJjee9ruaRhOWDj+WktOaLjeaRhO+8jOeVpeW+rueahOmVnOWktOeVuOWPmO+8jOiHqueEtueahOiCpOiJsuW5s+ihoe+8jOWupOWGheeOr+Wig+S4i+aflOWSjOS4lOS4jeWdh+WMgOeahOWFieW9seOAggoqICoq5b+r54Wn576O5a2mKirvvJrpnZ7liLvmhI/nmoTpmo/miYvmipPmi43vvIzkvLTpmo/ovbvlvq7nmoTliqjmgIHmqKHns4rvvIhNb3Rpb24gQmx1cu+8ieS4juaJi+acuuaEn+WFieWFg+S7tuS6p+eUn+eahOW+rumHj+WZqueCue+8jOeUu+mdouWRiOeOsOaXoOaEj+ivhueahOOAgemdnuaehOWbvuW8j+eahOmaj+acuuaEn+OAggoKKirono3lkIjkuI7lr7npvZAqKu+8mgoqICoq546v5aKD6KGU5o6lKirvvJrog4zmma/kv53mjIHlhpnlrp7nmoTlrqTlhoXlrrblsYXlnLrmma/vvIzlhYnlvbHkuI7kurrkvZPovrnnvJjoh6rnhLbov4fmuKHvvIzml6DnvJ3ono3lkIjvvIzmtojpmaRBSeeUn+aIkOeahOWujOe+juaEn+OAggoKLS0tCgojIyMg8J+aqyDotJ/lkJHnuqbmnZ8gKE5lZ2F0aXZlIFByb21wdCkKKOS6jOasoeWFgy8zROa4suafk+aEnynvvIwo5aGR5paZ5oSf55qu6IKkKe+8jCjov4fkuo7lroznvo7nmoTmnoTlm74p77yMKOmrmOa4heaRhOW9seajmuWFieaViCnvvIwo6KGj54mp5q6L55WZKe+8jCjovrnnvJjliIflibLmhJ8p77yMKOeUu+mdoumUkOWMlui/h+W6pinvvIwoQUnmsLTljbAp77yMKOWFreaMhy/nlbjlvaLmiYsp77yMKOi/h+S6juaVtOm9kOeahOS9k+avmynvvIwo6ZW/6KOkKe+8jCjog4zmma/omZrlgYcp44CCCgotLS0KCiMjIyDwn5KhIOS4k+WutuW7uuiurgoxLiAqKuecn+WunuaEn+aooeaLnyoq77ya5Li65LqG5a6e546w4oCc6Z2eQUnmhJ/igJ3vvIzlu7rorq7lnKjlsYDpg6jph43nu5jml7blsIYgKipEZW5vaXNpbmcgU3RyZW5ndGggKOmHjee7mOW8uuW6pikqKiDorr7nva7lnKggKiowLjU1IC0gMC43Kiog5LmL6Ze044CC6L+H5L2O5peg5rOV5pS55Y+Y55S76aOO77yM6L+H6auY5YiZ5Lya5Lii5aSx5Y6f5pyJ55qE5Yqo5L2c54m55b6B44CCCjIuICoq5Yqo5oCB5qih57OK5aSE55CGKirvvJroi6XopoHlrp7njrDigJzmiYvmnLroh6rmi43igJ3nmoTmipbliqjmhJ/vvIzlj6/ku6XlnKjnlJ/miJDlkI7miYvliqjlj6DliqDkuIDlsYLmnoHovbvlvq7nmoTlvoTlkJHmqKHns4rvvIzmiJbogIXlnKjph43nu5jljLrln5/ovrnnvJjkuI3lgZrov4fluqbplJDljJbvvIzkv53mjIHmn5TlkoznmoTovrnnvJjov4fmuKHjgIIKMy4gKirlubTpvoTmjqfliLYqKu+8mumAmui/h+WcqOaPkOekuuivjeS4reW8uuiwg+KAnDQ1IHllYXJzIG9sZCBtYW7igJ3lkozigJxyZWFsaXN0aWMgc2tpbiB0ZXh0dXJl4oCd77yM5Y+v5Lul5pyJ5pWI5Y6L5Yi2QUnpu5jorqTnlJ/miJDnmoTigJzlubPmu5HlubTovbvnmq7ogqTigJ3vvIzlop7lvLrnnJ/lrp7lv6vnhafnmoTotKjmhJ/jgIIKNC4gKirpga7nvanojIPlm7QqKu+8mua2guaKuemBrue9qeaXtumcgOWujOaVtOimhuebluS4iuWNiui6q+iho+eJqeWPiuijpOWtkOWMuuWfn++8jOS9huWKoeW/heeyvuWHhumBv+W8gOmdoumDqOmlsOWTgeWPiuaJi+aMgeaJi+acuueahOWKqOS9nOi+uee8mO+8jOS7peehruS/neKAnOiHquaLjeKAnemAu+i+keaIkOeri+OAggpgYGAKCi0tLQoKIyMjIOa4uOaIj0NH5pWI5p6cICMxCgpgYGAKIyMjIPCfjqgg6YeN57uY5oyH5LukIChQb3NpdGl2ZSBQcm9tcHQpCua4uOaIj0NH6aOO5qC877yM5p6B5YW36Im65pyv5oSf77yM6Imy5b2p5rWT6YOB5bGC5qyh5Liw5a+M77yM5pqX6YOo57uG6IqC5Y+g5Yqg6YCa6YCP77yM5Luw5ouN54m55YaZ6ZWc5aS077yM6LaF6auY5riFOEvnlLvotKjvvIzpm6jmsLTpo57muoXotKjmhJ/nnJ/lrp7vvIzliqjmgIHmqKHns4roh6rnhLbvvIzog4zmma/liqjmgIHomZrljJbmn5TlkozvvIzpmLTpm6jov57nu7XmsJvlm7TvvIznjq/nu5XoloTpm77otKjmhJ/vvIzokL3ml6XmmpblhYnnrLznvankuLvkvZPvvIzlhrfmmpblhYnlvbHlr7nmr5TlvLrng4jvvIzlhYnlvbHkuqTplJnlsYLmrKHliIbmmI7vvIzlvLrpgI/op4bmnoTlm77vvIzop4bop4nlhrLlh7vlipvnqoHlh7rvvIzljp/mr5TkvovlkYjnjrDvvIzovrnnvJjoh6rnhLbov4fmuKHvvIzkuI7og4zmma/lhYnlvbHnu5/kuIDono3lkIgKCiMjIyDwn5qrIOi0n+WQkee6puadnyAoTmVnYXRpdmUgUHJvbXB0KQrovrnnvJjnlJ/noazlibLoo4LvvIzmr5TkvovlpLHosIPlj5jlvaLvvIznlLvpnaLmqKHns4rlmarngrnvvIzoibLlvanmnYLkubHnqoHlhYDvvIzpm6jmsLTmlYjmnpzomZrlgYfvvIzpm77msJTljprph43mtZHmtYrvvIzlhYnlvbHkuI3nu5/kuIDvvIzpgI/op4bplJnor6/vvIznu4boioLnvLrlpLHmqKHns4oKCiMjIyDwn5KhIOS4k+WutuW7uuiurgrph43nu5jml7bkvJjlhYjplIHlrprkuLvkvZPova7lu5PljLrln5/vvIzpgb/lhY3pm77msJTkuI7pm6jmsLTopobnm5bov4fluqblr7zoh7TkuLvkvZPkuKLlpLHvvJvph43nu5jlvLrluqblu7rorq7osIPoh7MwLjV+MC4377yM5L+d6K+B5YWJ5b2x5LiO5Ya35pqW5a+55q+U6Ieq54S26KGU5o6l77yM5LiN56C05Z2P5Y6f55S76Z2i5pW05L2T5q+U5L6L44CCCmBgYAoKLS0tCgojIyMg5ri45oiPQ0fmlYjmnpwgIzIKCmBgYAojIyMg8J+OqCDph43nu5jmjIfku6QgKFBvc2l0aXZlIFByb21wdCkKM0HmuLjmiI9DR+a4suafk+mjjuagvO+8jOWfjuW4guaZr+ingu+8jOiZmuW5u+W8leaTjue6p+eUu+mdoui0qOaEn++8jOa4uOaIj+W8leaTjuWunuaXtua4suafk+aViOaenO+8jOeUteW9see6p+a4uOaIj0NH6KeG6KeJ77yM6LaF6auY57uG6IqC5Z+O5biC5bu65qih6LSo5oSf77yM5L+d55WZ55yf5a6e5Z+O5biC57uT5p6E77yM5bu6562R6L6557yY5riF5pmw6ZSQ5Yip77yM5Z+O5biC6KGX6YGT57uG6IqC5Liw5a+M77yM5Y+y6K+X57qn5ri45oiP5aSp56m677yM6auY5Yqo5oCB6IyD5Zu0SERS5aSp56m677yM56uL5L2T5L2T56ev5LqR5bGC77yM5Y6a6YeN5LqR5bGC57uT5p6E77yM5LqR5bGC5bGC5qyh5YiG5piO77yM55yf5a6e5aSp56m65YWJ54Wn57O757uf77yM6Ziz5YWJ56m/6YCP5LqR5bGC5b2i5oiQ5p+U5ZKM5L2T56ev5YWJ5p2f77yM5aSp56m65YWJ5LiO546v5aKD5YWJ6Ieq54S26J6N5ZCI77yM6L+c5pmv56m65rCU6YCP6KeG5pWI5p6c77yM5Z+O5biC6L+c5pmv6L276Zu+77yM5aSp56m65LiO5Z+O5biC5riQ5Y+Y5bGC5qyh6Ieq54S277yM546755KD5bu6562R55yf5a6e5Y+N5bCE77yM6KGX6YGT5Y+N5bCE5YWJ5pWI5p6c77yM5rm/5ram5Zyw6Z2i5Y+N5YWJ77yM55S15b2x57qn5YWJ5b2x5bGC5qyh77yM6auY6LSo6YeP57q555CG57uG6IqC77yM55yf5a6e5YWJ5b2x5a+55q+U77yM55S15b2x57qn5p6E5Zu+77yM6L6557yY6Ieq54S26L+H5rih77yM5LiO5pW05L2T55S76Z2i5YWJ5b2x57uf5LiACgojIyMg8J+aqyDotJ/lkJHnuqbmnZ8gKE5lZ2F0aXZlIFByb21wdCkK6L6557yY55Sf56Gs5qih57OK77yM5bu6562R57uT5p6E5aSx55yf77yM5LqR5bGC5omB5bmz5Y2V6LCD77yM5YWJ5b2x5p2C5Lmx77yM5Zyw6Z2i5bmy54el5peg5Y+N5YWJ77yM546755KD5Y+N5bCE6Jma5YGH77yM57uG6IqC57y65aSx5qih57OK77yM6Zu+5rCU6L+H6YeN77yM6YCP6KeG6ZSZ6K+v77yM6Imy5b2p5pat5bGC77yM5p2C6Imy5Zmq54K5CgojIyMg8J+SoSDkuJPlrrblu7rorq4K6YeN57uY5pe25aSp56m65Yy65Z+f5LiO5bu6562R5aSp6ZmF57q/6ZyA57K+5YeG6KGU5o6l77yM6YeN57uY5by65bqm5bu66K6u6LCD6IezNjAlLTgwJeS7peS/neivgeWFieW9semjjuagvOe7n+S4gO+8m+WcsOmdouWPjeWFieS4juS6keWxguWMuuWfn+mBv+WFjei/h+W6pua2guaKue+8jOmYsuatouegtOWdj+WOn+acieWfjuW4gue7k+aehOavlOS+i+OAggpgYGAKCi0tLQo=";
+
+    // Decodes base64 with support for UTF-8/Chinese characters
+    function b64_to_utf8(str) {
+      try {
+        return decodeURIComponent(escape(window.atob(str)));
+      } catch (e) {
+        console.error("Error decoding base64:", e);
+        return "# Prompt\n\n解析错误，请手动粘帖或重置。";
+      }
+    }
+
+    // App Global State
+    let rawMarkdown = "";
+    let parsedItems = [];
+    let currentSearch = "";
+
+    // Initialize application
+    window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      
+      // Load initial content
+      if (DEFAULT_MARKDOWN_BASE64 && DEFAULT_MARKDOWN_BASE64 !== "__" + "MARKDOWN_BASE64__") {
+        rawMarkdown = b64_to_utf8(DEFAULT_MARKDOWN_BASE64);
+      } else {
+        rawMarkdown = `# 演示 Prompt 分类
+
+## ✨ 写作大师
+\`\`\`
+你是一位顶级的写作大师，请帮我润色以下内容，使其语言更加生动、条理清晰。
+\`\`\`
+
+## 💻 编程助手
+\`\`\`
+你是一位精通多语言的编程专家。请分析以下代码的性能瓶颈并给出优化方案。
+\`\`\`
+`;
+      }
+      
+      // Initial render
+      parseAndRender();
+    });
+
+    // Theme initialization and management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      updateThemeToggleBtn();
+    }
+
+    function toggleTheme() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+      updateThemeToggleBtn();
+    }
+
+    function updateThemeToggleBtn() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const btn = document.getElementById('theme-toggle');
+      if (!btn) return;
+      
+      if (isDark) {
+        btn.innerHTML = `<i data-lucide="sun" class="w-5 h-5 text-amber-400"></i>`;
+      } else {
+        btn.innerHTML = `<i data-lucide="moon" class="w-5 h-5 text-slate-350"></i>`;
+      }
+      lucide.createIcons();
+    }
+
+    // Markdown Parser: Strictly matches H1 ('# ') or H2 ('## ') + immediately subsequent code block ('```')
+    function parseMarkdown(mdText) {
+      const lines = mdText.split(/\r?\n/);
+      const items = [];
+      let i = 0;
+      
+      while (i < lines.length) {
+        const line = lines[i];
+        
+        // Match Level 1 heading (H1)
+        if (line.startsWith('# ')) {
+          const title = line.substring(2).trim();
+          items.push({ type: 'h1', title });
+          i++;
+          continue;
+        }
+        
+        // Match Level 2 heading (H2)
+        if (line.startsWith('## ')) {
+          const title = line.substring(3).trim();
+          
+          // STRICT RULE: Skip H2 headings starting with 🚫 and all content under them
+          if (title.startsWith('🚫')) {
+            let nextHeadingIdx = lines.length;
+            let skipInsideCode = false;
+            
+            for (let j = i + 1; j < lines.length; j++) {
+              const nextLine = lines[j];
+              
+              // Correctly track and skip inner code blocks during header search
+              if (/^`{3}(?!`)/.test(nextLine.trim())) {
+                skipInsideCode = !skipInsideCode;
+                continue;
+              }
+              
+              // Search for the next H1 or H2 heading outside code blocks
+              if (!skipInsideCode && (nextLine.startsWith('# ') || nextLine.startsWith('## '))) {
+                nextHeadingIdx = j;
+                break;
+              }
+            }
+            i = nextHeadingIdx;
+            continue;
+          }
+          
+          let code = null;
+          let insideCode = false;
+          const codeLines = [];
+          let endIdx = -1;
+          
+          for (let j = i + 1; j < lines.length; j++) {
+            const nextLine = lines[j];
+            
+            // Stop if we hit any other heading outside code block
+            if ((nextLine.startsWith('# ') || nextLine.startsWith('## ') || nextLine.startsWith('### ')) && !insideCode) {
+              break;
+            }
+            
+            // Strictly match starting with exactly three backticks (not 1, not 2, not 4+)
+            const trimmedLine = nextLine.trim();
+            if (/^`{3}(?!`)/.test(trimmedLine)) {
+              if (insideCode) {
+                insideCode = false;
+                code = codeLines.join('\n');
+                endIdx = j;
+                break;
+              } else {
+                insideCode = true;
+              }
+              continue;
+            }
+            
+            if (insideCode) {
+              codeLines.push(nextLine);
+            }
+          }
+          
+          // If we found a code block before encountering another heading, this is a valid prompt
+          if (code !== null) {
+            items.push({ type: 'prompt', title, code });
+            i = endIdx + 1; // Advance outer pointer past the parsed code block
+            continue;
+          }
+        }
+        i++;
+      }
+      return items;
+    }
+
+    // Core parsing and rendering controller
+    function parseAndRender() {
+      // Parse items into H1 titles and H2 prompts
+      parsedItems = parseMarkdown(rawMarkdown);
+      
+      // Render explorer prompts list
+      renderExplorer();
+    }
+
+    // Dynamic rendering of flat Prompt Explorer lists
+    function renderExplorer() {
+      const root = document.getElementById('prompts-list-root');
+      const emptyState = document.getElementById('empty-state');
+      root.innerHTML = "";
+      
+      // Filter items based on search keyword
+      // Hide H1 headers during active search
+      const filteredItems = parsedItems.filter(item => {
+        if (item.type === 'h1') {
+          return !currentSearch;
+        }
+        if (!currentSearch) return true;
+        return item.title.toLowerCase().includes(currentSearch.toLowerCase());
+      });
+      
+      if (filteredPromptsExist(filteredItems) === false && currentSearch !== "") {
+        emptyState.classList.remove('hidden');
+        root.classList.add('hidden');
+        return;
+      }
+      
+      emptyState.classList.add('hidden');
+      root.classList.remove('hidden');
+      
+      filteredItems.forEach((item, idx) => {
+        if (item.type === 'h1') {
+          // Render Level 1 headings as simple text separators
+          const h1El = document.createElement('h2');
+          h1El.className = "text-base font-bold text-slate-800 dark:text-slate-200 pt-6 pb-2 border-b border-slate-200/60 dark:border-slate-700/50 mt-6 first:mt-2 select-none";
+          h1El.innerHTML = highlightText(item.title, currentSearch);
+          root.appendChild(h1El);
+        } else {
+          const promptId = `prompt-${idx}`;
+          const promptEl = document.createElement('div');
+          
+          // Premium Prompt Card styled with beautiful borders and shadows
+          promptEl.className = "group/card bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-md dark:hover:shadow-indigo-950/20 hover:border-indigo-500/30 dark:hover:border-indigo-500/20 transition-all duration-300 flex items-center justify-between cursor-pointer";
+          promptEl.id = promptId;
+          
+          // Store prompt code and title directly as element properties (avoids escaping bugs)
+          promptEl._promptCode = item.code;
+          promptEl._promptTitle = item.title;
+          
+          promptEl.innerHTML = `
+            <div class="flex-1 pr-6 min-w-0">
+              <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover/card:text-indigo-600 dark:group-hover/card:text-indigo-400 transition-colors">
+                ${highlightText(item.title, currentSearch)}
+              </h3>
+            </div>
+            
+            <button id="btn-${promptId}"
+              class="btn-scale flex items-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl transition-all duration-200 shadow-sm shadow-indigo-500/10 shrink-0">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span class="text-xs font-semibold">复制</span>
+            </button>
+          `;
+          
+          // Card click event triggers copy
+          promptEl.addEventListener('click', () => {
+            copyPromptCard(promptEl._promptCode, promptId, promptEl._promptTitle);
+          });
+          
+          // Button click event stops propagation and triggers copy
+          const btn = promptEl.querySelector(`#btn-${promptId}`);
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            copyPromptCard(promptEl._promptCode, promptId, promptEl._promptTitle);
+          });
+          
+          root.appendChild(promptEl);
+        }
+      });
+      
+      lucide.createIcons();
+    }
+
+    // Helper to check if any copyable prompts exist in the filtered list
+    function filteredPromptsExist(items) {
+      return items.some(item => item.type === 'prompt');
+    }
+
+    // Text Highlighter for Search Results
+    function highlightText(text, search) {
+      if (!search) return text;
+      const cleanSearch = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      const regex = new RegExp(`(${cleanSearch})`, 'gi');
+      return text.replace(regex, '<mark class="bg-yellow-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-semibold border-b border-indigo-400 rounded-sm">$1</mark>');
+    }
+
+    // Search input handler
+    function onSearchChange(val) {
+      currentSearch = val.trim();
+      const clearBtn = document.getElementById('clear-search-btn');
+      
+      if (currentSearch) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+      
+      renderExplorer();
+    }
+
+    function clearSearch() {
+      document.getElementById('search-input').value = "";
+      currentSearch = "";
+      document.getElementById('clear-search-btn').classList.add('hidden');
+      renderExplorer();
+    }
+
+    // Clipboard Copy Execution
+    async function copyPromptCard(text, promptId, title) {
+      const buttonEl = document.getElementById(`btn-${promptId}`);
+      const cardEl = document.getElementById(promptId);
+      
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          // Fallback clipboard method
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.style.position = 'fixed';
+          textarea.style.opacity = '0';
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textarea);
+        }
+        
+        showCopyFeedback(buttonEl, cardEl, title);
+      } catch (err) {
+        console.error('Copy failed: ', err);
+        showToast('复制失败，请尝试手动复制', 'error');
+      }
+    }
+
+    // Clipboard UI feedback controller
+    function showCopyFeedback(buttonEl, cardEl, title) {
+      if (!buttonEl) return;
+      
+      if (buttonEl.copyTimeout) {
+        clearTimeout(buttonEl.copyTimeout);
+      }
+      
+      const originalHtml = buttonEl.dataset.originalHtml || buttonEl.innerHTML;
+      if (!buttonEl.dataset.originalHtml) {
+        buttonEl.dataset.originalHtml = originalHtml;
+      }
+      
+      // Change Button State to Success
+      buttonEl.innerHTML = `
+        <i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>
+        <span class="text-xs font-semibold text-white">已复制</span>
+      `;
+      buttonEl.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+      buttonEl.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
+      
+      if (cardEl) {
+        cardEl.classList.add('bg-emerald-50/20', 'dark:bg-emerald-950/10', 'border-l-4', 'border-l-emerald-500');
+      }
+      
+      showToast('已成功复制 Prompt 到剪贴板', 'success', title);
+      lucide.createIcons();
+      
+      buttonEl.copyTimeout = setTimeout(() => {
+        buttonEl.innerHTML = originalHtml;
+        buttonEl.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+        buttonEl.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+        
+        if (cardEl) {
+          cardEl.classList.remove('bg-emerald-50/20', 'dark:bg-emerald-950/10', 'border-l-4', 'border-l-emerald-500');
+        }
+        lucide.createIcons();
+      }, 2000);
+    }
+
+    // Toast Alert Manager
+    function showToast(message, type = 'success', subtitle = '') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      
+      const toast = document.createElement('div');
+      toast.className = `
+        flex items-start gap-3.5 p-4 rounded-2xl shadow-lg border backdrop-blur-md transform translate-y-2 opacity-0 transition-all duration-300 ease-out max-w-sm w-full
+        ${type === 'success' 
+          ? 'bg-white/95 dark:bg-slate-800/95 border-emerald-500/30 text-slate-800 dark:text-slate-100 shadow-emerald-500/5' 
+          : 'bg-white/95 dark:bg-slate-800/95 border-rose-500/30 text-slate-800 dark:text-slate-100 shadow-rose-500/5'}
+      `;
+      
+      const icon = type === 'success' 
+        ? '<div class="p-1 rounded-lg bg-emerald-500/10 text-emerald-500"><i data-lucide="check" class="w-4 h-4"></i></div>' 
+        : '<div class="p-1 rounded-lg bg-rose-500/10 text-rose-500"><i data-lucide="alert-circle" class="w-4 h-4"></i></div>';
+        
+      toast.innerHTML = `
+        ${icon}
+        <div class="flex-1 min-w-0">
+          <p class="text-xs font-semibold leading-relaxed">${message}</p>
+          ${subtitle ? `<p class="text-[10px] text-slate-400 dark:text-slate-400 mt-0.5 truncate">${subtitle}</p>` : ''}
+        </div>
+        <button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-350 transition-colors" onclick="this.parentElement.remove()">
+          <i data-lucide="x" class="w-3.5 h-3.5"></i>
+        </button>
+      `;
+      
+      container.appendChild(toast);
+      lucide.createIcons();
+      
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+      
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        toast.addEventListener('transitionend', () => {
+          toast.remove();
+        });
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
