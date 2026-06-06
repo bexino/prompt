@@ -163,13 +163,13 @@
 ### vue 部署 github/cf 强推
 
 ```
-我刚刚对 Vue 项目进行了一些修改，现在需要同步部署到 GitHub Pages 和 Cloudflare Pages。请帮我全自动执行以下发布流程：
+我修改了网页，请帮我把最新的源码提交并推送到 GitHub 的 main 分支：
 
-1. **代码打包：** 运行 `npm run build`，确保本地最新修改成功编译进 `dist` 文件夹。
-2. **Cloudflare 自动触发准备：** 将我的**源码和修改**正常提交并推送到 GitHub 的 `source` 分支（或者你日常存放源码的分支），让 Cloudflare Pages 能够捕捉到更新并自动在云端构建。
-3. **GitHub Pages 强推：** 运行 `npx gh-pages -d dist -b main` 命令，将最新打包好的 `dist` 静态文件强制推送到 GitHub 的 `main` 分支，更新 GitHub Pages 页面。
+1. 运行 git add .
+2. 运行 git commit -m "update: 修改了网页内容"
+3. 运行 git push origin main
 
-请帮我依次在终端执行上述命令，并在完成后告诉我。
+推送完成后，Cloudflare Pages 会自动感应并开始在云端打包部署，我不需要在本地运行 build。
 ```
 
 ---
