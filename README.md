@@ -160,20 +160,6 @@
 
 ---
 
-### vue 部署 github/cf 强推
-
-```
-我修改了网页，请帮我把最新的源码提交并推送到 GitHub 的 main 分支：
-
-1. 运行 git add .
-2. 运行 git commit -m "update: 修改了网页内容"
-3. 运行 git push origin main
-
-推送完成后，Cloudflare Pages 会自动感应并开始在云端打包部署，我不需要在本地运行 build。
-```
-
----
-
 ## 🎬 视频生成
 
 ---
