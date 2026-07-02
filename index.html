@@ -255,7 +255,7 @@
     <div
       class="bg-white p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4 text-center max-w-sm pointer-events-auto">
       <div>
-        <h3 class="text-lg font-bold text-slate-800">释放以导入 README.md</h3>
+        <h3 class="text-lg font-bold text-slate-800">释放以导入 <span id="drag-overlay-filename">README.md</span></h3>
         <p class="text-xs text-slate-500 mt-1">拖放文件到这里，即可立刻更新页面上的 Prompt 列表并自动缓存。</p>
       </div>
     </div>
@@ -349,18 +349,45 @@
     let rawMarkdown = "";
     let parsedItems = [];
 
+    // Helper to get active site configuration
+    function getActiveSiteConfig() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const siteParam = urlParams.get('site');
+      if (siteParam === 'fam') {
+        return {
+          path: './docs/fam.md',
+          filename: 'fam.md'
+        };
+      }
+      return {
+        path: './README.md',
+        filename: 'README.md'
+      };
+    }
+
+    // Update dynamic texts based on active site configuration
+    function updateDynamicTexts() {
+      const config = getActiveSiteConfig();
+      const dragOverlayFilename = document.getElementById('drag-overlay-filename');
+      if (dragOverlayFilename) {
+        dragOverlayFilename.textContent = config.filename;
+      }
+    }
+
     // Initialize application
     window.addEventListener('DOMContentLoaded', async () => {
       initDragAndDrop();
+      updateDynamicTexts();
 
-      console.log("当前尝试请求的完整路径是:", new URL('./README.md', window.location.href).href);
+      const config = getActiveSiteConfig();
+      console.log("当前尝试请求的完整路径是:", new URL(config.path, window.location.href).href);
 
       let loadedSuccessfully = false;
 
       // 1. Try to fetch dynamically from server
       try {
         const timestamp = new Date().getTime();
-        const response = await fetch(`./README.md?t=${timestamp}`);
+        const response = await fetch(`${config.path}?t=${timestamp}`);
         if (response.ok) {
           rawMarkdown = await response.text();
           loadedSuccessfully = true;
@@ -369,10 +396,10 @@
           localStorage.removeItem('local_readme_filename');
           localStorage.removeItem('local_readme_updated');
         } else {
-          console.warn("获取 README.md 失败，HTTP 状态码:", response.status);
+          console.warn(`获取 ${config.filename} 失败，HTTP 状态码:`, response.status);
         }
       } catch (err) {
-        console.error("获取 README.md 发生错误，将尝试本地存储:", err);
+        console.error(`获取 ${config.filename} 发生错误，将尝试本地存储:`, err);
       }
 
       // 2. Fallback to localStorage if dynamic fetch failed
@@ -448,7 +475,7 @@
 
         parseAndRender();
         showImportStatus(true);
-        showToast('README.md 导入成功并已更新', 'success');
+        showToast(`${file.name} 导入成功并已更新`, 'success');
       };
       reader.onerror = () => {
         showToast('读取文件失败，请重试', 'error');
@@ -467,8 +494,10 @@
         const statusText = document.getElementById('local-mode-status-text');
         const resetBtn = document.getElementById('local-mode-reset-btn');
 
+        const config = getActiveSiteConfig();
+
         if (show) {
-          const filename = localStorage.getItem('local_readme_filename') || 'README.md';
+          const filename = localStorage.getItem('local_readme_filename') || config.filename;
           const time = localStorage.getItem('local_readme_updated') || '';
 
           if (statusText) {
@@ -482,7 +511,7 @@
           if (statusText) {
             statusText.innerHTML = `
               <h4 class="font-semibold text-slate-800 text-sm">本地离线模式</h4>
-              <p class="text-xs text-slate-500 mt-0.5">由于浏览器安全限制，无法自动加载您的 README.md 修改。请拖拽修改后的 README.md 到此处，或点击导入。</p>
+              <p class="text-xs text-slate-500 mt-0.5">由于浏览器安全限制，无法自动加载您的 ${config.filename} 修改。请拖拽修改后的 ${config.filename} 到此处，或点击导入。</p>
             `;
           }
           if (resetBtn) resetBtn.classList.add('hidden');
@@ -941,8 +970,28 @@
     function showErrorOverlay() {
       const errorState = document.getElementById('error-state');
       const root = document.getElementById('prompts-list-root');
+      if (!errorState) return;
 
-      if (errorState) errorState.classList.remove('hidden');
+      const config = getActiveSiteConfig();
+      const errorTitle = errorState.querySelector('h3');
+      if (errorTitle) errorTitle.textContent = `无法加载同目录的 ${config.filename}`;
+
+      const errorDesc = errorState.querySelector('p');
+      if (errorDesc) {
+        errorDesc.innerHTML = `
+          由于浏览器的安全策略（CORS 限制），直接双击打开本地 HTML 文件时，网页无法主动读取磁盘上的文件。<br>
+          <strong>解决办法：</strong><br>
+          1. 运行本地 HTTP 服务器打开此页面（如 <code>python -m http.server</code>）。<br>
+          2. 或者直接把同目录下的 <code>${config.filename}</code> 拖拽到本页面任意位置来手动导入。
+        `;
+      }
+
+      const errorBtn = errorState.querySelector('button');
+      if (errorBtn) {
+        errorBtn.textContent = `手动导入 ${config.filename}`;
+      }
+
+      errorState.classList.remove('hidden');
       if (root) root.classList.add('hidden');
       showImportStatus(false);
     }
