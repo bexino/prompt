@@ -12,7 +12,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -50,18 +49,9 @@
       background: transparent;
     }
 
-    .dark ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 9999px;
-    }
-
     ::-webkit-scrollbar-thumb {
       background: rgba(0, 0, 0, 0.1);
       border-radius: 9999px;
-    }
-
-    .dark ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.2);
     }
 
     ::-webkit-scrollbar-thumb:hover {
@@ -75,11 +65,6 @@
 
     .glow-hover:hover {
       box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.15);
-      transform: translateY(-2px);
-    }
-
-    .dark .glow-hover:hover {
-      box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.4);
       transform: translateY(-2px);
     }
 
@@ -101,32 +86,32 @@
 </head>
 
 <body
-  class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300 font-sans">
+  class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
 
   <!-- Drag and Drop Overlay -->
   <div id="drag-overlay"
-    class="hidden fixed inset-0 z-50 bg-indigo-600/10 dark:bg-indigo-950/20 backdrop-blur-sm border-4 border-dashed border-indigo-500 flex flex-col items-center justify-center pointer-events-none transition-all duration-300">
+    class="hidden fixed inset-0 z-50 bg-indigo-600/10 backdrop-blur-sm border-4 border-dashed border-indigo-500 flex flex-col items-center justify-center pointer-events-none transition-all duration-300">
     <div
-      class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4 text-center max-w-sm pointer-events-auto">
+      class="bg-white p-8 rounded-3xl shadow-2xl flex flex-col items-center gap-4 text-center max-w-sm pointer-events-auto">
       <div
-        class="w-16 h-16 rounded-2xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center animate-bounce">
+        class="w-16 h-16 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center animate-bounce">
         <span class="text-3xl">📥</span>
       </div>
       <div>
-        <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">释放以导入 README.md</h3>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">拖放文件到这里，即可立刻更新页面上的 Prompt 列表并自动缓存。</p>
+        <h3 class="text-lg font-bold text-slate-800">释放以导入 README.md</h3>
+        <p class="text-xs text-slate-500 mt-1">拖放文件到这里，即可立刻更新页面上的 Prompt 列表并自动缓存。</p>
       </div>
     </div>
   </div>
 
   <!-- Header -->
   <header
-    class="sticky top-0 z-40 w-full border-b border-slate-200/50 dark:border-slate-800/50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-colors duration-300">
+    class="sticky top-0 z-40 w-full border-b border-slate-200/50 bg-white/80 backdrop-blur-md transition-colors duration-300">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div>
           <h1 id="webpage-header-title"
-            class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 dark:from-indigo-400 dark:to-violet-400 bg-clip-text text-transparent">
+            class="text-lg font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-500 bg-clip-text text-transparent">
             提示词复制库</h1>
         </div>
       </div>
@@ -136,7 +121,7 @@
         <div class="relative flex items-center">
           <!-- Search Open Button -->
           <button id="search-open-btn" onclick="openSearch()"
-            class="btn-scale p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 text-slate-500 dark:text-slate-400"
+            class="btn-scale p-2 rounded-xl border border-slate-200 hover:bg-slate-100 transition-all duration-200 text-slate-500"
             aria-label="打开搜索">
             🔍
           </button>
@@ -146,15 +131,15 @@
             <div class="relative flex items-center">
               <span class="absolute left-3 text-slate-400 text-xs select-none">🔍</span>
               <input type="text" id="search-input"
-                class="w-36 sm:w-48 pl-8 pr-8 py-1.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/50 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs text-slate-700 dark:text-slate-300 transition-all"
+                class="w-36 sm:w-48 pl-8 pr-8 py-1.5 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-xs text-slate-700 transition-all"
                 placeholder="搜索 Prompt..." oninput="onSearchChange(this.value)">
               <button id="clear-search-btn" onclick="clearSearch()"
-                class="hidden absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                class="hidden absolute right-3 text-slate-400 hover:text-slate-600">
                 <span class="text-[10px]">❌</span>
               </button>
             </div>
             <button onclick="closeSearch()"
-              class="text-xs text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 px-2 py-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-all font-semibold">
+              class="text-xs text-slate-500 hover:text-slate-700 px-2 py-1.5 rounded-xl hover:bg-slate-100 transition-all font-semibold">
               取消
             </button>
           </div>
@@ -169,20 +154,20 @@
 
       <!-- Local Offline Mode Banner -->
       <div id="local-mode-banner"
-        class="hidden bg-indigo-50/60 dark:bg-indigo-950/20 backdrop-blur border border-indigo-500/20 dark:border-indigo-500/10 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 transition-all duration-300">
+        class="hidden bg-indigo-50/60 backdrop-blur border border-indigo-500/20 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 transition-all duration-300">
         <div class="flex items-center gap-3">
-          <div class="p-2 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+          <div class="p-2 rounded-xl bg-indigo-500/10 text-indigo-600">
             <span class="text-base">ℹ️</span>
           </div>
           <div id="local-mode-status-text">
-            <h4 class="font-semibold text-slate-800 dark:text-slate-100 text-sm">本地离线模式</h4>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">由于浏览器安全限制，无法自动加载您的 README.md 修改。请拖拽修改后的
+            <h4 class="font-semibold text-slate-800 text-sm">本地离线模式</h4>
+            <p class="text-xs text-slate-500 mt-0.5">由于浏览器安全限制，无法自动加载您的 README.md 修改。请拖拽修改后的
               README.md 到此处，或点击导入。</p>
           </div>
         </div>
         <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
           <button id="local-mode-reset-btn" onclick="resetDefaultReadme()"
-            class="hidden btn-scale px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold shadow-sm transition-all">
+            class="hidden btn-scale px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold shadow-sm transition-all">
             重置默认
           </button>
           <input type="file" id="local-file-input" accept=".md" class="hidden"
@@ -205,13 +190,13 @@
 
       <!-- Empty state placeholder -->
       <div id="empty-state"
-        class="hidden flex flex-col items-center justify-center py-16 px-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-sm">
+        class="hidden flex flex-col items-center justify-center py-16 px-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
         <div
-          class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-700/50 text-slate-400 dark:text-slate-500 flex items-center justify-center mb-4">
+          class="w-16 h-16 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mb-4">
           <span class="text-3xl">❓</span>
         </div>
-        <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100 mb-1">未找到匹配项</h3>
-        <p class="text-sm text-slate-500 dark:text-slate-400 text-center max-w-sm">
+        <h3 class="text-base font-semibold text-slate-800 mb-1">未找到匹配项</h3>
+        <p class="text-sm text-slate-500 text-center max-w-sm">
           找不到与您的搜索词相符的 Prompt。请检查拼写，或者清空搜索重试。
         </p>
         <button onclick="clearSearch()"
@@ -222,13 +207,13 @@
 
       <!-- Error State for CORS/Load failure -->
       <div id="error-state"
-        class="hidden flex flex-col items-center justify-center py-16 px-4 bg-rose-50/50 dark:bg-rose-950/10 rounded-2xl border border-rose-500/20 shadow-sm text-center">
+        class="hidden flex flex-col items-center justify-center py-16 px-4 bg-rose-50/50 rounded-2xl border border-rose-500/20 shadow-sm text-center">
         <div
-          class="w-16 h-16 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-500 flex items-center justify-center mb-4">
+          class="w-16 h-16 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center mb-4">
           <span class="text-3xl">⚠️</span>
         </div>
-        <h3 class="text-base font-semibold text-rose-800 dark:text-rose-300 mb-2">无法加载同目录的 README.md</h3>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md mb-6 leading-relaxed">
+        <h3 class="text-base font-semibold text-rose-800 mb-2">无法加载同目录的 README.md</h3>
+        <p class="text-xs text-slate-500 mt-1 max-w-md mb-6 leading-relaxed">
           由于浏览器的安全策略（CORS 限制），直接双击打开本地 HTML 文件时，网页无法主动读取磁盘上的文件。<br>
           <strong>解决办法：</strong><br>
           1. 运行本地 HTTP 服务器打开此页面（如 <code>python -m http.server</code>）。<br>
@@ -248,24 +233,13 @@
 
   <!-- Footer -->
   <footer
-    class="mt-auto border-t border-slate-200/50 dark:border-slate-800/50 bg-white dark:bg-slate-900 transition-colors duration-300 py-6">
+    class="mt-auto border-t border-slate-200/50 bg-white py-6">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 flex flex-col items-center gap-4">
-      <!-- Theme Toggle -->
-      <button id="theme-toggle" onclick="toggleTheme()"
-        class="btn-scale flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-200 text-slate-600 dark:text-slate-300 text-xs font-semibold"
-        aria-label="切换主题">
-        <span id="theme-toggle-icon">🌙</span>
-        <span id="theme-toggle-text">切换至暗色模式</span>
-      </button>
-
       <div
-        class="w-full flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800/50 pt-4 mt-2">
-        <p class="text-xs text-slate-500 dark:text-slate-400 text-center sm:text-left">
+        class="w-full flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 pt-4 mt-2">
+        <p class="text-xs text-slate-500 text-center sm:text-left">
           &copy; 2026 bexino. 版权所有
         </p>
-        <div class="flex items-center gap-4 text-xs text-slate-400 dark:text-slate-500">
-          <span>基于 Tailwind CSS 构建</span>
-        </div>
       </div>
     </div>
   </footer>
@@ -282,7 +256,6 @@
 
     // Initialize application
     window.addEventListener('DOMContentLoaded', async () => {
-      initTheme();
       initDragAndDrop();
 
       console.log("当前尝试请求的完整路径是:", new URL('./README.md', window.location.href).href);
@@ -405,16 +378,16 @@
 
           if (statusText) {
             statusText.innerHTML = `
-              <h4 class="font-semibold text-slate-800 dark:text-slate-100 text-sm">已载入自定义配置</h4>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">正在使用导入的 <strong>${filename}</strong> (更新于 ${time})。更改文件后可重新拖入。</p>
+              <h4 class="font-semibold text-slate-800 text-sm">已载入自定义配置</h4>
+              <p class="text-xs text-slate-500 mt-0.5">正在使用导入的 <strong>${filename}</strong> (更新于 ${time})。更改文件后可重新拖入。</p>
             `;
           }
           if (resetBtn) resetBtn.classList.remove('hidden');
         } else {
           if (statusText) {
             statusText.innerHTML = `
-              <h4 class="font-semibold text-slate-800 dark:text-slate-100 text-sm">本地离线模式</h4>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">由于浏览器安全限制，无法自动加载您的 README.md 修改。请拖拽修改后的 README.md 到此处，或点击导入。</p>
+              <h4 class="font-semibold text-slate-800 text-sm">本地离线模式</h4>
+              <p class="text-xs text-slate-500 mt-0.5">由于浏览器安全限制，无法自动加载您的 README.md 修改。请拖拽修改后的 README.md 到此处，或点击导入。</p>
             `;
           }
           if (resetBtn) resetBtn.classList.add('hidden');
@@ -429,19 +402,6 @@
       localStorage.removeItem('local_readme_filename');
       localStorage.removeItem('local_readme_updated');
       window.location.reload();
-    }
-
-    // Theme initialization and management
-    function initTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-      if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      updateThemeToggleBtn();
     }
 
     // Collapsible Search UI Handlers
@@ -471,50 +431,18 @@
       }
     }
 
-    function toggleTheme() {
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      }
-      updateThemeToggleBtn();
-    }
-
-    function updateThemeToggleBtn() {
-      const isDark = document.documentElement.classList.contains('dark');
-      const iconSpan = document.getElementById('theme-toggle-icon');
-      const textSpan = document.getElementById('theme-toggle-text');
-      if (!iconSpan || !textSpan) return;
-
-      if (isDark) {
-        iconSpan.innerHTML = `☀️`;
-        textSpan.innerHTML = `切换至亮色模式`;
-      } else {
-        iconSpan.innerHTML = `🌙`;
-        textSpan.innerHTML = `切换至暗色模式`;
-      }
-    }
-
-    // Markdown Parser: H1 for title, H2 for category text separators, H3 for copyable prompts
+    // Markdown Parser: H2 for category text separators, H3 for copyable prompts
     function parseMarkdown(mdText) {
       const lines = mdText.split(/\r?\n/);
       const items = [];
       let i = 0;
-      let pageTitle = "";
 
       while (i < lines.length) {
         const line = lines[i];
         const cleanLine = line.trim();
 
-        // Match Level 1 heading (H1)
+        // Match Level 1 heading (H1) - Ignored
         if (cleanLine.startsWith('# ')) {
-          const title = cleanLine.substring(2).trim();
-          if (!pageTitle) {
-            pageTitle = title;
-          }
-          items.push({ type: 'h1', title });
           i++;
           continue;
         }
@@ -619,22 +547,13 @@
         }
         i++;
       }
-      return { items, pageTitle };
+      return { items };
     }
 
     // Core parsing and rendering controller
     function parseAndRender() {
       const parsed = parseMarkdown(rawMarkdown);
       parsedItems = parsed.items;
-
-      // Update webpage title and header title dynamically based on first H1
-      if (parsed.pageTitle) {
-        document.title = parsed.pageTitle;
-        const pageHeaderTitle = document.getElementById('webpage-header-title');
-        if (pageHeaderTitle) {
-          pageHeaderTitle.textContent = parsed.pageTitle;
-        }
-      }
 
       // Render Table of Contents directory
       renderDirectory();
@@ -665,11 +584,7 @@
       if (!container) return;
 
       // H2 headings are our categories in the page body
-      let categories = parsedItems.filter(item => item.type === 'h2');
-      if (categories.length === 0) {
-        // Fallback to H1s if no H2s exist
-        categories = parsedItems.filter(item => item.type === 'h1');
-      }
+      const categories = parsedItems.filter(item => item.type === 'h2');
 
       // Hide directory if empty or during search
       if (categories.length === 0 || currentSearch) {
@@ -708,7 +623,7 @@
         const idx = parsedItems.indexOf(item);
         const itemEl = document.createElement('a');
         itemEl.href = `#category-${idx}`;
-        itemEl.className = "flex items-center justify-center p-3 rounded-xl bg-white dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 border border-slate-200 dark:border-slate-700/50 hover:border-indigo-500/30 dark:hover:border-indigo-500/20 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer text-center";
+        itemEl.className = "flex items-center justify-center p-3 rounded-xl bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-500/30 text-xs font-bold text-slate-700 hover:text-indigo-600 transition-all duration-200 shadow-sm hover:shadow-md cursor-pointer text-center";
         itemEl.innerHTML = `
           <span class="truncate">${item.title}</span>
         `;
@@ -727,9 +642,9 @@
       root.innerHTML = "";
 
       // Filter items based on search keyword
-      // Hide H1 and H2 headers during active search
+      // Hide H2 headers during active search
       const filteredItems = parsedItems.filter(item => {
-        if (item.type === 'h1' || item.type === 'h2') {
+        if (item.type === 'h2') {
           return !currentSearch;
         }
         if (!currentSearch) return true;
@@ -746,13 +661,10 @@
       root.classList.remove('hidden');
 
       filteredItems.forEach((item, idx) => {
-        if (item.type === 'h1') {
-          // H1 headers are skipped in the page body list
-          return;
-        } else if (item.type === 'h2') {
+        if (item.type === 'h2') {
           // Render Level 2 headings as simple text separators
           const h2El = document.createElement('h2');
-          h2El.className = "text-base font-bold text-slate-800 dark:text-slate-200 pt-6 pb-2 border-b border-slate-200/60 dark:border-slate-700/50 mt-6 first:mt-2 select-none";
+          h2El.className = "text-base font-bold text-slate-800 pt-6 pb-2 border-b border-slate-200/60 mt-6 first:mt-2 select-none";
           const itemIdx = parsedItems.indexOf(item);
           h2El.id = `category-${itemIdx}`;
           h2El.innerHTML = highlightText(item.title, currentSearch);
@@ -762,7 +674,7 @@
           const promptEl = document.createElement('div');
 
           // Premium Prompt Card styled with beautiful borders and shadows
-          promptEl.className = "group/card bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700/50 shadow-sm hover:shadow-md dark:hover:shadow-indigo-950/20 hover:border-indigo-500/30 dark:hover:border-indigo-500/20 transition-all duration-300 flex items-center justify-between cursor-pointer";
+          promptEl.className = "group/card bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-500/30 transition-all duration-300 flex items-center justify-between cursor-pointer";
           promptEl.id = promptId;
 
           // Store prompt code and title directly as element properties (avoids escaping bugs)
@@ -771,7 +683,7 @@
 
           promptEl.innerHTML = `
             <div class="flex-1 pr-6 min-w-0">
-              <h3 class="text-sm font-semibold text-slate-800 dark:text-slate-200 group-hover/card:text-indigo-600 dark:group-hover/card:text-indigo-400 transition-colors">
+              <h3 class="text-sm font-semibold text-slate-800 group-hover/card:text-indigo-600 transition-colors">
                 ${highlightText(item.title, currentSearch)}
               </h3>
             </div>
@@ -808,7 +720,7 @@
       if (!search) return text;
       const cleanSearch = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
       const regex = new RegExp(`(${cleanSearch})`, 'gi');
-      return text.replace(regex, '<mark class="bg-yellow-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-semibold border-b border-indigo-400 rounded-sm">$1</mark>');
+      return text.replace(regex, '<mark class="bg-yellow-100 text-indigo-700 font-semibold border-b border-indigo-400 rounded-sm">$1</mark>');
     }
 
     // Search input handler
@@ -882,7 +794,7 @@
       buttonEl.classList.add('bg-emerald-600', 'hover:bg-emerald-700');
 
       if (cardEl) {
-        cardEl.classList.add('bg-emerald-50/20', 'dark:bg-emerald-950/10', 'border-l-4', 'border-l-emerald-500');
+        cardEl.classList.add('bg-emerald-50/20', 'border-l-4', 'border-l-emerald-500');
       }
 
       showToast('已成功复制 Prompt 到剪贴板', 'success', title);
@@ -893,7 +805,7 @@
         buttonEl.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
 
         if (cardEl) {
-          cardEl.classList.remove('bg-emerald-50/20', 'dark:bg-emerald-950/10', 'border-l-4', 'border-l-emerald-500');
+          cardEl.classList.remove('bg-emerald-50/20', 'border-l-4', 'border-l-emerald-500');
         }
       }, 2000);
     }
@@ -907,8 +819,8 @@
       toast.className = `
         flex items-start gap-3.5 p-4 rounded-2xl shadow-lg border backdrop-blur-md transform translate-y-2 opacity-0 transition-all duration-300 ease-out max-w-sm w-full
         ${type === 'success'
-          ? 'bg-white/95 dark:bg-slate-800/95 border-emerald-500/30 text-slate-800 dark:text-slate-100 shadow-emerald-500/5'
-          : 'bg-white/95 dark:bg-slate-800/95 border-rose-500/30 text-slate-800 dark:text-slate-100 shadow-rose-500/5'}
+          ? 'bg-white/95 border-emerald-500/30 text-slate-800 shadow-emerald-500/5'
+          : 'bg-white/95 border-rose-500/30 text-slate-800 shadow-rose-500/5'}
       `;
 
       const icon = type === 'success' ? '<div class="p-1 rounded-lg bg-emerald-500/10 text-emerald-500">✅</div>' : '<div class="p-1 rounded-lg bg-rose-500/10 text-rose-500">❌</div>';
@@ -917,9 +829,9 @@
         ${icon}
         <div class="flex-1 min-w-0">
           <p class="text-xs font-semibold leading-relaxed">${message}</p>
-          ${subtitle ? `<p class="text-[10px] text-slate-400 dark:text-slate-400 mt-0.5 truncate">${subtitle}</p>` : ''}
+          ${subtitle ? `<p class="text-[10px] text-slate-400 mt-0.5 truncate">${subtitle}</p>` : ''}
         </div>
-        <button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors" onclick="this.parentElement.remove()">
+        <button class="text-slate-400 hover:text-slate-600 transition-colors" onclick="this.parentElement.remove()">
           ❌
         </button>
       `;

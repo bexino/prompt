@@ -1,4 +1,4 @@
-# Prompt
+# [Prompt](https://github.com/bexino/prompt)
 
 [TOC]
 
