@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>提示词复制库</title>
+  <title>一键复制库</title>
 
 
 
@@ -58,7 +58,7 @@
     .pride-gradient-bg {
       background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
     }
-    
+
     .pride-gradient-text {
       background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
       -webkit-background-clip: text;
@@ -67,140 +67,190 @@
       text-fill-color: transparent;
     }
 
-    /* Pride Hover & Copied Card with Gradient Border */
+    /* Pride Card Solid Color Themes & Thick Borders */
     .pride-card {
       position: relative;
-      border: 1px solid rgba(226, 232, 240, 1); /* border-slate-200 */
       background-color: white;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-width: 3px;
+      border-style: solid;
     }
-    .pride-card::before {
-      content: '';
-      position: absolute;
-      top: -1px; bottom: -1px; left: -1px; right: -1px;
-      z-index: 1;
-      border-radius: 1rem; /* rounded-2xl */
-      padding: 1px;
-      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-    }
-    .pride-card:not(.copied):hover::before {
-      opacity: 1;
-    }
+
     .pride-card:hover {
-      box-shadow: 0 10px 30px -10px rgba(249, 115, 22, 0.15), 0 10px 30px -10px rgba(59, 130, 246, 0.15);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
     }
-    .pride-card:hover .pride-card-hover-text {
-      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-fill-color: transparent;
+
+    /* 6 Solid Pride Color Themes: Thick Border & Matching Font Color */
+    .pride-card-red {
+      border-color: #ef4444;
+      color: #dc2626;
     }
+    .pride-card-red:hover {
+      background-color: rgba(254, 242, 242, 0.6);
+      box-shadow: 0 12px 24px -6px rgba(239, 68, 68, 0.25);
+    }
+
+    .pride-card-orange {
+      border-color: #f97316;
+      color: #ea580c;
+    }
+    .pride-card-orange:hover {
+      background-color: rgba(255, 247, 237, 0.6);
+      box-shadow: 0 12px 24px -6px rgba(249, 115, 22, 0.25);
+    }
+
+    .pride-card-yellow {
+      border-color: #eab308;
+      color: #ca8a04;
+    }
+    .pride-card-yellow:hover {
+      background-color: rgba(254, 252, 232, 0.6);
+      box-shadow: 0 12px 24px -6px rgba(234, 179, 8, 0.25);
+    }
+
+    .pride-card-green {
+      border-color: #22c55e;
+      color: #16a34a;
+    }
+    .pride-card-green:hover {
+      background-color: rgba(240, 253, 244, 0.6);
+      box-shadow: 0 12px 24px -6px rgba(34, 197, 94, 0.25);
+    }
+
+    .pride-card-blue {
+      border-color: #3b82f6;
+      color: #2563eb;
+    }
+    .pride-card-blue:hover {
+      background-color: rgba(239, 246, 255, 0.6);
+      box-shadow: 0 12px 24px -6px rgba(59, 130, 246, 0.25);
+    }
+
+    .pride-card-purple {
+      border-color: #a855f7;
+      color: #9333ea;
+    }
+    .pride-card-purple:hover {
+      background-color: rgba(250, 245, 255, 0.6);
+      box-shadow: 0 12px 24px -6px rgba(168, 85, 247, 0.25);
+    }
+
     .pride-card.copied {
-      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7) !important;
-      background-clip: border-box !important;
-      background-origin: border-box !important;
+      transition: none !important;
+      background: linear-gradient(135deg, #16a34a, #059669) !important;
       color: white !important;
-      border: 1px solid transparent !important;
-      box-shadow: 0 10px 30px -10px rgba(249, 115, 22, 0.3), 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+      border-color: #16a34a !important;
+      box-shadow: 0 10px 25px -5px rgba(22, 163, 74, 0.4) !important;
     }
-    .pride-card.copied::before {
-      content: none !important;
+
+    .pride-card.copied .card-content-wrap {
       display: none !important;
+      opacity: 0 !important;
     }
-    .pride-card.copied .pride-card-hover-text {
-      background: none !important;
-      -webkit-text-fill-color: white !important;
-      text-fill-color: white !important;
-      color: white !important;
+
+    .pride-card.copied .copied-overlay {
+      display: flex !important;
     }
-    .pride-card.copied .btn-scale {
-      background-color: white !important;
-      color: #16a34a !important; /* Green text representing success */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+
+    .line-clamp-4 {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-5 {
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     /* Pride Solid Color Buttons */
-    .pride-btn-red { background-color: #ef4444 !important; color: white !important; }
-    .pride-btn-red:hover { background-color: #dc2626 !important; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2) !important; }
-    
-    .pride-btn-orange { background-color: #f97316 !important; color: white !important; }
-    .pride-btn-orange:hover { background-color: #ea580c !important; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2) !important; }
-    
-    .pride-btn-yellow { background-color: #eab308 !important; color: white !important; }
-    .pride-btn-yellow:hover { background-color: #ca8a04 !important; box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2) !important; }
-    
-    .pride-btn-green { background-color: #22c55e !important; color: white !important; }
-    .pride-btn-green:hover { background-color: #16a34a !important; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2) !important; }
-    
-    .pride-btn-blue { background-color: #3b82f6 !important; color: white !important; }
-    .pride-btn-blue:hover { background-color: #2563eb !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2) !important; }
-    
-    .pride-btn-purple { background-color: #a855f7 !important; color: white !important; }
-    .pride-btn-purple:hover { background-color: #9333ea !important; box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2) !important; }
+    .pride-btn-red {
+      background-color: #ef4444 !important;
+      color: white !important;
+    }
 
-    /* Pride Category Link */
-    .pride-category-link {
-      position: relative;
-      border: 1px solid rgba(226, 232, 240, 1);
-      background-color: white;
-      transition: all 0.2s ease;
+    .pride-btn-red:hover {
+      background-color: #dc2626 !important;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2) !important;
     }
-    .pride-category-link::before {
-      content: '';
-      position: absolute;
-      top: -1px; bottom: -1px; left: -1px; right: -1px;
-      z-index: 1;
-      border-radius: 0.75rem; /* rounded-xl */
-      padding: 1px;
-      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      pointer-events: none;
+
+    .pride-btn-orange {
+      background-color: #f97316 !important;
+      color: white !important;
     }
-    .pride-category-link:hover::before {
-      opacity: 1;
+
+    .pride-btn-orange:hover {
+      background-color: #ea580c !important;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2) !important;
     }
-    .pride-category-link:hover {
-      box-shadow: 0 4px 12px -2px rgba(249, 115, 22, 0.1), 0 4px 12px -2px rgba(59, 130, 246, 0.1);
-      transform: translateY(-1px);
+
+    .pride-btn-yellow {
+      background-color: #eab308 !important;
+      color: white !important;
     }
-    .pride-category-link:hover .pride-category-text {
-      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-fill-color: transparent;
+
+    .pride-btn-yellow:hover {
+      background-color: #ca8a04 !important;
+      box-shadow: 0 4px 12px rgba(234, 179, 8, 0.2) !important;
     }
+
+    .pride-btn-green {
+      background-color: #22c55e !important;
+      color: white !important;
+    }
+
+    .pride-btn-green:hover {
+      background-color: #16a34a !important;
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2) !important;
+    }
+
+    .pride-btn-blue {
+      background-color: #3b82f6 !important;
+      color: white !important;
+    }
+
+    .pride-btn-blue:hover {
+      background-color: #2563eb !important;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2) !important;
+    }
+
+    .pride-btn-purple {
+      background-color: #a855f7 !important;
+      color: white !important;
+    }
+
+    .pride-btn-purple:hover {
+      background-color: #9333ea !important;
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.2) !important;
+    }
+
 
 
     /* Pride Buttons & Banner */
     .pride-btn {
-      background-color: #334155; /* slate-700 */
+      background-color: #334155;
+      /* slate-700 */
       color: white;
       transition: all 0.2s ease;
     }
+
     .pride-btn:hover {
       background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
       box-shadow: 0 4px 12px rgba(249, 115, 22, 0.15);
     }
-    
+
     .pride-btn-secondary {
-      background-color: #f8fafc; /* slate-50 */
-      color: #334155; /* slate-700 */
+      background-color: #f8fafc;
+      /* slate-50 */
+      color: #334155;
+      /* slate-700 */
       transition: all 0.2s ease;
       border: 1px solid #e2e8f0;
     }
+
     .pride-btn-secondary:hover {
       background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
       color: white;
@@ -215,38 +265,23 @@
       background-color: rgba(255, 255, 255, 0.9);
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
+
     .pride-banner::before {
       content: '';
       position: absolute;
-      top: -1px; bottom: -1px; left: -1px; right: -1px;
+      top: -1px;
+      bottom: -1px;
+      left: -1px;
+      right: -1px;
       z-index: -1;
-      border-radius: 1rem; /* rounded-2xl */
+      border-radius: 1rem;
+      /* rounded-2xl */
       background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
-    }
-
-    /* Dropdown Arrow Rotation Style */
-    #dropdown-arrow {
-      transition: transform 0.2s ease;
-      display: inline-block;
-    }
-    .rotate-180 {
-      transform: rotate(180deg);
-    }
-    .pride-dropdown-border {
-      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
-    }
-    .dropdown-item:hover .dropdown-item-text {
-      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-fill-color: transparent;
     }
   </style>
 </head>
 
-<body
-  class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans pb-16">
+<body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans pb-16">
 
   <!-- Drag and Drop Overlay -->
   <div id="drag-overlay"
@@ -261,32 +296,8 @@
     </div>
   </div>
 
-  <!-- Header -->
-  <header
-    class="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md transition-colors duration-300">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-center relative">
-      <button id="dropdown-trigger" onclick="toggleDropdown(event)"
-        class="flex items-center gap-1.5 focus:outline-none select-none cursor-pointer">
-        <h1 id="webpage-header-title"
-          class="text-lg font-bold tracking-tight pride-gradient-text text-center">
-          提示词复制库</h1>
-        <span class="text-xs text-slate-500" id="dropdown-arrow">🔽</span>
-      </button>
-
-      <!-- Dropdown Menu -->
-      <div id="category-dropdown"
-        class="hidden absolute top-16 mt-2 w-56 pride-dropdown-border rounded-2xl shadow-xl z-50 p-[1px] transition-all duration-200 origin-top scale-95 opacity-0 flex flex-col">
-        <div class="bg-white/95 backdrop-blur-md rounded-[15px] py-1.5 flex flex-col w-full h-full" id="category-dropdown-inner">
-          <!-- Category links will be rendered here dynamically -->
-        </div>
-      </div>
-    </div>
-    <!-- Thin Rainbow Gradient Line -->
-    <div class="h-[1px] w-full" style="background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);"></div>
-  </header>
-
-  <!-- Main Container (Centered Single Column) -->
-  <main class="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8">
+  <!-- Main Container (Responsive 3-Column Max Grid Layout) -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
     <div class="flex flex-col gap-6 w-full">
 
       <!-- Local Offline Mode Banner -->
@@ -530,149 +541,208 @@
       window.location.reload();
     }
 
-    // Collapsible Search UI Handlers
-    function openSearch() {
-      const openBtn = document.getElementById('search-open-btn');
-      const searchBox = document.getElementById('search-box');
-      const searchInput = document.getElementById('search-input');
-
-      if (openBtn && searchBox && searchInput) {
-        openBtn.classList.add('hidden');
-        searchBox.classList.remove('hidden');
-        searchBox.classList.add('flex');
-        searchInput.focus();
-      }
+    // Inline markdown parser
+    function parseInline(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-black text-slate-950">$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em class="italic text-slate-900">$1</em>')
+        .replace(/`([^`]+)`/g, '<code class="bg-slate-100 text-slate-900 px-2 py-0.5 rounded-md text-sm sm:text-base font-mono border border-slate-200">$1</code>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 hover:underline font-bold transition-colors">$1</a>');
     }
 
-    // Close and reset search
-    function closeSearch() {
-      const openBtn = document.getElementById('search-open-btn');
-      const searchBox = document.getElementById('search-box');
+    // Convert markdown text block to styled HTML adhering to enlarged HCI typography standards
+    function renderMarkdownToHtml(mdText) {
+      if (!mdText.trim()) return '';
 
-      if (openBtn && searchBox) {
-        clearSearch();
-        searchBox.classList.remove('flex');
-        searchBox.classList.add('hidden');
-        openBtn.classList.remove('hidden');
+      const lines = mdText.split('\n');
+      const result = [];
+      let inList = null;
+      let inTable = false;
+
+      function closeList() {
+        if (inList) {
+          result.push(`</${inList}>`);
+          inList = null;
+        }
       }
+
+      function closeTable() {
+        if (inTable) {
+          result.push('</tbody></table></div>');
+          inTable = false;
+        }
+      }
+
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let trimmed = line.trim();
+
+        let isQuote = false;
+        if (trimmed.startsWith('>')) {
+          isQuote = true;
+          trimmed = trimmed.replace(/^>\s?/, '');
+        }
+
+        if (trimmed === '---' || trimmed === '***') {
+          closeList();
+          closeTable();
+          result.push('<hr class="my-8 border-slate-200">');
+          continue;
+        }
+
+        if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+          closeList();
+          const cells = trimmed.split('|').slice(1, -1).map(c => c.trim());
+          if (cells.every(c => /^:?-+:?$/.test(c))) continue;
+
+          if (!inTable) {
+            inTable = true;
+            result.push('<div class="overflow-x-auto my-5"><table class="w-full text-sm sm:text-base text-left border-collapse border border-slate-200 rounded-xl overflow-hidden shadow-sm"><thead><tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">');
+            cells.forEach(c => result.push(`<th class="px-4.5 py-3.5 border-r border-slate-200 last:border-0 text-base sm:text-lg">${parseInline(c)}</th>`));
+            result.push('</tr></thead><tbody>');
+          } else {
+            result.push('<tr class="border-b border-slate-200/70 last:border-0 hover:bg-slate-50/80 transition-colors">');
+            cells.forEach(c => result.push(`<td class="px-4.5 py-3.5 border-r border-slate-200/70 last:border-0 text-slate-800 leading-relaxed">${parseInline(c)}</td>`));
+            result.push('</tr>');
+          }
+          continue;
+        } else {
+          closeTable();
+        }
+
+        if (trimmed.startsWith('# ')) {
+          closeList();
+          result.push(`<h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter pride-gradient-text my-8 sm:my-12 leading-none select-none">${parseInline(trimmed.substring(2))}</h1>`);
+          continue;
+        }
+        if (trimmed.startsWith('#### ')) {
+          closeList();
+          result.push(`<h4 class="text-lg sm:text-xl font-bold text-slate-900 my-4">${parseInline(trimmed.substring(5))}</h4>`);
+          continue;
+        }
+
+        const ulMatch = trimmed.match(/^[-*]\s+(.*)/);
+        if (ulMatch) {
+          if (inList !== 'ul') {
+            closeList();
+            inList = 'ul';
+            result.push('<ul class="list-disc list-inside space-y-2.5 my-4 text-base sm:text-lg text-slate-800 leading-relaxed">');
+          }
+          result.push(`<li>${parseInline(ulMatch[1])}</li>`);
+          continue;
+        }
+
+        const olMatch = trimmed.match(/^\d+\.\s+(.*)/);
+        if (olMatch) {
+          if (inList !== 'ol') {
+            closeList();
+            inList = 'ol';
+            result.push('<ol class="list-decimal list-inside space-y-2.5 my-4 text-base sm:text-lg text-slate-800 leading-relaxed">');
+          }
+          result.push(`<li>${parseInline(olMatch[1])}</li>`);
+          continue;
+        }
+
+        closeList();
+
+        if (trimmed) {
+          const inlineContent = parseInline(trimmed);
+          if (isQuote) {
+            result.push(`<blockquote class="border-l-4 border-slate-300 pl-4.5 py-3 my-3 text-base sm:text-lg text-slate-800 italic bg-slate-50/90 rounded-r-xl">${inlineContent}</blockquote>`);
+          } else {
+            result.push(`<p class="text-base sm:text-lg text-slate-800 my-3 leading-relaxed">${inlineContent}</p>`);
+          }
+        }
+      }
+
+      closeList();
+      closeTable();
+      return result.join('');
     }
 
-    // Markdown Parser: H2 for category text separators, H3 for copyable prompts
+    // Markdown Parser: H2 for category separators, H3 for subheadings, formatted text, and copyable prompt code blocks
     function parseMarkdown(mdText) {
       const lines = mdText.split(/\r?\n/);
       const items = [];
-      let i = 0;
+      let pendingTextLines = [];
+      let lastHeadingTitle = "";
 
+      function flushPendingText() {
+        if (pendingTextLines.length === 0) return;
+        const html = renderMarkdownToHtml(pendingTextLines.join('\n'));
+        if (html.trim()) {
+          items.push({ type: 'html', content: html });
+        }
+        pendingTextLines = [];
+      }
+
+      let i = 0;
       while (i < lines.length) {
         const line = lines[i];
         const cleanLine = line.trim();
 
-        // Match Level 1 heading (H1) - Ignored
-        if (cleanLine.startsWith('# ')) {
+        if (cleanLine === '[TOC]') {
+          flushPendingText();
+          items.push({ type: 'toc' });
           i++;
           continue;
         }
 
-        // Match Level 2 heading (H2)
-        if (cleanLine.startsWith('## ')) {
-          const title = cleanLine.substring(3).trim();
-
-          // STRICT RULE: Skip headings starting with 🚫 and all content under them
-          if (title.startsWith('🚫')) {
-            let nextHeadingIdx = lines.length;
-            let skipInsideCode = false;
-
-            for (let j = i + 1; j < lines.length; j++) {
-              const nextLine = lines[j].trim();
-
-              // Track and skip inner code blocks during header search
-              if (/^`{3}(?!`)/.test(nextLine)) {
-                skipInsideCode = !skipInsideCode;
-                continue;
-              }
-
-              // Search for the next heading outside code blocks
-              if (!skipInsideCode && (nextLine.startsWith('# ') || nextLine.startsWith('## ') || nextLine.startsWith('### '))) {
-                nextHeadingIdx = j;
-                break;
-              }
-            }
-            i = nextHeadingIdx;
-            continue;
-          }
-
-          items.push({ type: 'h2', title });
-          i++;
-          continue;
-        }
-
-        // Match Level 3 heading (H3)
-        if (cleanLine.startsWith('### ')) {
-          const title = cleanLine.substring(4).trim();
-
-          // STRICT RULE: Skip headings starting with 🚫 and all content under them
-          if (title.startsWith('🚫')) {
-            let nextHeadingIdx = lines.length;
-            let skipInsideCode = false;
-
-            for (let j = i + 1; j < lines.length; j++) {
-              const nextLine = lines[j].trim();
-
-              if (/^`{3}(?!`)/.test(nextLine)) {
-                skipInsideCode = !skipInsideCode;
-                continue;
-              }
-
-              if (!skipInsideCode && (nextLine.startsWith('# ') || nextLine.startsWith('## ') || nextLine.startsWith('### '))) {
-                nextHeadingIdx = j;
-                break;
-              }
-            }
-            i = nextHeadingIdx;
-            continue;
-          }
-
-          let code = null;
-          let insideCode = false;
+        // Match Code Block: ```
+        if (/^`{3}(?!`)/.test(cleanLine)) {
+          flushPendingText();
           const codeLines = [];
-          let endIdx = -1;
-
-          for (let j = i + 1; j < lines.length; j++) {
-            const nextLine = lines[j];
-            const cleanNextLine = nextLine.trim();
-
-            // Stop if we hit any other heading outside code block
-            if ((cleanNextLine.startsWith('# ') || cleanNextLine.startsWith('## ') || cleanNextLine.startsWith('### ')) && !insideCode) {
+          i++;
+          while (i < lines.length) {
+            if (/^`{3}(?!`)/.test(lines[i].trim())) {
+              i++;
               break;
             }
+            codeLines.push(lines[i]);
+            i++;
+          }
+          const code = codeLines.join('\n');
 
-            // Strictly match starting with exactly three backticks (not 1, not 2, not 4+)
-            if (/^`{3}(?!`)/.test(cleanNextLine)) {
-              if (insideCode) {
-                insideCode = false;
-                code = codeLines.join('\n');
-                endIdx = j;
-                break;
-              } else {
-                insideCode = true;
-              }
-              continue;
-            }
-
-            if (insideCode) {
-              codeLines.push(nextLine);
-            }
+          let title = lastHeadingTitle || "一键复制 Prompt";
+          if (items.length > 0 && items[items.length - 1].type === 'h3_heading') {
+            title = items[items.length - 1].title;
+            items.pop();
           }
 
-          // If we found a code block before encountering another heading, this is a valid prompt
-          if (code !== null) {
-            items.push({ type: 'prompt', title, code });
-            i = endIdx + 1;
-            continue;
-          }
+          items.push({ type: 'prompt', title, code });
+          lastHeadingTitle = "";
+          continue;
         }
+
+        // Match Level 2 Heading (## Category)
+        if (cleanLine.startsWith('## ')) {
+          flushPendingText();
+          const title = cleanLine.substring(3).trim();
+          items.push({ type: 'h2', title });
+          lastHeadingTitle = title;
+          i++;
+          continue;
+        }
+
+        // Match Level 3 Heading (### Title)
+        if (cleanLine.startsWith('### ')) {
+          flushPendingText();
+          const title = cleanLine.substring(4).trim();
+          items.push({ type: 'h3_heading', title });
+          lastHeadingTitle = title;
+          i++;
+          continue;
+        }
+
+        pendingTextLines.push(line);
         i++;
       }
+
+      flushPendingText();
       return { items };
     }
 
@@ -680,20 +750,15 @@
     function parseAndRender() {
       const parsed = parseMarkdown(rawMarkdown);
       parsedItems = parsed.items;
-
-      // Render Table of Contents directory
-      renderDirectory();
-
-      // Render explorer prompts list
       renderExplorer();
     }
 
     // Smooth Scroll Helper
     function scrollToSection(event, id) {
-      event.preventDefault();
+      if (event) event.preventDefault();
       const el = document.getElementById(id);
       if (el) {
-        const headerOffset = 80; // height of sticky header
+        const headerOffset = 40;
         const elementPosition = el.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -704,161 +769,151 @@
       }
     }
 
-    // Dynamic rendering of Table of Contents directory in dropdown menu
-    function renderDirectory() {
-      const dropdown = document.getElementById('category-dropdown-inner');
-      if (!dropdown) return;
-
-      // H2 headings are our categories in the page body
-      const categories = parsedItems.filter(item => item.type === 'h2');
-
-      dropdown.innerHTML = "";
-
-      if (categories.length === 0) {
-        // Hide trigger button if no categories exist
-        const trigger = document.getElementById('dropdown-trigger');
-        if (trigger) trigger.classList.add('hidden');
-        return;
-      }
-
-      const trigger = document.getElementById('dropdown-trigger');
-      if (trigger) trigger.classList.remove('hidden');
-
-      categories.forEach((item) => {
-        const idx = parsedItems.indexOf(item);
-        const itemEl = document.createElement('a');
-        itemEl.href = `#category-${idx}`;
-        itemEl.className = "flex items-center px-4 py-3 hover:bg-slate-50 rounded-xl mx-1 transition-all duration-200 cursor-pointer border-b border-slate-100 last:border-0 dropdown-item";
-        itemEl.innerHTML = `
-          <span class="truncate text-sm font-semibold text-slate-800 dropdown-item-text">${item.title}</span>
-        `;
-        itemEl.addEventListener('click', (e) => {
-          scrollToSection(e, `category-${idx}`);
-          closeDropdown();
-        });
-        dropdown.appendChild(itemEl);
-      });
-    }
-
-    // Dropdown visibility controllers
-    function toggleDropdown(event) {
-      if (event) event.stopPropagation();
-      const dropdown = document.getElementById('category-dropdown');
-      const arrow = document.getElementById('dropdown-arrow');
-      if (!dropdown) return;
-
-      const isHidden = dropdown.classList.contains('hidden');
-      if (isHidden) {
-        dropdown.classList.remove('hidden');
-        // trigger animation
-        requestAnimationFrame(() => {
-          dropdown.classList.remove('opacity-0', 'scale-95');
-          dropdown.classList.add('opacity-100', 'scale-100');
-          if (arrow) arrow.classList.add('rotate-180');
-        });
-      } else {
-        closeDropdown();
-      }
-    }
-
-    function closeDropdown() {
-      const dropdown = document.getElementById('category-dropdown');
-      const arrow = document.getElementById('dropdown-arrow');
-      if (!dropdown || dropdown.classList.contains('hidden')) return;
-
-      dropdown.classList.remove('opacity-100', 'scale-100');
-      dropdown.classList.add('opacity-0', 'scale-95');
-      if (arrow) arrow.classList.remove('rotate-180');
-
-      // wait for transition then hide
-      setTimeout(() => {
-        if (dropdown.classList.contains('opacity-0')) {
-          dropdown.classList.add('hidden');
-        }
-      }, 200);
-    }
-
-    // Close dropdown on click outside
-    document.addEventListener('click', (e) => {
-      const dropdown = document.getElementById('category-dropdown');
-      const trigger = document.getElementById('dropdown-trigger');
-      if (dropdown && !dropdown.contains(e.target) && trigger && !trigger.contains(e.target)) {
-        closeDropdown();
-      }
-    });
-
-    // Dynamic rendering of flat Prompt Explorer lists
+    // Dynamic rendering of flat Prompt Explorer list as Responsive Square Card Grid with Pride Solid Color Themes
     function renderExplorer() {
       const root = document.getElementById('prompts-list-root');
       if (!root) return;
       root.innerHTML = "";
 
-      const prideColors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
+      const prideColorThemes = [
+        'pride-card-red',
+        'pride-card-orange',
+        'pride-card-yellow',
+        'pride-card-green',
+        'pride-card-blue',
+        'pride-card-purple'
+      ];
       let promptCounter = 0;
 
-      parsedItems.forEach((item, idx) => {
-        if (item.type === 'h2') {
-          // Render Level 2 headings as simple text separators
-          const h2El = document.createElement('h2');
-          h2El.className = "text-base font-bold text-slate-800 pt-6 pb-2 border-b border-slate-200/60 mt-6 first:mt-2 select-none";
-          const itemIdx = parsedItems.indexOf(item);
-          h2El.id = `category-${itemIdx}`;
-          h2El.innerHTML = item.title;
-          root.appendChild(h2El);
-        } else {
-          const promptId = `prompt-${idx}`;
-          const promptEl = document.createElement('div');
-          const colorIdx = promptCounter % 6;
-          promptCounter++;
-          const btnColorClass = `pride-btn-${prideColors[colorIdx]}`;
+      let i = 0;
+      while (i < parsedItems.length) {
+        const item = parsedItems[i];
 
-          // Premium Prompt Card styled with beautiful borders and shadows
-          promptEl.className = "group/card pride-card p-5 rounded-2xl shadow-sm flex items-center justify-between cursor-pointer";
-          promptEl.id = promptId;
+        if (item.type === 'toc') {
+          const categories = parsedItems.filter(it => it.type === 'h2');
+          if (categories.length > 0) {
+            const tocEl = document.createElement('div');
+            tocEl.className = "bg-white p-6 sm:p-8 rounded-3xl border-2 border-slate-200 shadow-sm my-6 select-none w-full";
 
-          // Store prompt code and title directly as element properties (avoids escaping bugs)
-          promptEl._promptCode = item.code;
-          promptEl._promptTitle = item.title;
+            let tocHtml = `
+              <div class="flex items-center gap-2 text-sm sm:text-base font-bold text-slate-500 uppercase tracking-wider mb-4">
+                <span>📌</span> 目录
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            `;
 
-          promptEl.innerHTML = `
-            <div class="flex-1 pr-6 min-w-0">
-              <h3 class="text-sm font-semibold text-slate-800 pride-card-hover-text transition-colors">
-                ${item.title}
-              </h3>
-            </div>
-            
-            <button id="btn-${promptId}" class="btn-scale flex items-center gap-1.5 px-4 py-2 ${btnColorClass} rounded-xl transition-all duration-200 shadow-sm shrink-0">📋 <span class="text-xs font-semibold">复制</span></button>
-          `;
-
-          // Card click event triggers copy
-          promptEl.addEventListener('click', () => {
-            copyPromptCard(promptEl._promptCode, promptId, promptEl._promptTitle);
-          });
-
-          // Button click event stops propagation and triggers copy
-          const btn = promptEl.querySelector(`#btn-${promptId}`);
-          if (btn) {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              copyPromptCard(promptEl._promptCode, promptId, promptEl._promptTitle);
+            categories.forEach((catItem) => {
+              const catIdx = parsedItems.indexOf(catItem);
+              tocHtml += `
+                <a href="#category-${catIdx}" data-target="category-${catIdx}"
+                  class="toc-item-link flex items-center justify-between px-6 sm:px-7 py-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-900 hover:text-slate-950 transition-all text-base sm:text-lg font-extrabold group shadow-xs">
+                  <span class="truncate pr-3">${parseInline(catItem.title)}</span>
+                  <span class="text-slate-400 group-hover:translate-x-1 transition-transform shrink-0">→</span>
+                </a>
+              `;
             });
+
+            tocHtml += `</div>`;
+            tocEl.innerHTML = tocHtml;
+
+            tocEl.querySelectorAll('.toc-item-link').forEach(link => {
+              link.addEventListener('click', (e) => {
+                const targetId = link.getAttribute('data-target');
+                scrollToSection(e, targetId);
+              });
+            });
+
+            root.appendChild(tocEl);
+          }
+          i++;
+        } else if (item.type === 'h2') {
+          const h2El = document.createElement('h2');
+          h2El.className = "text-2xl sm:text-3xl font-extrabold text-slate-950 pt-10 pb-4 border-b-2 border-slate-200/90 mt-10 first:mt-3 select-none w-full";
+          h2El.id = `category-${i}`;
+          h2El.innerHTML = parseInline(item.title);
+          root.appendChild(h2El);
+          i++;
+        } else if (item.type === 'h3_heading') {
+          const h3El = document.createElement('h3');
+          h3El.className = "text-lg sm:text-xl font-bold text-slate-900 mt-8 mb-4 select-none w-full";
+          h3El.innerHTML = parseInline(item.title);
+          root.appendChild(h3El);
+          i++;
+        } else if (item.type === 'html') {
+          const div = document.createElement('div');
+          div.className = "text-base sm:text-lg text-slate-800 leading-relaxed my-3 w-full";
+          div.innerHTML = item.content;
+          root.appendChild(div);
+          i++;
+        } else if (item.type === 'prompt') {
+          // Collect consecutive prompt cards into a responsive grid (2 columns on mobile, max 3 columns on web)
+          const promptGroup = [];
+          while (i < parsedItems.length && parsedItems[i].type === 'prompt') {
+            promptGroup.push({ item: parsedItems[i], idx: i });
+            i++;
           }
 
-          root.appendChild(promptEl);
+          const gridEl = document.createElement('div');
+          gridEl.className = "grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-5 my-5 w-full";
+
+          promptGroup.forEach(({ item: promptItem, idx: promptIdx }) => {
+            const promptId = `prompt-${promptIdx}`;
+            const promptEl = document.createElement('div');
+
+            const colorTheme = prideColorThemes[promptCounter % 6];
+            promptCounter++;
+
+            promptEl.className = `group/card pride-card ${colorTheme} aspect-square p-3.5 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl shadow-sm flex flex-col justify-between cursor-pointer relative overflow-hidden transition-all duration-300 select-none btn-scale`;
+            promptEl.id = promptId;
+
+            promptEl._promptCode = promptItem.code;
+            promptEl._promptTitle = promptItem.title;
+
+            promptEl.innerHTML = `
+              <div class="card-content-wrap flex flex-col justify-between h-full w-full">
+                <div class="w-full text-left overflow-hidden">
+                  <h3 class="text-lg sm:text-xl md:text-2xl lg:text-2xl font-black line-clamp-4 sm:line-clamp-5 leading-snug tracking-tight break-words">
+                    ${parseInline(promptItem.title)}
+                  </h3>
+                </div>
+                <div class="flex items-center justify-end w-full mt-auto pt-2">
+                  <span class="clipboard-icon text-xl sm:text-2xl opacity-80 group-hover/card:opacity-100 group-hover/card:scale-110 transition-all select-none">📋</span>
+                </div>
+              </div>
+              <div class="copied-overlay hidden absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+                <span class="text-6xl sm:text-7xl font-black text-white transform scale-110 transition-transform">✓</span>
+              </div>
+            `;
+
+            promptEl.addEventListener('click', () => {
+              copyPromptCard(promptEl._promptCode, promptId, promptEl._promptTitle);
+            });
+
+            gridEl.appendChild(promptEl);
+          });
+
+          root.appendChild(gridEl);
+        } else {
+          i++;
         }
-      });
+      }
     }
 
-    // Clipboard Copy Execution
-    async function copyPromptCard(text, promptId, title) {
-      const buttonEl = document.getElementById(`btn-${promptId}`);
+    // Clipboard Copy Execution with Synchronous 0ms INSTANT UI Feedback
+    function copyPromptCard(text, promptId, title) {
       const cardEl = document.getElementById(promptId);
 
-      try {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          await navigator.clipboard.writeText(text);
-        } else {
-          // Fallback clipboard method
+      // 1. INSTANT UI FEEDBACK (0ms synchronous execution!)
+      showCopyFeedback(cardEl, title);
+
+      // 2. Clipboard API execution in background
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(err => {
+          console.error('Clipboard copy error: ', err);
+          showToast('复制失败，请尝试手动复制', 'error');
+        });
+      } else {
+        try {
           const textarea = document.createElement('textarea');
           textarea.value = text;
           textarea.style.position = 'fixed';
@@ -867,43 +922,25 @@
           textarea.select();
           document.execCommand('copy');
           document.body.removeChild(textarea);
+        } catch (err) {
+          console.error('Fallback copy failed: ', err);
+          showToast('复制失败，请尝试手动复制', 'error');
         }
-
-        showCopyFeedback(buttonEl, cardEl, title);
-      } catch (err) {
-        console.error('Copy failed: ', err);
-        showToast('复制失败，请尝试手动复制', 'error');
       }
     }
 
-    // Clipboard UI feedback controller
-    function showCopyFeedback(buttonEl, cardEl, title) {
-      if (!buttonEl) return;
+    // Clipboard UI feedback controller: Card instantly turns green, text disappears, centered huge checkmark ✓ appears
+    function showCopyFeedback(cardEl, title) {
+      if (!cardEl) return;
 
-      if (buttonEl.copyTimeout) {
-        clearTimeout(buttonEl.copyTimeout);
+      if (cardEl.copyTimeout) {
+        clearTimeout(cardEl.copyTimeout);
       }
 
-      const originalHtml = buttonEl.dataset.originalHtml || buttonEl.innerHTML;
-      if (!buttonEl.dataset.originalHtml) {
-        buttonEl.dataset.originalHtml = originalHtml;
-      }
+      cardEl.classList.add('copied');
 
-      // Change Button State to Success
-      buttonEl.innerHTML = `✅ <span class="text-xs font-semibold">已复制</span>`;
-
-      if (cardEl) {
-        cardEl.classList.add('copied');
-      }
-
-      showToast('复制成功', 'success');
-
-      buttonEl.copyTimeout = setTimeout(() => {
-        buttonEl.innerHTML = originalHtml;
-
-        if (cardEl) {
-          cardEl.classList.remove('copied');
-        }
+      cardEl.copyTimeout = setTimeout(() => {
+        cardEl.classList.remove('copied');
       }, 2000);
     }
 
@@ -913,18 +950,18 @@
       if (!container) return;
 
       const toast = document.createElement('div');
-      
+
       if (message === '复制成功') {
         const wrapper = document.createElement('div');
         wrapper.className = "fixed inset-0 z-50 flex items-center justify-center pointer-events-none";
-        
+
         toast.className = `
-          px-5 py-2.5 rounded-xl shadow-lg bg-green-600 text-white text-xs font-semibold backdrop-blur-sm transform scale-90 opacity-0 transition-all duration-200 ease-out flex items-center justify-center
+          px-6 py-3 rounded-2xl shadow-xl bg-green-600 text-white text-sm font-bold backdrop-blur-sm transform scale-90 opacity-0 transition-all duration-200 ease-out flex items-center justify-center
         `;
         toast.innerHTML = `<span>${message}</span>`;
         wrapper.appendChild(toast);
         document.body.appendChild(wrapper);
-        
+
         requestAnimationFrame(() => {
           toast.classList.remove('scale-90', 'opacity-0');
         });
@@ -939,7 +976,7 @@
       }
 
       toast.className = `
-        flex items-start justify-between gap-3 p-4 rounded-2xl shadow-lg border backdrop-blur-md transform translate-y-2 opacity-0 transition-all duration-300 ease-out max-w-sm w-full
+        flex items-start justify-between gap-3 p-4.5 rounded-2xl shadow-lg border backdrop-blur-md transform translate-y-2 opacity-0 transition-all duration-300 ease-out max-w-sm w-full
         ${type === 'success'
           ? 'pride-gradient-bg text-white border-transparent shadow-md shadow-orange-500/5'
           : 'bg-white/95 border-rose-500/30 text-slate-800 shadow-rose-500/5'}
@@ -947,10 +984,10 @@
 
       toast.innerHTML = `
         <div class="flex-1 min-w-0">
-          <p class="text-xs font-semibold leading-relaxed">${message}</p>
-          ${subtitle ? `<p class="text-[10px] ${type === 'success' ? 'text-white/80' : 'text-slate-400'} mt-0.5 truncate">${subtitle}</p>` : ''}
+          <p class="text-sm font-semibold leading-relaxed">${message}</p>
+          ${subtitle ? `<p class="text-xs ${type === 'success' ? 'text-white/80' : 'text-slate-400'} mt-0.5 truncate">${subtitle}</p>` : ''}
         </div>
-        <button class="${type === 'success' ? 'text-white/80 hover:text-white' : 'text-slate-400 hover:text-slate-600'} transition-colors font-bold text-xs" onclick="this.parentElement.remove()">
+        <button class="${type === 'success' ? 'text-white/80 hover:text-white' : 'text-slate-400 hover:text-slate-600'} transition-colors font-bold text-sm" onclick="this.parentElement.remove()">
           &times;
         </button>
       `;
@@ -1006,15 +1043,6 @@
       if (root) root.classList.remove('hidden');
     }
   </script>
-  <!-- Permanent Bottom Rainbow Strip -->
-  <div class="fixed bottom-0 left-0 right-0 z-50 h-5 flex w-full select-none pointer-events-none" id="pride-bottom-strip">
-    <div class="flex-1 bg-[#ef4444]"></div>
-    <div class="flex-1 bg-[#f97316]"></div>
-    <div class="flex-1 bg-[#eab308]"></div>
-    <div class="flex-1 bg-[#22c55e]"></div>
-    <div class="flex-1 bg-[#3b82f6]"></div>
-    <div class="flex-1 bg-[#a855f7]"></div>
-  </div>
 </body>
 
 </html>
