@@ -228,3 +228,8 @@ https://easylist-downloads.adblockplus.org/easyprivacy.txt
 3. 滚动到页面底部，勾选 “导入”。
 4. 在文本框中粘贴以上 URL。
 5. 点击上方绿色的 “应用更改”。
+
+---
+
+©️ bexino. 2026  
+All rights reserved.
