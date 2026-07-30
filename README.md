@@ -231,5 +231,29 @@ https://easylist-downloads.adblockplus.org/easyprivacy.txt
 
 ---
 
+## VSCode 商店源链接
+
+1. **打开设置：** 在 Google Antigravity IDE 中，使用快捷键 `Ctrl + ,` (Windows/Linux) 或 `Cmd + ,` (Mac) 打开设置界面。
+
+2. **找到市场配置项：** 在设置页面左侧点击 **“Editor”** 图标，然后在右侧找到 **Marketplace** 相关的配置项。
+
+3. **填入官方源地址：** 在对应的输入框中，将以下两个地址分别复制并填入：
+
+### Marketplace Item URL
+
+```
+https://marketplace.visualstudio.com/items
+```
+
+### Marketplace Gallery URL
+
+```
+https://marketplace.visualstudio.com/_apis/public/gallery
+```
+
+4. **重启生效：** 配置完成后，**彻底关闭并重新打开** Google Antigravity IDE 即可。
+
+---
+
 ©️ bexino. 2026  
 All rights reserved.
