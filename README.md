@@ -231,7 +231,7 @@ https://easylist-downloads.adblockplus.org/easyprivacy.txt
 
 ---
 
-## VSCode 商店源链接
+## 💻 VSCode 商店源链接
 
 1. **打开设置：** 在 Google Antigravity IDE 中，使用快捷键 `Ctrl + ,` (Windows/Linux) 或 `Cmd + ,` (Mac) 打开设置界面。
 
