@@ -2,9 +2,9 @@
 
 [TOC]
 
-## 🌁 图片重绘生成
+## 🌁图片重绘生成
 
-### ✨ 图片8K高清
+### ✨图片8K高清
 
 ```
 1. 核心目标：
@@ -101,7 +101,7 @@
 把画中的人物变成真人的样子，生成一张看起来像是用iPhone随手自拍的照片。这张照片不需要有清晰的主体，也不用讲究构图，更像是一张随意拍下、无意识的快照。画面因为拍摄时手有晃动而略显模糊，光线来自路灯，均匀地照亮整个场景。图片比例是9:16。整体效果要自然，不能让人一眼看出是AI生成的，必须像真人用手机拍出来的照片。
 ```
 
-## 💬 对话
+## 💬对话
 
 ### LLM 总结上文以接力对话（通用）
 
@@ -168,7 +168,7 @@
 **重写后的中文重绘指令**:
 ```
 
-## ⌨️ AI Coding
+## ⌨️AICoding
 
 ### 交接文档 (docs/HANDOFF.md)
 
@@ -182,7 +182,7 @@
 写给一个完全没有上下文的新会话看。
 ```
 
-## 🎬 视频生成
+## 🎬视频生成
 
 ### 图片转视频 #1
 
@@ -204,7 +204,7 @@
 视角不动，只让头发飘荡，眼睛1.5秒眨眼一次，动作其他的都不动。
 ```
 
-## ⛔ ublock Origin 规则
+## ⛔ublockOrigin规则
 
 ### 反代加速版
 
@@ -246,7 +246,7 @@ https://easylist-downloads.adblockplus.org/easyprivacy.txt
 
 ---
 
-## 💻 VSCode 商店源链接
+## 💻VSCode商店源链接
 
 1. **打开设置：** 在 Google Antigravity IDE 中，使用快捷键 `Ctrl + ,` (Windows/Linux) 或 `Cmd + ,` (Mac) 打开设置界面。
 
@@ -269,6 +269,17 @@ https://marketplace.visualstudio.com/_apis/public/gallery
 4. **重启生效：** 配置完成后，**彻底关闭并重新打开** Google Antigravity IDE 即可。
 
 ---
+
+## 🔄️VScode配置git
+
+以下内容修改成你自己的真实信息：  
+- "你的名字"：GitHub 用户名；  
+- "你的邮箱"：GitHub 账号邮箱。
+
+## 全局配置 (自行修改)
+```
+git config --global user.name "你的名字" && git config --global user.email "你的邮箱"
+```
 
 ©️ bexino. 2026  
 All rights reserved.
