@@ -279,22 +279,22 @@ https://marketplace.visualstudio.com/_apis/public/gallery
 > - Windows下请使用："全局替换 - PowerShell"；  
 > - 报错请手动执行："全局替换 - 手动第1行"与"全局替换 - 手动第2行"。  
 
-## 全局替换 - PowerShell
+### 全局替换 - PowerShell
 ```
 git config --global user.name "你的名字" ; git config --global user.email "你的邮箱"
 ```
 
-## 全局替换 - GitBash
+### 全局替换 - GitBash
 ```
 git config --global user.name "你的名字" && git config --global user.email "你的邮箱"
 ```
 
-## 全局替换 - 手动第1行
+### 全局替换 - 手动第1行
 ```
 git config --global user.name
 ```
 
-## 全局替换 - 手动第2行
+### 全局替换 - 手动第2行
 ```
 git config --global user.email
 ```
