@@ -6,7 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>一键复制库</title>
 
-
+  <script>
+    (() => {
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      const constrained = connection && (connection.saveData || /(^|-)2g$/i.test(connection.effectiveType || ''));
+      if (constrained) document.documentElement.classList.add('low-bandwidth');
+    })();
+  </script>
 
   <!-- Tailwind CSS Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -25,6 +31,22 @@
 
 
   <style>
+    @font-face {
+      font-family: 'Gelasio Local';
+      src: url('./assets/fonts/gelasio-variable.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Prompt Source Han Serif SC';
+      src: url('./assets/fonts/source-han-serif-sc-subset-variable.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 250 900;
+      font-display: swap;
+    }
+
     /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
@@ -278,10 +300,872 @@
       /* rounded-2xl */
       background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
     }
+
+    /* Tactile desktop theme */
+    :root {
+      --wood-dark: #2b170f;
+      --brass-light: #d8b66c;
+      --brass-mid: #9a6f2f;
+      --brass-dark: #4f3215;
+      --leather: #372219;
+      --system-serif: 'Gelasio Local', 'Prompt Source Han Serif SC', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Songti SC', STSong, SimSun, Georgia, 'Times New Roman', serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--wood-dark);
+    }
+
+    body.skeuo-app {
+      position: relative;
+      font-family: var(--system-serif) !important;
+      background-color: var(--wood-dark);
+      background-image:
+        radial-gradient(circle at 50% -10%, rgba(255, 214, 145, 0.16), transparent 42rem),
+        linear-gradient(rgba(30, 13, 7, 0.15), rgba(30, 13, 7, 0.38)),
+        url('./assets/textures/walnut-desk.webp');
+      background-repeat: no-repeat, no-repeat, repeat;
+      background-size: auto, auto, 627px 627px;
+      background-attachment: fixed;
+      color: #2f2821;
+      text-rendering: optimizeLegibility;
+    }
+    html.low-bandwidth body.skeuo-app {
+      font-family: Georgia, 'Times New Roman', 'Songti SC', STSong, SimSun, serif !important;
+    }
+
+    body.skeuo-app::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      box-shadow: inset 0 0 10rem rgba(17, 7, 3, 0.72);
+    }
+
+    ::-webkit-scrollbar { width: 13px; height: 13px; }
+    ::-webkit-scrollbar-track {
+      background: #25140e;
+      box-shadow: inset 1px 0 4px rgba(0, 0, 0, 0.75);
+    }
+    ::-webkit-scrollbar-thumb {
+      border: 3px solid #25140e;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #68471f, #c59a4f 48%, #725025);
+      box-shadow: inset 0 0 0 1px rgba(255, 225, 164, 0.3);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(90deg, #805a2a, #dbb96f 48%, #89642f);
+    }
+
+    .desk-workspace {
+      max-width: 64rem !important;
+      padding-top: 2.25rem !important;
+    }
+
+    .brand-plaque {
+      --plaque-rotation: 0deg;
+      --plaque-mobile-rotation: 0deg;
+      --wear-a-x: 13%;
+      --wear-a-y: 32%;
+      --wear-a-size: 5px;
+      --wear-a-chip-size: 2.4px;
+      --wear-a-chip2-size: 1.8px;
+      --wear-a-alpha: 0.32;
+      --wear-a-light-alpha: 0.2;
+      --wear-a-chip-dx: 1.4%;
+      --wear-a-chip-dy: -7%;
+      --wear-a-chip2-dx: -1.1%;
+      --wear-a-chip2-dy: 6%;
+      --wear-b-x: 73%;
+      --wear-b-y: 68%;
+      --wear-b-size: 7px;
+      --wear-b-chip-size: 3px;
+      --wear-b-chip2-size: 2.1px;
+      --wear-b-alpha: 0.42;
+      --wear-b-light-alpha: 0.27;
+      --wear-b-chip-dx: -1.7%;
+      --wear-b-chip-dy: 9%;
+      --wear-b-chip2-dx: 1.3%;
+      --wear-b-chip2-dy: -7%;
+      --wear-c-x: 88%;
+      --wear-c-y: 24%;
+      --wear-c-size: 4px;
+      --wear-c-alpha: 0.27;
+      --wear-scratch-angle: 174deg;
+      --wear-scratch-stop: 42%;
+      --wear-scratch2-angle: 97deg;
+      --wear-scratch2-stop: 68%;
+      position: relative;
+      margin: 0 auto 2.3rem;
+      width: min(92%, 38rem);
+      padding: 1.15rem 4rem 1.25rem;
+      text-align: center;
+      color: #f5e3bd;
+      border: 1px solid #2b0809;
+      border-radius: 10px;
+      background:
+        radial-gradient(circle var(--wear-a-size) at var(--wear-a-x) var(--wear-a-y), rgba(210, 170, 91, var(--wear-a-alpha)) 0 27%, rgba(29, 5, 7, 0.48) 38%, transparent 76%),
+        radial-gradient(circle var(--wear-a-chip-size) at calc(var(--wear-a-x) + var(--wear-a-chip-dx)) calc(var(--wear-a-y) + var(--wear-a-chip-dy)), rgba(213, 175, 97, var(--wear-a-alpha)) 0 35%, transparent 79%),
+        radial-gradient(circle var(--wear-a-chip2-size) at calc(var(--wear-a-x) + var(--wear-a-chip2-dx)) calc(var(--wear-a-y) + var(--wear-a-chip2-dy)), rgba(25, 3, 5, var(--wear-a-alpha)) 0 36%, transparent 78%),
+        radial-gradient(circle var(--wear-b-size) at var(--wear-b-x) var(--wear-b-y), rgba(24, 3, 5, var(--wear-b-alpha)) 0 31%, rgba(76, 16, 17, 0.2) 52%, transparent 82%),
+        radial-gradient(circle var(--wear-b-chip-size) at calc(var(--wear-b-x) + var(--wear-b-chip-dx)) calc(var(--wear-b-y) + var(--wear-b-chip-dy)), rgba(21, 2, 4, var(--wear-b-alpha)) 0 36%, transparent 80%),
+        radial-gradient(circle var(--wear-b-chip2-size) at calc(var(--wear-b-x) + var(--wear-b-chip2-dx)) calc(var(--wear-b-y) + var(--wear-b-chip2-dy)), rgba(218, 181, 99, var(--wear-b-light-alpha)) 0 34%, transparent 79%),
+        radial-gradient(circle var(--wear-c-size) at var(--wear-c-x) var(--wear-c-y), rgba(218, 181, 99, var(--wear-c-alpha)) 0 30%, transparent 75%),
+        linear-gradient(var(--wear-scratch-angle), transparent 0 calc(var(--wear-scratch-stop) - 0.22%), rgba(211, 194, 143, 0.14) var(--wear-scratch-stop), transparent calc(var(--wear-scratch-stop) + 0.3%)),
+        linear-gradient(var(--wear-scratch2-angle), transparent 0 calc(var(--wear-scratch2-stop) - 0.16%), rgba(25, 3, 5, 0.2) var(--wear-scratch2-stop), transparent calc(var(--wear-scratch2-stop) + 0.22%)),
+        radial-gradient(circle at 22% 12%, rgba(230, 171, 135, 0.11), transparent 30%),
+        linear-gradient(105deg, rgba(255,255,255,0.06), transparent 35%, rgba(0,0,0,0.2)),
+        #571b20;
+      background-blend-mode: normal, normal, multiply, multiply, multiply, screen, screen, screen, multiply, screen, multiply, normal;
+      box-shadow: inset 0 1px 0 rgba(244, 205, 177, 0.12), inset 0 -3px 7px rgba(0,0,0,0.54), inset 0 0 18px rgba(31, 3, 6, 0.4), 0 12px 26px rgba(24, 3, 5, 0.58);
+      text-shadow: 0 1px 0 #210406;
+      transform: rotate(var(--plaque-rotation));
+      transform-origin: 51% 54%;
+    }
+
+    .brand-plaque::before,
+    .brand-plaque::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      background: radial-gradient(circle at 34% 30%, #f1d58c 0 8%, #b6873f 30%, #5b3818 72%, #2d190d 100%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.16);
+    }
+    .brand-plaque::before { left: 1.25rem; }
+    .brand-plaque::after { right: 1.25rem; }
+    .brand-plaque-logo {
+      display: block;
+      width: min(100%, 34rem);
+      max-height: 7.2rem;
+      margin: 0 auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 1px rgba(20, 2, 4, 0.7));
+    }
+    .brand-plaque h1 {
+      margin: 0.28rem 0 0;
+      color: #ead5a9;
+      font-family: inherit;
+      font-size: clamp(0.86rem, 2vw, 1.05rem);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-shadow: 0 2px 2px #260507;
+    }
+
+    .catalog-panel {
+      position: relative;
+      border: 1px solid #1f100a !important;
+      border-radius: 12px !important;
+      color: #ead9b9;
+      background: radial-gradient(circle at 15% 12%, rgba(255,255,255,0.05), transparent 22%), linear-gradient(115deg, rgba(255,255,255,0.025), transparent 40%, rgba(0,0,0,0.2)), #3a241a !important;
+      box-shadow: inset 0 0 0 3px #29170f, inset 0 0 0 4px rgba(185,139,75,0.24), inset 0 1px 12px rgba(255,255,255,0.035), 0 18px 34px rgba(12,5,2,0.5) !important;
+    }
+    .catalog-panel::after {
+      content: '';
+      position: absolute;
+      inset: 11px;
+      pointer-events: none;
+      border: 1px dashed rgba(205, 163, 104, 0.3);
+      border-radius: 7px;
+    }
+    .catalog-panel > div:first-child {
+      color: #d8bd8c !important;
+      text-shadow: 0 1px 1px #160b07;
+    }
+    .catalog-panel .toc-list {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 0.875rem;
+      width: 100%;
+    }
+    .catalog-panel .toc-item-link {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      flex: 0 0 auto;
+      width: max-content;
+      max-width: 100%;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.8rem;
+      border: 1px solid #6d512d !important;
+      border-radius: 5px !important;
+      color: #3f3022 !important;
+      background: linear-gradient(rgba(255,255,255,0.12), rgba(92,62,28,0.05)), #d7bc86 !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 3px 5px rgba(0,0,0,0.4) !important;
+      text-shadow: 0 1px rgba(255,255,255,0.5);
+    }
+    .catalog-panel .toc-item-link:hover {
+      transform: translateY(-2px);
+      color: #24180f !important;
+      background: #e4cd9c !important;
+      box-shadow: inset 0 1px rgba(255,255,255,0.5), 0 6px 10px rgba(0,0,0,0.45) !important;
+    }
+    .catalog-panel .toc-arrow {
+      flex: 0 0 auto;
+      color: #4a321f !important;
+      text-shadow: 0 1px rgba(255, 255, 255, 0.42);
+    }
+    .catalog-panel .toc-label {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .catalog-panel .toc-item-link:hover .toc-arrow {
+      color: #25170d !important;
+    }
+
+    .section-plaque {
+      --plaque-rotation: 0deg;
+      --plaque-mobile-rotation: 0deg;
+      --wear-a-x: 12%;
+      --wear-a-y: 38%;
+      --wear-a-size: 4px;
+      --wear-a-chip-size: 2px;
+      --wear-a-chip2-size: 1.5px;
+      --wear-a-alpha: 0.4;
+      --wear-a-light-alpha: 0.24;
+      --wear-a-chip-dx: 2.1%;
+      --wear-a-chip-dy: 8%;
+      --wear-a-chip2-dx: -1.2%;
+      --wear-a-chip2-dy: -7%;
+      --wear-b-x: 68%;
+      --wear-b-y: 72%;
+      --wear-b-size: 6px;
+      --wear-b-chip-size: 2.6px;
+      --wear-b-chip2-size: 1.8px;
+      --wear-b-alpha: 0.38;
+      --wear-b-light-alpha: 0.24;
+      --wear-b-chip-dx: -1.8%;
+      --wear-b-chip-dy: -10%;
+      --wear-b-chip2-dx: 1.4%;
+      --wear-b-chip2-dy: 8%;
+      --wear-c-x: 86%;
+      --wear-c-y: 25%;
+      --wear-c-size: 3px;
+      --wear-c-alpha: 0.28;
+      --wear-scratch-angle: 176deg;
+      --wear-scratch-stop: 47%;
+      --wear-scratch2-angle: 99deg;
+      --wear-scratch2-stop: 66%;
+      position: relative;
+      width: fit-content !important;
+      min-width: min(18rem, 80%);
+      margin: 4.5rem auto 2rem !important;
+      padding: 0.7rem 3.5rem 0.82rem !important;
+      border: 1px solid #41270f !important;
+      border-radius: 5px !important;
+      color: #2c2115 !important;
+      text-align: center;
+      font-family: inherit;
+      background:
+        radial-gradient(circle var(--wear-a-size) at var(--wear-a-x) var(--wear-a-y), rgba(55, 30, 10, var(--wear-a-alpha)) 0 30%, rgba(87, 51, 17, 0.16) 52%, transparent 80%),
+        radial-gradient(circle var(--wear-a-chip-size) at calc(var(--wear-a-x) + var(--wear-a-chip-dx)) calc(var(--wear-a-y) + var(--wear-a-chip-dy)), rgba(48, 25, 7, var(--wear-a-alpha)) 0 34%, transparent 78%),
+        radial-gradient(circle var(--wear-a-chip2-size) at calc(var(--wear-a-x) + var(--wear-a-chip2-dx)) calc(var(--wear-a-y) + var(--wear-a-chip2-dy)), rgba(246, 221, 155, var(--wear-a-light-alpha)) 0 36%, transparent 79%),
+        radial-gradient(circle var(--wear-b-size) at var(--wear-b-x) var(--wear-b-y), rgba(58, 31, 9, var(--wear-b-alpha)) 0 29%, rgba(102, 61, 21, 0.13) 51%, transparent 82%),
+        radial-gradient(circle var(--wear-b-chip-size) at calc(var(--wear-b-x) + var(--wear-b-chip-dx)) calc(var(--wear-b-y) + var(--wear-b-chip-dy)), rgba(48, 25, 7, var(--wear-b-alpha)) 0 34%, transparent 79%),
+        radial-gradient(circle var(--wear-b-chip2-size) at calc(var(--wear-b-x) + var(--wear-b-chip2-dx)) calc(var(--wear-b-y) + var(--wear-b-chip2-dy)), rgba(52, 28, 8, var(--wear-b-alpha)) 0 35%, transparent 80%),
+        radial-gradient(circle var(--wear-c-size) at var(--wear-c-x) var(--wear-c-y), rgba(247, 223, 157, var(--wear-c-alpha)) 0 30%, transparent 76%),
+        linear-gradient(var(--wear-scratch-angle), transparent 0 calc(var(--wear-scratch-stop) - 0.2%), rgba(72, 40, 11, 0.2) var(--wear-scratch-stop), transparent calc(var(--wear-scratch-stop) + 0.28%)),
+        linear-gradient(var(--wear-scratch2-angle), transparent 0 calc(var(--wear-scratch2-stop) - 0.15%), rgba(255, 232, 171, 0.16) var(--wear-scratch2-stop), transparent calc(var(--wear-scratch2-stop) + 0.21%)),
+        linear-gradient(100deg, #755122, #d7b66b 21%, #a97b38 50%, #ddc27b 78%, #6a471d) !important;
+      background-blend-mode: multiply, multiply, screen, multiply, multiply, multiply, screen, multiply, screen, normal;
+      box-shadow: inset 0 1px rgba(255,255,255,0.38), inset 0 -2px 3px rgba(51,29,8,0.58), inset 0 0 12px rgba(58, 31, 9, 0.28), 0 7px 13px rgba(15,6,2,0.55);
+      text-shadow: 0 1px rgba(255,255,255,0.38);
+      transform: rotate(var(--plaque-rotation));
+      transform-origin: 49% 55%;
+    }
+    .section-plaque::before,
+    .section-plaque::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      background: #4b2d12;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.18);
+    }
+    .section-plaque::before { left: 1rem; }
+    .section-plaque::after { right: 1rem; }
+
+    .subheading-slip,
+    .prose-paper {
+      color: #3a291d !important;
+      text-shadow: 0 1px rgba(255, 247, 220, 0.45);
+      border: 1px solid #5a3b24;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255, 250, 225, 0.34), transparent 34%),
+        linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(105, 69, 34, 0.08)),
+        url('./assets/textures/paper-fiber.webp'),
+        #ddc998;
+      background-blend-mode: soft-light, multiply, multiply, normal;
+      box-shadow:
+        inset 0 10px 18px rgba(65, 37, 17, 0.38),
+        inset 0 -7px 13px rgba(72, 42, 20, 0.27),
+        inset 9px 0 15px rgba(80, 47, 22, 0.18),
+        inset -8px 0 14px rgba(74, 42, 19, 0.22),
+        inset 0 1px rgba(255, 251, 226, 0.55),
+        0 7px 13px rgba(12, 4, 2, 0.42);
+    }
+    .subheading-slip {
+      width: fit-content !important;
+      padding: 0.68rem 1.35rem 0.76rem;
+      color: #342318 !important;
+      transform: none;
+    }
+    .prose-paper {
+      padding: 1.2rem 1.35rem;
+    }
+    .prose-divider-only {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .prose-paper p,
+    .prose-paper h1,
+    .prose-paper h4,
+    .prose-paper ul,
+    .prose-paper ol {
+      color: #3a291d !important;
+    }
+    .prose-paper strong { color: #24160f !important; }
+    .prose-paper em { color: #4a3323 !important; }
+    .prose-paper a {
+      color: #7d2423 !important;
+      text-decoration-color: #a32125;
+    }
+
+    .markdown-ribbon-divider {
+      width: min(96%, 62rem);
+      height: clamp(3.2rem, 6.5vw, 4.8rem);
+      margin: 2rem auto;
+      background-position: center;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+    .markdown-ribbon-divider.lazy-bg-loaded {
+      background-image: url('./assets/decor/markdown-ribbon-navy.webp');
+      filter: drop-shadow(0 3px 1px rgba(2, 5, 12, 0.76)) drop-shadow(0 8px 8px rgba(1, 3, 8, 0.56));
+      opacity: 1;
+    }
+
+    .markdown-quote {
+      margin: 1rem 0;
+      padding: 1rem 1.25rem;
+      border: 2px solid #21120c;
+      border-left: 7px solid #6d201d;
+      border-radius: 5px;
+      color: #f4e2bc !important;
+      background: linear-gradient(110deg, #4b2e22, #382117 58%, #2b180f);
+      box-shadow: inset 0 1px rgba(255, 240, 205, 0.1), inset 0 -3px 7px rgba(0, 0, 0, 0.35), 3px 6px 12px rgba(12, 4, 2, 0.45);
+      text-shadow: 0 2px 2px #160a06;
+    }
+    .markdown-quote strong,
+    .markdown-quote em,
+    .markdown-quote a { color: #fff0ca !important; }
+
+    .markdown-table-wrap {
+      margin: 1.25rem 0;
+      overflow-x: auto;
+      border-radius: 5px;
+      box-shadow: 4px 8px 15px rgba(14, 5, 2, 0.48);
+    }
+    .markdown-table {
+      width: 100%;
+      border: 2px solid #321b11;
+      border-collapse: collapse;
+      color: #38271b;
+      background: rgba(219, 194, 143, 0.9);
+      text-shadow: none;
+    }
+    .markdown-table thead tr {
+      color: #f5e3bd;
+      background: linear-gradient(#503126, #321d14);
+      text-shadow: 0 2px 2px #160a06;
+    }
+    .markdown-table th,
+    .markdown-table td {
+      border: 1px solid #43271a;
+    }
+    .markdown-table th {
+      border-bottom-width: 2px;
+      font-weight: 800;
+      text-align: center;
+    }
+    .markdown-table th,
+    .markdown-table th strong,
+    .markdown-table th em,
+    .markdown-table th a {
+      color: #f5e3bd !important;
+    }
+    .markdown-table tbody tr { background: rgba(223, 199, 151, 0.84); }
+    .markdown-table tbody tr:nth-child(even) { background: rgba(201, 170, 118, 0.82); }
+    .markdown-table tbody tr:hover { background: rgba(231, 207, 159, 0.94); }
+    .markdown-table td,
+    .markdown-table td strong,
+    .markdown-table td em { color: #38271b !important; }
+
+    .markdown-inline-code {
+      padding: 0.12rem 0.42rem;
+      border: 1px solid #26150d;
+      border-radius: 3px;
+      color: #f3dfb7;
+      background: #3b2419;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .notes-grid {
+      width: min(100%, 48rem) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      gap: 0.8rem 0.45rem !important;
+      padding: 0.35rem 0 0.8rem;
+    }
+
+    .pride-card.note-card {
+      --note-rotation: 0deg;
+      --note-mobile-rotation: 0deg;
+      --note-x: 0px;
+      --note-y: 0px;
+      --note-origin-x: 50%;
+      --note-origin-y: 50%;
+      --note-shadow-x: 4px;
+      --note-shadow-y: 8px;
+      --note-shadow-blur: 5px;
+      --note-shadow-opacity: 0.72;
+      --note-contact-shadow-opacity: 0.74;
+      --note-paper-brightness: 0.96;
+      --note-paper-hover-brightness: 1;
+      --note-top-shadow-opacity: 0.28;
+      isolation: isolate;
+      overflow: visible !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      color: var(--note-ink) !important;
+      background: transparent !important;
+      transform-origin: var(--note-origin-x) var(--note-origin-y);
+      transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-rotation));
+      box-shadow: none !important;
+      transition: transform 220ms cubic-bezier(.2,.85,.25,1), box-shadow 220ms ease, filter 220ms ease !important;
+      will-change: transform;
+      padding: clamp(1.2rem, 2.7vw, 2.2rem) !important;
+    }
+    .pride-card.note-card::before {
+      display: none;
+    }
+    .pride-card.note-card:hover {
+      z-index: 20;
+      filter: saturate(1.05) brightness(1.03);
+      transform: translate(var(--note-x), calc(var(--note-y) - 6px)) rotate(0deg) scale(1.015);
+      box-shadow: none !important;
+    }
+    .pride-card.note-card:active {
+      transform: translate(var(--note-x), calc(var(--note-y) - 2px)) rotate(0deg) scale(0.985) !important;
+    }
+
+    .pride-card-red { --note-color: #b65f55; --note-ink: #f8e6dc; }
+    .pride-card-orange { --note-color: #be7d3f; --note-ink: #fff0d2; }
+    .pride-card-yellow { --note-color: #c4a33e; --note-ink: #fff6d2; }
+    .pride-card-green { --note-color: #658e67; --note-ink: #edf5e2; }
+    .pride-card-blue { --note-color: #5d8292; --note-ink: #edf5f6; }
+    .pride-card-purple { --note-color: #75648d; --note-ink: #f4ecfa; }
+
+    .note-paper-visual {
+      position: absolute;
+      inset: -3.5%;
+      z-index: 0;
+      pointer-events: none;
+      isolation: isolate;
+      filter: none;
+    }
+
+    .note-paper-visual::before {
+      content: '';
+      position: absolute;
+      inset: 3%;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12)), var(--note-color);
+      clip-path: polygon(2% 1%, 95% 0, 100% 5%, 98% 95%, 94% 100%, 4% 98%, 0 94%, 1% 5%);
+      opacity: 1;
+      transition: opacity 160ms ease;
+    }
+    .note-card.note-assets-ready .note-paper-visual::before {
+      opacity: 0;
+    }
+
+    .note-card:hover .note-paper-visual {
+      filter: none;
+    }
+
+    .note-paper-base,
+    .note-top-shadow {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .note-paper-base {
+      z-index: 1;
+      display: block;
+      object-fit: contain;
+      user-select: none;
+      opacity: 0;
+      filter:
+        contrast(1.18)
+        brightness(var(--note-paper-brightness))
+        drop-shadow(0 2px 1px rgba(0, 0, 0, var(--note-contact-shadow-opacity)))
+        drop-shadow(
+          var(--note-shadow-x)
+          var(--note-shadow-y)
+          var(--note-shadow-blur)
+          rgba(0, 0, 0, var(--note-shadow-opacity))
+        );
+      transition: filter 220ms ease, opacity 160ms ease;
+    }
+    .note-card.note-assets-ready .note-paper-base { opacity: 1; }
+
+    .note-card:hover .note-paper-base {
+      filter:
+        contrast(1.2)
+        brightness(var(--note-paper-hover-brightness))
+        drop-shadow(0 3px 1.5px rgba(0, 0, 0, var(--note-contact-shadow-opacity)))
+        drop-shadow(
+          calc(var(--note-shadow-x) + 1px)
+          calc(var(--note-shadow-y) + 2px)
+          calc(var(--note-shadow-blur) + 1px)
+          rgba(0, 0, 0, var(--note-shadow-opacity))
+        );
+    }
+
+    .note-top-shadow {
+      z-index: 2;
+      display: block;
+      object-fit: contain;
+      opacity: 0;
+      user-select: none;
+      mix-blend-mode: multiply;
+      transition: opacity 220ms ease;
+    }
+    .note-card.note-assets-ready .note-top-shadow {
+      opacity: var(--note-top-shadow-opacity);
+    }
+
+    .note-card .card-content-wrap {
+      position: relative;
+      z-index: 3;
+      overflow: hidden;
+      text-shadow: 0 1px 1px rgba(28, 13, 9, 0.58);
+    }
+    .note-card .clipboard-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 4.5rem;
+      padding: 0.48rem 0.95rem 0.52rem;
+      border: 1px solid rgba(76,47,19,0.45);
+      border-radius: 999px;
+      color: #362511;
+      background: linear-gradient(#dfc17e, #a87a38);
+      box-shadow: inset 0 1px rgba(255,255,255,0.45), 0 2px 3px rgba(45,25,9,0.3);
+      font-family: inherit;
+      font-size: 0.92rem !important;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      opacity: 0.92;
+      text-shadow: 0 1px rgba(255,255,255,0.36);
+    }
+
+    .note-decoration {
+      position: absolute;
+      z-index: 5;
+      pointer-events: none;
+      user-select: none;
+      filter: drop-shadow(2px 4px 3px rgba(28,13,5,0.24));
+    }
+    .note-decoration-tape {
+      top: -7%;
+      left: 50%;
+      width: 48%;
+      transform: translateX(-50%) rotate(-1.5deg);
+    }
+    .note-decoration-pin {
+      top: -4.5%;
+      left: 50%;
+      width: 16%;
+      transform: translateX(-50%);
+    }
+    .note-decoration-fold {
+      right: -3%;
+      bottom: -3%;
+      width: 23%;
+      opacity: 0.68;
+      transform-origin: bottom right;
+    }
+
+    .pride-card.copied {
+      color: var(--note-ink) !important;
+      border: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+    .pride-card.copied .card-content-wrap {
+      display: flex !important;
+      opacity: 0.16 !important;
+    }
+    .pride-card.copied .copied-overlay {
+      z-index: 8;
+      display: flex !important;
+      flex-direction: column;
+      gap: 0.2rem;
+      color: #1e6138;
+      background: transparent;
+      transform: rotate(-8deg);
+    }
+    .copied-stamp-image {
+      width: 72%;
+      max-width: 12rem;
+      opacity: 0.96;
+      mix-blend-mode: multiply;
+    }
+    .copied-stamp-label {
+      margin-top: -0.45rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.25em;
+      text-shadow: none;
+    }
+
+    .pride-banner {
+      border: 1px solid #8c713f !important;
+      border-radius: 4px !important;
+      color: #3c3124;
+      background: linear-gradient(rgba(255,255,255,0.12), rgba(73,51,23,0.06)), url('./assets/textures/paper-fiber.webp'), #e5d5ae !important;
+      background-blend-mode: soft-light, multiply, normal;
+      box-shadow: 4px 7px 14px rgba(19,8,3,0.42) !important;
+      transform: rotate(-0.25deg);
+    }
+    .pride-banner::before { display: none; }
+    .pride-banner h4, .pride-banner p { color: inherit !important; }
+
+    .pride-btn,
+    .pride-btn-secondary {
+      border: 1px solid #513415 !important;
+      border-radius: 5px !important;
+      color: #2f2112 !important;
+      background: linear-gradient(#e1c581, #a97a38) !important;
+      box-shadow: inset 0 1px rgba(255,255,255,0.45), 0 2px 4px rgba(31,16,5,0.38) !important;
+      text-shadow: 0 1px rgba(255,255,255,0.3);
+    }
+    .pride-btn:hover,
+    .pride-btn-secondary:hover {
+      color: #24170b !important;
+      background: linear-gradient(#efd99f, #ba8a43) !important;
+    }
+
+    #drag-overlay {
+      border: 0 !important;
+      background: rgba(35,20,13,0.88) !important;
+    }
+    #drag-overlay > div,
+    #error-state {
+      border: 1px solid #8b6c3b !important;
+      border-radius: 5px !important;
+      color: #3c3023 !important;
+      background: url('./assets/textures/paper-fiber.webp'), #e8d9b6 !important;
+      background-blend-mode: multiply;
+      box-shadow: 10px 18px 34px rgba(12,5,2,0.55) !important;
+    }
+    #drag-overlay h3, #drag-overlay p,
+    #error-state h3, #error-state p { color: inherit !important; }
+
+    #toast-container > div {
+      border-radius: 4px !important;
+      color: #3a2d20 !important;
+      background: url('./assets/textures/paper-fiber.webp'), #e7d5ad !important;
+      background-blend-mode: multiply;
+      border-color: #896b3e !important;
+      box-shadow: 5px 10px 20px rgba(13,5,2,0.5) !important;
+    }
+
+    #toast-container > .copy-detail-toast {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #061d13 !important;
+      border-radius: 10px !important;
+      color: #f2e6c7 !important;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(197, 230, 202, 0.13), transparent 30%),
+        url('./assets/textures/paper-fiber.webp'),
+        #0b3b25 !important;
+      background-blend-mode: soft-light, multiply, normal !important;
+      box-shadow: inset 0 3px 8px rgba(199, 229, 201, 0.1), inset 0 -5px 9px rgba(0, 12, 8, 0.48), 6px 12px 24px rgba(3, 15, 10, 0.64) !important;
+      text-shadow: 0 2px 2px #04140d;
+    }
+    #toast-container > .copy-detail-toast::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      pointer-events: none;
+      border: 1px dashed rgba(204, 224, 191, 0.28);
+      border-radius: 6px;
+    }
+    .copy-detail-toast-action,
+    .copy-detail-modal-done {
+      border: 1px solid #402713;
+      color: #2e2114;
+      background: linear-gradient(#e4ca86, #a87835);
+      box-shadow: inset 0 1px rgba(255,255,255,0.5), inset 0 -2px 3px rgba(63,35,10,0.28), 0 3px 5px rgba(27,13,5,0.4);
+      text-shadow: 0 1px rgba(255,255,255,0.4);
+    }
+    .copy-detail-toast-action:hover,
+    .copy-detail-modal-done:hover {
+      background: linear-gradient(#efdca7, #bd8d48);
+      transform: translateY(-1px);
+    }
+
+    #copy-detail-modal {
+      background: rgba(15, 7, 4, 0.72);
+      backdrop-filter: blur(5px);
+    }
+    .copy-detail-modal-frame {
+      position: relative;
+      width: min(92vw, 58rem);
+      max-height: min(86vh, 52rem);
+      overflow: hidden;
+      border: 2px solid #21120b;
+      border-radius: 15px;
+      color: #f1dfb9;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(255,255,255,0.06), transparent 26%),
+        linear-gradient(145deg, #4b3025, #2e1a11 64%, #211109);
+      box-shadow: inset 0 0 0 4px #160b07, inset 0 0 0 5px rgba(191,145,76,0.34), 0 24px 55px rgba(0,0,0,0.72);
+    }
+    .copy-detail-modal-frame::before,
+    .copy-detail-modal-frame::after {
+      content: '';
+      position: absolute;
+      top: 1.25rem;
+      z-index: 3;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 34% 30%, #f1d58c 0 8%, #b6873f 30%, #5b3818 72%, #2d190d 100%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.16);
+    }
+    .copy-detail-modal-frame::before { left: 1.25rem; }
+    .copy-detail-modal-frame::after { right: 1.25rem; }
+    .copy-detail-modal-header {
+      padding: 1rem 3.25rem;
+      border-bottom: 1px solid #11251c;
+      background: linear-gradient(110deg, #1d503d, #12382a 58%, #0b281d);
+      box-shadow: inset 0 1px rgba(214,239,217,0.1), inset 0 -4px 8px rgba(0,0,0,0.35);
+      text-shadow: 0 2px 2px #06120d;
+    }
+    .copy-detail-modal-body {
+      margin: 1rem;
+      padding: 1.35rem 1.5rem;
+      max-height: calc(min(86vh, 52rem) - 9.5rem);
+      overflow: auto;
+      border: 1px solid #5a3b24;
+      border-radius: 10px;
+      color: #39281c;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255,250,225,0.34), transparent 34%),
+        url('./assets/textures/paper-fiber.webp'),
+        #dfcc9b;
+      background-blend-mode: soft-light, multiply, normal;
+      box-shadow: inset 0 9px 16px rgba(65,37,17,0.32), inset 0 -6px 12px rgba(72,42,20,0.23), 0 6px 12px rgba(10,4,2,0.42);
+      text-shadow: 0 1px rgba(255,250,226,0.42);
+    }
+    .copy-detail-modal-body h1,
+    .copy-detail-modal-body h2,
+    .copy-detail-modal-body h3,
+    .copy-detail-modal-body h4 {
+      margin: 1.1rem 0 0.55rem;
+      color: #2d1d14 !important;
+      font-weight: 800;
+    }
+    .copy-detail-modal-body h1 {
+      font-size: 1.65rem;
+      background: none !important;
+      -webkit-text-fill-color: #2d1d14 !important;
+    }
+    .copy-detail-modal-body h2 { font-size: 1.4rem; }
+    .copy-detail-modal-body h3 { font-size: 1.2rem; }
+    .copy-detail-modal-body p,
+    .copy-detail-modal-body li { color: #39281c !important; }
+    .copy-detail-modal-body ul { list-style: disc; padding-left: 1.4rem; }
+    .copy-detail-modal-body ol { list-style: decimal; padding-left: 1.4rem; }
+    .copy-detail-modal-body .markdown-quote { color: #f4e2bc !important; }
+    .copy-detail-modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 1rem 1rem;
+    }
+    body.copy-detail-open { overflow: hidden; }
+
+    @media (max-width: 639px) {
+      .copied-stamp-image { width: 82%; }
+      .copied-stamp-label { font-size: 0.84rem; }
+      .copy-detail-modal-header { padding-inline: 2.7rem; }
+      .copy-detail-modal-body { margin: 0.7rem; padding: 1rem; }
+    }
+
+    @media (max-width: 639px) {
+      body.skeuo-app { background-attachment: scroll; }
+      .desk-workspace { padding-top: 1.3rem !important; }
+      .brand-plaque { width: 94%; margin-bottom: 1.55rem; padding: 0.9rem 2.5rem 1rem; }
+      .brand-plaque { transform: rotate(var(--plaque-mobile-rotation)); }
+      .brand-plaque::before { left: 0.75rem; }
+      .brand-plaque::after { right: 0.75rem; }
+      .catalog-panel { padding: 1.25rem !important; }
+      .section-plaque { min-width: 72%; margin-top: 3.5rem !important; padding-inline: 2.25rem !important; transform: rotate(var(--plaque-mobile-rotation)); }
+      .notes-grid { gap: 0.55rem 0.15rem !important; padding-inline: 0; }
+      .pride-card.note-card {
+        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-mobile-rotation));
+      }
+      .note-decoration-fold { display: none; }
+      .note-decoration-tape { width: 54%; }
+      .note-decoration-pin { width: 18%; }
+      .note-card .clipboard-icon {
+        min-width: 3.8rem;
+        padding: 0.38rem 0.72rem 0.42rem;
+        font-size: 0.82rem !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+      .pride-card.note-card:hover {
+        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-rotation));
+      }
+    }
   </style>
 </head>
 
-<body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans pb-16">
+<body class="skeuo-app min-h-screen flex flex-col font-sans pb-16">
 
   <!-- Drag and Drop Overlay -->
   <div id="drag-overlay"
@@ -297,7 +1181,13 @@
   </div>
 
   <!-- Main Container (Responsive 3-Column Max Grid Layout) -->
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
+  <main class="desk-workspace flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
+    <header class="brand-plaque" aria-label="Prompt Systems">
+      <img class="brand-plaque-logo" src="./assets/branding/prompt-systems-logo.webp?v=2"
+        width="1100" height="362" loading="eager" decoding="async" fetchpriority="high"
+        alt="PROMPT SYSTEMS — Electronic Research, established 1978">
+      <h1 id="brand-subtitle"></h1>
+    </header>
     <div class="flex flex-col gap-6 w-full">
 
       <!-- Local Offline Mode Banner -->
@@ -353,6 +1243,22 @@
 
 
 
+  <!-- Copied Markdown Detail Modal -->
+  <div id="copy-detail-modal" class="hidden fixed inset-0 z-[70] items-center justify-center p-4" role="dialog"
+    aria-modal="true" aria-labelledby="copy-detail-modal-title">
+    <section class="copy-detail-modal-frame" tabindex="-1">
+      <header class="copy-detail-modal-header flex items-center justify-between gap-4">
+        <div class="min-w-0">
+          <h2 id="copy-detail-modal-title" class="text-xl sm:text-2xl font-bold truncate">已复制内容</h2>
+        </div>
+      </header>
+      <div id="copy-detail-modal-content" class="copy-detail-modal-body text-base sm:text-lg leading-relaxed"></div>
+      <footer class="copy-detail-modal-footer">
+        <button type="button" class="copy-detail-modal-done rounded-md px-5 py-2 font-bold transition-transform">关闭</button>
+      </footer>
+    </section>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-md w-full px-4 sm:px-0"></div>
 
@@ -361,6 +1267,7 @@
     // App Global State
     let rawMarkdown = "";
     let parsedItems = [];
+    let lazyAssetObserver = null;
 
     // Helper to get active site configuration
     function getActiveSiteConfig() {
@@ -390,7 +1297,16 @@
     // Initialize application
     window.addEventListener('DOMContentLoaded', async () => {
       initDragAndDrop();
+      initCopyDetailModal();
       updateDynamicTexts();
+
+      const brandPlaque = document.querySelector('.brand-plaque');
+      if (brandPlaque) {
+        const brandRotation = getStablePlaqueRotation('prompt-notebook-brand');
+        brandPlaque.style.setProperty('--plaque-rotation', `${brandRotation.rotation}deg`);
+        brandPlaque.style.setProperty('--plaque-mobile-rotation', `${brandRotation.mobileRotation}deg`);
+        applyStablePlaqueWear(brandPlaque, 'prompt-notebook-brand');
+      }
 
       const config = getActiveSiteConfig();
       console.log("当前尝试请求的完整路径是:", new URL(config.path, window.location.href).href);
@@ -550,7 +1466,7 @@
         .replace(/>/g, '&gt;')
         .replace(/\*\*(.*?)\*\*/g, '<strong class="font-black text-slate-950">$1</strong>')
         .replace(/\*(.*?)\*/g, '<em class="italic text-slate-900">$1</em>')
-        .replace(/`([^`]+)`/g, '<code class="bg-slate-100 text-slate-900 px-2 py-0.5 rounded-md text-sm sm:text-base font-mono border border-slate-200">$1</code>')
+        .replace(/`([^`]+)`/g, '<code class="markdown-inline-code text-sm sm:text-base font-mono">$1</code>')
         .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 hover:underline font-bold transition-colors">$1</a>');
     }
 
@@ -590,7 +1506,7 @@
         if (trimmed === '---' || trimmed === '***') {
           closeList();
           closeTable();
-          result.push('<hr class="my-8 border-slate-200">');
+          result.push('<div class="markdown-ribbon-divider" role="separator" aria-hidden="true"></div>');
           continue;
         }
 
@@ -601,12 +1517,12 @@
 
           if (!inTable) {
             inTable = true;
-            result.push('<div class="overflow-x-auto my-5"><table class="w-full text-sm sm:text-base text-left border-collapse border border-slate-200 rounded-xl overflow-hidden shadow-sm"><thead><tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">');
-            cells.forEach(c => result.push(`<th class="px-4.5 py-3.5 border-r border-slate-200 last:border-0 text-base sm:text-lg">${parseInline(c)}</th>`));
+            result.push('<div class="markdown-table-wrap"><table class="markdown-table text-sm sm:text-base text-left"><thead><tr>');
+            cells.forEach(c => result.push(`<th class="px-4.5 py-3.5 text-base sm:text-lg">${parseInline(c)}</th>`));
             result.push('</tr></thead><tbody>');
           } else {
-            result.push('<tr class="border-b border-slate-200/70 last:border-0 hover:bg-slate-50/80 transition-colors">');
-            cells.forEach(c => result.push(`<td class="px-4.5 py-3.5 border-r border-slate-200/70 last:border-0 text-slate-800 leading-relaxed">${parseInline(c)}</td>`));
+            result.push('<tr>');
+            cells.forEach(c => result.push(`<td class="px-4.5 py-3.5 leading-relaxed">${parseInline(c)}</td>`));
             result.push('</tr>');
           }
           continue;
@@ -617,6 +1533,16 @@
         if (trimmed.startsWith('# ')) {
           closeList();
           result.push(`<h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter pride-gradient-text my-8 sm:my-12 leading-none select-none">${parseInline(trimmed.substring(2))}</h1>`);
+          continue;
+        }
+        if (trimmed.startsWith('## ')) {
+          closeList();
+          result.push(`<h2>${parseInline(trimmed.substring(3))}</h2>`);
+          continue;
+        }
+        if (trimmed.startsWith('### ')) {
+          closeList();
+          result.push(`<h3>${parseInline(trimmed.substring(4))}</h3>`);
           continue;
         }
         if (trimmed.startsWith('#### ')) {
@@ -652,7 +1578,7 @@
         if (trimmed) {
           const inlineContent = parseInline(trimmed);
           if (isQuote) {
-            result.push(`<blockquote class="border-l-4 border-slate-300 pl-4.5 py-3 my-3 text-base sm:text-lg text-slate-800 italic bg-slate-50/90 rounded-r-xl">${inlineContent}</blockquote>`);
+            result.push(`<blockquote class="markdown-quote text-base sm:text-lg italic">${inlineContent}</blockquote>`);
           } else {
             result.push(`<p class="text-base sm:text-lg text-slate-800 my-3 leading-relaxed">${inlineContent}</p>`);
           }
@@ -718,6 +1644,23 @@
           continue;
         }
 
+        // The page title is already rendered as the leather masthead.
+        if (cleanLine.startsWith('# ') && !cleanLine.startsWith('## ')) {
+          flushPendingText();
+          i++;
+          continue;
+        }
+
+        if (cleanLine === '---' || cleanLine === '***') {
+          flushPendingText();
+          items.push({
+            type: 'divider',
+            content: '<div class="markdown-ribbon-divider" role="separator" aria-hidden="true"></div>'
+          });
+          i++;
+          continue;
+        }
+
         // Match Level 2 Heading (## Category)
         if (cleanLine.startsWith('## ')) {
           flushPendingText();
@@ -750,7 +1693,19 @@
     function parseAndRender() {
       const parsed = parseMarkdown(rawMarkdown);
       parsedItems = parsed.items;
+      updateBrandSubtitle(rawMarkdown);
       renderExplorer();
+    }
+
+    function updateBrandSubtitle(markdown) {
+      const subtitle = document.getElementById('brand-subtitle');
+      if (!subtitle) return;
+      const titleMatch = markdown.match(/^\s*#\s+(.+?)\s*$/m);
+      subtitle.innerHTML = titleMatch ? parseInline(titleMatch[1].trim()) : '';
+      const plaque = subtitle.closest('.brand-plaque');
+      if (plaque && subtitle.textContent.trim()) {
+        plaque.setAttribute('aria-label', `Prompt Systems — ${subtitle.textContent.trim()}`);
+      }
     }
 
     // Smooth Scroll Helper
@@ -767,6 +1722,151 @@
           behavior: "smooth"
         });
       }
+    }
+
+    // The prompt content is the seed, so each note keeps its placement across renders.
+    function hashString(value) {
+      let hash = 2166136261;
+      for (let i = 0; i < value.length; i++) {
+        hash ^= value.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return hash >>> 0;
+    }
+
+    function getStableNoteLayout(key) {
+      const hash = hashString(key);
+      let rotation = -5 + ((hash % 1001) / 1000) * 10;
+      if (Math.abs(rotation) < 0.7) {
+        rotation = (hash & 1) === 0 ? -1.1 : 1.1;
+      }
+
+      return {
+        rotation: rotation.toFixed(2),
+        mobileRotation: rotation.toFixed(2),
+        offsetX: ((hash >>> 11) % 27) - 13,
+        offsetY: ((hash >>> 16) % 21) - 10,
+        originX: 47 + ((hash >>> 19) % 7),
+        originY: 48 + ((hash >>> 22) % 8),
+        shadowX: -6 + ((hash >>> 3) % 13),
+        shadowY: 10 + ((hash >>> 6) % 9),
+        shadowBlur: 5 + ((hash >>> 9) % 6),
+        shadowOpacity: (0.58 + ((hash >>> 13) % 15) / 100).toFixed(2),
+        contactShadowOpacity: (0.64 + ((hash >>> 18) % 17) / 100).toFixed(2),
+        paperBrightness: (0.94 + ((hash >>> 24) % 6) / 100).toFixed(2),
+        paperHoverBrightness: (0.98 + ((hash >>> 24) % 5) / 100).toFixed(2),
+        topShadowVariant: (hash >>> 5) % 3,
+        topShadowOpacity: (0.18 + ((hash >>> 18) % 21) / 100).toFixed(2),
+        decoration: hash % 8
+      };
+    }
+
+    function getStablePlaqueRotation(key) {
+      const hash = hashString(`plaque:${key}`);
+      let rotation = -5 + ((hash % 1001) / 1000) * 10;
+      if (Math.abs(rotation) < 1.2) {
+        rotation = (hash & 1) === 0 ? -1.2 : 1.2;
+      }
+
+      return {
+        rotation: rotation.toFixed(2),
+        mobileRotation: (rotation * 0.65).toFixed(2)
+      };
+    }
+
+    function getStablePlaqueWear(key) {
+      let state = hashString(`plaque-wear:${key}`);
+      const random = () => {
+        state += 0x6D2B79F5;
+        let value = state;
+        value = Math.imul(value ^ (value >>> 15), value | 1);
+        value ^= value + Math.imul(value ^ (value >>> 7), value | 61);
+        return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+      };
+      const between = (min, max) => min + random() * (max - min);
+
+      return {
+        aX: between(7, 31).toFixed(1),
+        aY: between(19, 79).toFixed(1),
+        aSize: between(4.5, 9).toFixed(1),
+        aChip2Size: between(1.4, 3.6).toFixed(1),
+        aAlpha: between(0.32, 0.55).toFixed(2),
+        aLightAlpha: between(0.15, 0.31).toFixed(2),
+        aChipDx: between(-3.2, 3.2).toFixed(1),
+        aChipDy: between(-11, 11).toFixed(1),
+        aChip2Dx: between(-3, 3).toFixed(1),
+        aChip2Dy: between(-10, 10).toFixed(1),
+        bX: between(38, 76).toFixed(1),
+        bY: between(22, 82).toFixed(1),
+        bSize: between(6, 11.5).toFixed(1),
+        bChip2Size: between(1.6, 4.2).toFixed(1),
+        bAlpha: between(0.35, 0.58).toFixed(2),
+        bLightAlpha: between(0.16, 0.32).toFixed(2),
+        bChipDx: between(-3.2, 3.2).toFixed(1),
+        bChipDy: between(-12, 12).toFixed(1),
+        bChip2Dx: between(-3, 3).toFixed(1),
+        bChip2Dy: between(-10, 10).toFixed(1),
+        cX: between(78, 94).toFixed(1),
+        cY: between(18, 76).toFixed(1),
+        cSize: between(3, 6.5).toFixed(1),
+        cAlpha: between(0.2, 0.38).toFixed(2),
+        scratchAngle: between(166, 188).toFixed(1),
+        scratchStop: between(28, 72).toFixed(1),
+        scratch2Angle: between(82, 108).toFixed(1),
+        scratch2Stop: between(24, 76).toFixed(1)
+      };
+    }
+
+    function applyStablePlaqueWear(element, key) {
+      if (!element) return;
+      const wear = getStablePlaqueWear(key);
+      element.style.setProperty('--wear-a-x', `${wear.aX}%`);
+      element.style.setProperty('--wear-a-y', `${wear.aY}%`);
+      element.style.setProperty('--wear-a-size', `${wear.aSize}px`);
+      element.style.setProperty('--wear-a-chip-size', `${(Number(wear.aSize) * 0.46).toFixed(1)}px`);
+      element.style.setProperty('--wear-a-chip2-size', `${wear.aChip2Size}px`);
+      element.style.setProperty('--wear-a-alpha', wear.aAlpha);
+      element.style.setProperty('--wear-a-light-alpha', wear.aLightAlpha);
+      element.style.setProperty('--wear-a-chip-dx', `${wear.aChipDx}%`);
+      element.style.setProperty('--wear-a-chip-dy', `${wear.aChipDy}%`);
+      element.style.setProperty('--wear-a-chip2-dx', `${wear.aChip2Dx}%`);
+      element.style.setProperty('--wear-a-chip2-dy', `${wear.aChip2Dy}%`);
+      element.style.setProperty('--wear-b-x', `${wear.bX}%`);
+      element.style.setProperty('--wear-b-y', `${wear.bY}%`);
+      element.style.setProperty('--wear-b-size', `${wear.bSize}px`);
+      element.style.setProperty('--wear-b-chip-size', `${(Number(wear.bSize) * 0.42).toFixed(1)}px`);
+      element.style.setProperty('--wear-b-chip2-size', `${wear.bChip2Size}px`);
+      element.style.setProperty('--wear-b-alpha', wear.bAlpha);
+      element.style.setProperty('--wear-b-light-alpha', wear.bLightAlpha);
+      element.style.setProperty('--wear-b-chip-dx', `${wear.bChipDx}%`);
+      element.style.setProperty('--wear-b-chip-dy', `${wear.bChipDy}%`);
+      element.style.setProperty('--wear-b-chip2-dx', `${wear.bChip2Dx}%`);
+      element.style.setProperty('--wear-b-chip2-dy', `${wear.bChip2Dy}%`);
+      element.style.setProperty('--wear-c-x', `${wear.cX}%`);
+      element.style.setProperty('--wear-c-y', `${wear.cY}%`);
+      element.style.setProperty('--wear-c-size', `${wear.cSize}px`);
+      element.style.setProperty('--wear-c-alpha', wear.cAlpha);
+      element.style.setProperty('--wear-scratch-angle', `${wear.scratchAngle}deg`);
+      element.style.setProperty('--wear-scratch-stop', `${wear.scratchStop}%`);
+      element.style.setProperty('--wear-scratch2-angle', `${wear.scratch2Angle}deg`);
+      element.style.setProperty('--wear-scratch2-stop', `${wear.scratch2Stop}%`);
+    }
+
+    function getNoteDecoration(decoration) {
+      const decorations = {
+        0: { className: 'tape', src: './assets/decor/masking-tape.png' },
+        1: { className: 'pin', src: './assets/decor/brass-pin.png' }
+      };
+      return decorations[decoration] || null;
+    }
+
+    function getNotePaper(variant, colorTheme, shadowVariant) {
+      const paperVariant = ['a', 'b', 'c'][variant % 3];
+      const colorName = colorTheme.replace('pride-card-', '');
+      return {
+        base: `./assets/notes/note-paper-${paperVariant}-${colorName}.webp?v=3`,
+        topShadow: `./assets/notes/note-top-shadow-${paperVariant}-${shadowVariant}.webp?v=1`
+      };
     }
 
     // Dynamic rendering of flat Prompt Explorer list as Responsive Square Card Grid with Pride Solid Color Themes
@@ -793,22 +1893,22 @@
           const categories = parsedItems.filter(it => it.type === 'h2');
           if (categories.length > 0) {
             const tocEl = document.createElement('div');
-            tocEl.className = "bg-white p-6 sm:p-8 rounded-3xl border-2 border-slate-200 shadow-sm my-6 select-none w-full";
+            tocEl.className = "catalog-panel p-6 sm:p-8 my-6 select-none w-full";
 
             let tocHtml = `
               <div class="flex items-center gap-2 text-sm sm:text-base font-bold text-slate-500 uppercase tracking-wider mb-4">
-                <span>📌</span> 目录
+                目录
               </div>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+              <div class="toc-list">
             `;
 
             categories.forEach((catItem) => {
               const catIdx = parsedItems.indexOf(catItem);
               tocHtml += `
                 <a href="#category-${catIdx}" data-target="category-${catIdx}"
-                  class="toc-item-link flex items-center justify-between px-6 sm:px-7 py-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-900 hover:text-slate-950 transition-all text-base sm:text-lg font-extrabold group shadow-xs">
-                  <span class="truncate pr-3">${parseInline(catItem.title)}</span>
-                  <span class="text-slate-400 group-hover:translate-x-1 transition-transform shrink-0">→</span>
+                  class="toc-item-link px-6 sm:px-7 py-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-900 hover:text-slate-950 transition-all text-base sm:text-lg font-extrabold group shadow-xs">
+                  <span class="toc-label">${parseInline(catItem.title)}</span>
+                  <span class="toc-arrow group-hover:translate-x-1 transition-transform shrink-0">→</span>
                 </a>
               `;
             });
@@ -828,20 +1928,30 @@
           i++;
         } else if (item.type === 'h2') {
           const h2El = document.createElement('h2');
-          h2El.className = "text-2xl sm:text-3xl font-extrabold text-slate-950 pt-10 pb-4 border-b-2 border-slate-200/90 mt-10 first:mt-3 select-none w-full";
+          const plaqueRotation = getStablePlaqueRotation(item.title);
+          h2El.className = "section-plaque text-2xl sm:text-3xl font-extrabold select-none";
           h2El.id = `category-${i}`;
+          h2El.style.setProperty('--plaque-rotation', `${plaqueRotation.rotation}deg`);
+          h2El.style.setProperty('--plaque-mobile-rotation', `${plaqueRotation.mobileRotation}deg`);
+          applyStablePlaqueWear(h2El, item.title);
           h2El.innerHTML = parseInline(item.title);
           root.appendChild(h2El);
           i++;
         } else if (item.type === 'h3_heading') {
           const h3El = document.createElement('h3');
-          h3El.className = "text-lg sm:text-xl font-bold text-slate-900 mt-8 mb-4 select-none w-full";
+          h3El.className = "subheading-slip text-lg sm:text-xl font-bold mt-8 mb-4 select-none w-full";
           h3El.innerHTML = parseInline(item.title);
           root.appendChild(h3El);
           i++;
+        } else if (item.type === 'divider') {
+          const dividerEl = document.createElement('div');
+          dividerEl.className = "prose-divider-only w-full";
+          dividerEl.innerHTML = item.content;
+          root.appendChild(dividerEl);
+          i++;
         } else if (item.type === 'html') {
           const div = document.createElement('div');
-          div.className = "text-base sm:text-lg text-slate-800 leading-relaxed my-3 w-full";
+          div.className = "prose-paper text-base sm:text-lg leading-relaxed my-3 w-full";
           div.innerHTML = item.content;
           root.appendChild(div);
           i++;
@@ -854,7 +1964,7 @@
           }
 
           const gridEl = document.createElement('div');
-          gridEl.className = "grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-5 my-5 w-full";
+          gridEl.className = "notes-grid grid grid-cols-2 sm:grid-cols-3 my-5 w-full";
 
           promptGroup.forEach(({ item: promptItem, idx: promptIdx }) => {
             const promptId = `prompt-${promptIdx}`;
@@ -863,13 +1973,36 @@
             const colorTheme = prideColorThemes[promptCounter % 6];
             promptCounter++;
 
-            promptEl.className = `group/card pride-card ${colorTheme} aspect-square p-3.5 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl shadow-sm flex flex-col justify-between cursor-pointer relative overflow-hidden transition-all duration-300 select-none btn-scale`;
+            const noteLayout = getStableNoteLayout(`${promptItem.title}\n${promptItem.code}`);
+            const decoration = getNoteDecoration(noteLayout.decoration);
+            const paperAsset = getNotePaper((promptCounter - 1) % 3, colorTheme, noteLayout.topShadowVariant);
+
+            promptEl.className = `group/card pride-card note-card ${colorTheme} aspect-square p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between cursor-pointer relative select-none btn-scale`;
             promptEl.id = promptId;
+            promptEl.style.setProperty('--note-rotation', `${noteLayout.rotation}deg`);
+            promptEl.style.setProperty('--note-mobile-rotation', `${noteLayout.mobileRotation}deg`);
+            promptEl.style.setProperty('--note-x', `${noteLayout.offsetX}px`);
+            promptEl.style.setProperty('--note-y', `${noteLayout.offsetY}px`);
+            promptEl.style.setProperty('--note-origin-x', `${noteLayout.originX}%`);
+            promptEl.style.setProperty('--note-origin-y', `${noteLayout.originY}%`);
+            promptEl.style.setProperty('--note-shadow-x', `${noteLayout.shadowX}px`);
+            promptEl.style.setProperty('--note-shadow-y', `${noteLayout.shadowY}px`);
+            promptEl.style.setProperty('--note-shadow-blur', `${noteLayout.shadowBlur}px`);
+            promptEl.style.setProperty('--note-shadow-opacity', noteLayout.shadowOpacity);
+            promptEl.style.setProperty('--note-contact-shadow-opacity', noteLayout.contactShadowOpacity);
+            promptEl.style.setProperty('--note-paper-brightness', noteLayout.paperBrightness);
+            promptEl.style.setProperty('--note-paper-hover-brightness', noteLayout.paperHoverBrightness);
+            promptEl.style.setProperty('--note-top-shadow-opacity', noteLayout.topShadowOpacity);
 
             promptEl._promptCode = promptItem.code;
             promptEl._promptTitle = promptItem.title;
 
             promptEl.innerHTML = `
+              <div class="note-paper-visual" aria-hidden="true">
+                <img class="note-paper-base lazy-asset" data-src="${paperAsset.base}" loading="lazy" decoding="async" fetchpriority="low" alt="">
+                <img class="note-top-shadow lazy-asset" data-src="${paperAsset.topShadow}" loading="lazy" decoding="async" fetchpriority="low" alt="">
+              </div>
+              ${decoration ? `<img class="note-decoration note-decoration-${decoration.className} lazy-asset" data-src="${decoration.src}" loading="lazy" decoding="async" fetchpriority="low" alt="" aria-hidden="true">` : ''}
               <div class="card-content-wrap flex flex-col justify-between h-full w-full">
                 <div class="w-full text-left overflow-hidden">
                   <h3 class="text-lg sm:text-xl md:text-2xl lg:text-2xl font-black line-clamp-4 sm:line-clamp-5 leading-snug tracking-tight break-words">
@@ -877,11 +2010,12 @@
                   </h3>
                 </div>
                 <div class="flex items-center justify-end w-full mt-auto pt-2">
-                  <span class="clipboard-icon text-xl sm:text-2xl opacity-80 group-hover/card:opacity-100 group-hover/card:scale-110 transition-all select-none">📋</span>
+                  <span class="clipboard-icon group-hover/card:opacity-100 transition-all select-none">复制</span>
                 </div>
               </div>
               <div class="copied-overlay hidden absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-                <span class="text-6xl sm:text-7xl font-black text-white transform scale-110 transition-transform">✓</span>
+                <img class="copied-stamp-image" src="./assets/decor/copied-stamp.png" loading="lazy" decoding="async" alt="">
+                <span class="copied-stamp-label">已复制</span>
               </div>
             `;
 
@@ -897,6 +2031,55 @@
           i++;
         }
       }
+      initializeLazyAssets(root);
+    }
+
+    function initializeLazyAssets(scope) {
+      if (lazyAssetObserver) lazyAssetObserver.disconnect();
+
+      const targets = [
+        ...scope.querySelectorAll('.lazy-asset[data-src]'),
+        ...scope.querySelectorAll('.markdown-ribbon-divider:not(.lazy-bg-loaded)')
+      ];
+
+      const loadTarget = target => {
+        if (target.classList.contains('markdown-ribbon-divider')) {
+          target.classList.add('lazy-bg-loaded');
+          return;
+        }
+
+        const source = target.dataset.src;
+        if (!source) return;
+        if (target.classList.contains('note-paper-base')) {
+          const card = target.closest('.note-card');
+          const markReady = () => card?.classList.add('note-assets-ready');
+          target.addEventListener('load', markReady, { once: true });
+          target.addEventListener('error', () => card?.classList.add('note-assets-failed'), { once: true });
+        }
+        target.src = source;
+        target.removeAttribute('data-src');
+        if (target.classList.contains('note-paper-base') && target.complete && target.naturalWidth > 0) {
+          target.closest('.note-card')?.classList.add('note-assets-ready');
+        }
+      };
+
+      if (!('IntersectionObserver' in window)) {
+        targets.forEach(loadTarget);
+        return;
+      }
+
+      lazyAssetObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          loadTarget(entry.target);
+          lazyAssetObserver.unobserve(entry.target);
+        });
+      }, {
+        rootMargin: document.documentElement.classList.contains('low-bandwidth') ? '220px 0px' : '700px 0px',
+        threshold: 0.01
+      });
+
+      targets.forEach(target => lazyAssetObserver.observe(target));
     }
 
     // Clipboard Copy Execution with Synchronous 0ms INSTANT UI Feedback
@@ -908,10 +2091,12 @@
 
       // 2. Clipboard API execution in background
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).catch(err => {
-          console.error('Clipboard copy error: ', err);
-          showToast('复制失败，请尝试手动复制', 'error');
-        });
+        navigator.clipboard.writeText(text)
+          .then(() => showCopyDetailToast(title, text))
+          .catch(err => {
+            console.error('Clipboard copy error: ', err);
+            showToast('复制失败，请尝试手动复制', 'error');
+          });
       } else {
         try {
           const textarea = document.createElement('textarea');
@@ -920,8 +2105,10 @@
           textarea.style.opacity = '0';
           document.body.appendChild(textarea);
           textarea.select();
-          document.execCommand('copy');
+          const copied = document.execCommand('copy');
           document.body.removeChild(textarea);
+          if (!copied) throw new Error('Fallback copy command returned false');
+          showCopyDetailToast(title, text);
         } catch (err) {
           console.error('Fallback copy failed: ', err);
           showToast('复制失败，请尝试手动复制', 'error');
@@ -942,6 +2129,91 @@
       cardEl.copyTimeout = setTimeout(() => {
         cardEl.classList.remove('copied');
       }, 2000);
+    }
+
+    function initCopyDetailModal() {
+      const modal = document.getElementById('copy-detail-modal');
+      if (!modal || modal.dataset.initialized === 'true') return;
+      modal.dataset.initialized = 'true';
+
+      modal.querySelectorAll('.copy-detail-modal-done').forEach(button => {
+        button.addEventListener('click', closeCopyDetails);
+      });
+      modal.addEventListener('click', event => {
+        if (event.target === modal) closeCopyDetails();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+          closeCopyDetails();
+        }
+      });
+    }
+
+    function openCopyDetails(title, markdown) {
+      const modal = document.getElementById('copy-detail-modal');
+      const titleEl = document.getElementById('copy-detail-modal-title');
+      const contentEl = document.getElementById('copy-detail-modal-content');
+      if (!modal || !titleEl || !contentEl) return;
+
+      titleEl.textContent = title || '已复制内容';
+      const rendered = renderMarkdownToHtml(markdown || '');
+      contentEl.innerHTML = rendered || '<p>复制内容为空。</p>';
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.classList.add('copy-detail-open');
+      modal.querySelector('.copy-detail-modal-frame')?.focus();
+    }
+
+    function closeCopyDetails() {
+      const modal = document.getElementById('copy-detail-modal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.classList.remove('copy-detail-open');
+    }
+
+    function showCopyDetailToast(title, markdown) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = 'copy-detail-toast relative flex items-center gap-3 p-4 opacity-0 translate-y-2 transition-all duration-300';
+
+      const textWrap = document.createElement('div');
+      textWrap.className = 'relative z-[1] flex-1 min-w-0';
+      const messageEl = document.createElement('p');
+      messageEl.className = 'font-bold text-sm';
+      messageEl.textContent = '复制成功';
+      const subtitleEl = document.createElement('p');
+      subtitleEl.className = 'mt-0.5 text-xs opacity-70 truncate';
+      subtitleEl.textContent = title || '已复制内容';
+      textWrap.append(messageEl, subtitleEl);
+
+      const actionButton = document.createElement('button');
+      actionButton.type = 'button';
+      actionButton.className = 'copy-detail-toast-action relative z-[1] shrink-0 rounded-md px-3 py-1.5 text-sm font-bold transition-transform';
+      actionButton.textContent = '查看详情';
+      actionButton.addEventListener('click', () => {
+        openCopyDetails(title, markdown);
+        toast.remove();
+      });
+
+      const closeButton = document.createElement('button');
+      closeButton.type = 'button';
+      closeButton.className = 'relative z-[1] px-1 text-xl font-bold opacity-55 hover:opacity-100';
+      closeButton.setAttribute('aria-label', '关闭提示');
+      closeButton.textContent = '×';
+      closeButton.addEventListener('click', () => toast.remove());
+
+      toast.append(textWrap, actionButton, closeButton);
+      container.appendChild(toast);
+      requestAnimationFrame(() => toast.classList.remove('opacity-0', 'translate-y-2'));
+
+      setTimeout(() => {
+        if (!toast.isConnected) return;
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 320);
+      }, 6500);
     }
 
     // Toast Alert Manager
