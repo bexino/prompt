@@ -655,8 +655,10 @@
       background-position: center;
       background-size: 100% 100%;
       background-repeat: no-repeat;
+      transform: rotate(var(--ribbon-rotation, 0deg));
+      transform-origin: center;
       opacity: 0;
-      transition: opacity 180ms ease;
+      transition: opacity 180ms ease, transform 180ms ease;
     }
     .markdown-ribbon-divider.lazy-bg-loaded {
       background-image: url('./assets/decor/markdown-ribbon-navy.webp');
@@ -1571,14 +1573,14 @@
           continue;
         }
 
-        const olMatch = trimmed.match(/^\d+\.\s+(.*)/);
+        const olMatch = trimmed.match(/^(\d+)\.\s+(.*)/);
         if (olMatch) {
           if (inList !== 'ol') {
             closeList();
             inList = 'ol';
             result.push('<ol class="list-decimal list-inside space-y-2.5 my-4 text-base sm:text-lg text-slate-800 leading-relaxed">');
           }
-          result.push(`<li>${parseInline(olMatch[1])}</li>`);
+          result.push(`<li value="${Number.parseInt(olMatch[1], 10)}">${parseInline(olMatch[2])}</li>`);
           continue;
         }
 
@@ -1781,6 +1783,14 @@
         rotation: rotation.toFixed(2),
         mobileRotation: (rotation * 0.65).toFixed(2)
       };
+    }
+
+    function applyStableRibbonRotations(scope, namespace = 'page') {
+      scope.querySelectorAll('.markdown-ribbon-divider').forEach((ribbon, index) => {
+        const hash = hashString(`ribbon:${namespace}:${index}`);
+        const rotation = -5 + ((hash % 1001) / 1000) * 10;
+        ribbon.style.setProperty('--ribbon-rotation', `${rotation.toFixed(2)}deg`);
+      });
     }
 
     function getStablePlaqueWear(key) {
@@ -2046,6 +2056,8 @@
     function initializeLazyAssets(scope) {
       if (lazyAssetObserver) lazyAssetObserver.disconnect();
 
+      applyStableRibbonRotations(scope);
+
       const targets = [
         ...scope.querySelectorAll('.lazy-asset[data-src]'),
         ...scope.querySelectorAll('.markdown-ribbon-divider:not(.lazy-bg-loaded)')
@@ -2173,6 +2185,10 @@
       titleEl.textContent = title || '已复制内容';
       const rendered = renderMarkdownToHtml(markdown || '');
       contentEl.innerHTML = rendered || '<p>复制内容为空。</p>';
+      applyStableRibbonRotations(contentEl, `copy:${title || ''}`);
+      contentEl.querySelectorAll('.markdown-ribbon-divider').forEach(ribbon => {
+        ribbon.classList.add('lazy-bg-loaded');
+      });
       modal.classList.remove('hidden');
       modal.classList.add('flex');
       document.body.classList.add('copy-detail-open');
