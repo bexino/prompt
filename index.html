@@ -483,12 +483,12 @@
       flex-wrap: wrap;
       align-items: flex-start;
       justify-content: flex-start;
-      gap: 0.15rem;
+      gap: 0.875rem;
       width: 100%;
     }
     .catalog-panel .toc-item-link {
       position: relative;
-      z-index: var(--toc-z, 1);
+      z-index: 1;
       display: inline-flex;
       flex: 0 0 auto;
       width: max-content;
@@ -500,27 +500,28 @@
       border-radius: 5px !important;
       color: #3f3022 !important;
       background: linear-gradient(rgba(255,255,255,0.12), rgba(92,62,28,0.05)), #d7bc86 !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.42),
-        0 2px 2px rgba(32,17,7,0.52),
-        var(--toc-shadow-x, 3px) var(--toc-shadow-y, 7px) var(--toc-shadow-blur, 10px) rgba(20,8,3,0.56) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 3px 5px rgba(0,0,0,0.4) !important;
       text-shadow: 0 1px rgba(255,255,255,0.5);
-      transform:
-        translate(var(--toc-offset-x, 0px), var(--toc-offset-y, 0px))
-        rotate(var(--toc-rotation, 0deg));
-      transform-origin: center;
     }
     .catalog-panel .toc-item-link:hover {
-      z-index: 20;
-      transform:
-        translate(var(--toc-offset-x, 0px), calc(var(--toc-offset-y, 0px) - 2px))
-        rotate(var(--toc-rotation, 0deg));
+      transform: translateY(-2px);
       color: #24180f !important;
       background: #e4cd9c !important;
-      box-shadow:
-        inset 0 1px rgba(255,255,255,0.5),
-        0 3px 2px rgba(32,17,7,0.58),
-        7px 12px 16px rgba(15,5,2,0.62) !important;
+      box-shadow: inset 0 1px rgba(255,255,255,0.5), 0 6px 10px rgba(0,0,0,0.45) !important;
+    }
+    .catalog-panel .toc-item-link.toc-item-deep {
+      border-color: #3f2816 !important;
+      color: #f0dfb8 !important;
+      background:
+        linear-gradient(rgba(255,235,183,0.08), rgba(42,20,8,0.12)),
+        linear-gradient(145deg, #835d36, #5b3a22 68%, #472b19) !important;
+      box-shadow: inset 0 1px rgba(255,226,163,0.18), 0 3px 6px rgba(14,6,2,0.52) !important;
+      text-shadow: 0 1px 1px rgba(28,12,5,0.72);
+    }
+    .catalog-panel .toc-item-link.toc-item-deep:hover {
+      color: #fff0c9 !important;
+      background: linear-gradient(145deg, #956c40, #67452a 68%, #50321e) !important;
+      box-shadow: inset 0 1px rgba(255,232,179,0.24), 0 7px 12px rgba(10,4,2,0.58) !important;
     }
     .catalog-panel .toc-arrow {
       flex: 0 0 auto;
@@ -535,6 +536,11 @@
     }
     .catalog-panel .toc-item-link:hover .toc-arrow {
       color: #25170d !important;
+    }
+    .catalog-panel .toc-item-link.toc-item-deep .toc-arrow,
+    .catalog-panel .toc-item-link.toc-item-deep:hover .toc-arrow {
+      color: #e9c980 !important;
+      text-shadow: 0 1px 1px rgba(25,10,4,0.7);
     }
 
     .section-plaque {
@@ -1017,11 +1023,18 @@
       background: linear-gradient(90deg, rgba(38,9,5,0.7), rgba(232,190,92,0.62), rgba(38,9,5,0.48));
       box-shadow: 1px 0 rgba(255,222,143,0.16);
     }
-    .pride-card.copied .copied-overlay {
+    .copied-overlay {
       z-index: 8;
-      display: flex !important;
       background: transparent;
       transform: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 280ms ease, visibility 0s linear 280ms;
+    }
+    .pride-card.copied .copied-overlay {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 300ms ease, visibility 0s;
     }
     .copied-sticker-image {
       position: relative;
@@ -1036,6 +1049,19 @@
       filter:
         drop-shadow(0 4px 5px rgba(22, 12, 6, 0.58))
         drop-shadow(7px 12px 15px rgba(18, 9, 4, 0.42));
+    }
+    .pride-card.copied .copied-sticker-image {
+      animation: copied-sticker-enter 420ms cubic-bezier(.18,.82,.24,1) both;
+    }
+    @keyframes copied-sticker-enter {
+      from {
+        opacity: 0;
+        scale: 1.35;
+      }
+      to {
+        opacity: 1;
+        scale: 1;
+      }
     }
 
     .pride-banner {
@@ -1951,6 +1977,33 @@
       return hash >>> 0;
     }
 
+    function getBalancedTocToneFlags(categories) {
+      const count = categories.length;
+      if (count === 0) return [];
+
+      const categoryKey = categories.map(item => item.title).join('\n');
+      let randomState = hashString(`${pageRotationSeed}:toc-tone-shuffle:${categoryKey}`) || 0x9e3779b9;
+      const nextRandom = () => {
+        randomState ^= randomState << 13;
+        randomState ^= randomState >>> 17;
+        randomState ^= randomState << 5;
+        return randomState >>> 0;
+      };
+
+      const shuffledIndexes = Array.from({ length: count }, (_, index) => index);
+      for (let index = count - 1; index > 0; index--) {
+        const swapIndex = nextRandom() % (index + 1);
+        [shuffledIndexes[index], shuffledIndexes[swapIndex]] = [shuffledIndexes[swapIndex], shuffledIndexes[index]];
+      }
+
+      const deepCount = Math.floor(count / 2) + (count % 2 === 1 && (nextRandom() & 1) === 1 ? 1 : 0);
+      const flags = Array(count).fill(false);
+      shuffledIndexes.slice(0, deepCount).forEach(index => {
+        flags[index] = true;
+      });
+      return flags;
+    }
+
     function getStableNoteLayout(key) {
       const hash = hashString(key);
       const rotationHash = hashString(`${pageRotationSeed}:note:${key}`);
@@ -1997,24 +2050,6 @@
       return {
         rotation: rotation.toFixed(2),
         mobileRotation: (rotation * 0.65).toFixed(2)
-      };
-    }
-
-    function getStableTocItemLayout(key, index) {
-      const hash = hashString(`${pageRotationSeed}:toc:${index}:${key}`);
-      let rotation = -4 + ((hash % 1001) / 1000) * 8;
-      if (Math.abs(rotation) < 0.7) {
-        rotation = (hash & 1) === 0 ? -0.7 : 0.7;
-      }
-
-      return {
-        rotation: rotation.toFixed(2),
-        offsetX: ((hash >>> 11) % 19) - 9,
-        offsetY: ((hash >>> 16) % 13) - 6,
-        zIndex: 1 + ((hash >>> 21) % 4),
-        shadowX: ((hash >>> 23) % 5) - 1,
-        shadowY: 6 + ((hash >>> 26) % 4),
-        shadowBlur: 9 + ((hash >>> 28) % 5)
       };
     }
 
@@ -2155,11 +2190,14 @@
               <div class="toc-list">
             `;
 
-            categories.forEach((catItem) => {
+            const tocToneFlags = getBalancedTocToneFlags(categories);
+
+            categories.forEach((catItem, categoryIndex) => {
               const catIdx = parsedItems.indexOf(catItem);
+              const toneClass = tocToneFlags[categoryIndex] ? ' toc-item-deep' : '';
               tocHtml += `
                 <a href="#category-${catIdx}" data-target="category-${catIdx}"
-                  class="toc-item-link px-6 sm:px-7 py-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-900 hover:text-slate-950 transition-all text-base sm:text-lg font-extrabold group shadow-xs">
+                  class="toc-item-link${toneClass} px-6 sm:px-7 py-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-900 hover:text-slate-950 transition-all text-base sm:text-lg font-extrabold group shadow-xs">
                   <span class="toc-label">${parseInline(catItem.title)}</span>
                   <span class="toc-arrow group-hover:translate-x-1 transition-transform shrink-0">→</span>
                 </a>
@@ -2169,15 +2207,7 @@
             tocHtml += `</div>`;
             tocEl.innerHTML = tocHtml;
 
-            tocEl.querySelectorAll('.toc-item-link').forEach((link, index) => {
-              const layout = getStableTocItemLayout(categories[index]?.title || '', index);
-              link.style.setProperty('--toc-rotation', `${layout.rotation}deg`);
-              link.style.setProperty('--toc-offset-x', `${layout.offsetX}px`);
-              link.style.setProperty('--toc-offset-y', `${layout.offsetY}px`);
-              link.style.setProperty('--toc-z', layout.zIndex);
-              link.style.setProperty('--toc-shadow-x', `${layout.shadowX}px`);
-              link.style.setProperty('--toc-shadow-y', `${layout.shadowY}px`);
-              link.style.setProperty('--toc-shadow-blur', `${layout.shadowBlur}px`);
+            tocEl.querySelectorAll('.toc-item-link').forEach(link => {
               link.addEventListener('click', (e) => {
                 const targetId = link.getAttribute('data-target');
                 scrollToSection(e, targetId);
@@ -2278,7 +2308,7 @@
                 <span class="note-copy-label-default">复制</span>
                 <span class="note-copy-label-success">查看</span>
               </button>
-              <div class="copied-overlay hidden absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+              <div class="copied-overlay absolute inset-0 flex items-center justify-center pointer-events-none select-none">
                 <img class="copied-sticker-image" src="./assets/decor/copied-sticker-v6.webp?v=7" width="512" height="512" decoding="async" alt="">
               </div>
             `;
@@ -2402,6 +2432,9 @@
         const stickerOffsetX = -16 + Math.random() * 32;
         const stickerOffsetY = -16 + Math.random() * 32;
         stickerEl.style.transform = `translate(${stickerOffsetX.toFixed(2)}px, ${stickerOffsetY.toFixed(2)}px) rotate(${stickerRotation.toFixed(2)}deg)`;
+        stickerEl.style.animation = 'none';
+        void stickerEl.offsetWidth;
+        stickerEl.style.removeProperty('animation');
       }
 
       cardEl.classList.add('copied');
