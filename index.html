@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>一键复制库</title>
+  <link rel="preload" as="image" href="./assets/decor/copied-sticker-v6.png?v=6">
 
   <script>
     (() => {
@@ -740,9 +741,12 @@
       width: min(100%, 48rem) !important;
       margin-left: auto !important;
       margin-right: auto !important;
-      gap: 0.8rem 0.45rem !important;
+      gap: 0.9rem 1rem !important;
       padding: 0.35rem 0 0.8rem;
     }
+    .notes-grid .note-card:nth-child(3n + 1) { z-index: 3; }
+    .notes-grid .note-card:nth-child(3n + 2) { z-index: 2; }
+    .notes-grid .note-card:nth-child(3n) { z-index: 1; }
 
     .pride-card.note-card {
       --note-rotation: 0deg;
@@ -880,23 +884,70 @@
       overflow: hidden;
       text-shadow: 0 1px 1px rgba(28, 13, 9, 0.58);
     }
-    .note-card .clipboard-icon {
+    .note-card .note-copy-tab {
+      --note-tab-bottom: 18%;
+      position: absolute;
+      right: -0.55rem;
+      bottom: var(--note-tab-bottom);
+      z-index: 4;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 4.5rem;
-      padding: 0.48rem 0.95rem 0.52rem;
-      border: 1px solid rgba(76,47,19,0.45);
-      border-radius: 999px;
-      color: #362511;
-      background: linear-gradient(#dfc17e, #a87a38);
-      box-shadow: inset 0 1px rgba(255,255,255,0.45), 0 2px 3px rgba(45,25,9,0.3);
+      width: 4.4rem;
+      min-height: 2rem;
+      padding: 0.36rem 0.75rem 0.4rem 0.95rem;
+      appearance: none;
+      border: 1px solid #8a6e3e;
+      border-left-color: #d5bd7c;
+      border-radius: 2px 5px 5px 2px;
+      color: #4a351c;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.12) 0 1px, rgba(79,56,23,0.06) 1px 2px),
+        linear-gradient(180deg, #f3e4b8 0%, #c8a65e 46%, #e1c77f 100%);
+      background-blend-mode: soft-light, normal;
+      box-shadow:
+        inset 0 1px rgba(255,255,255,0.58),
+        inset 0 -1px rgba(83,56,19,0.32),
+        0 2px 2px rgba(44,29,10,0.35),
+        4px 7px 8px rgba(32,19,6,0.34);
       font-family: inherit;
-      font-size: 0.92rem !important;
+      font-size: 0.9rem !important;
       font-weight: 800;
-      letter-spacing: 0.08em;
-      opacity: 0.92;
-      text-shadow: 0 1px rgba(255,255,255,0.36);
+      letter-spacing: 0.12em;
+      text-indent: 0.12em;
+      line-height: 1;
+      cursor: pointer;
+      text-shadow: 0 1px rgba(255,248,218,0.58), 0 -1px rgba(78,53,19,0.18);
+      filter: brightness(0.98);
+      transform:
+        translate(var(--note-tab-offset-x, 0px), var(--note-tab-offset-y, 0px))
+        rotate(var(--note-tab-rotation, 0deg));
+      transform-origin: left center;
+      transition: transform 180ms ease, filter 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
+    }
+    .note-card .note-copy-tab::before {
+      content: '';
+      position: absolute;
+      top: 0.24rem;
+      bottom: 0.24rem;
+      left: 0.32rem;
+      width: 2px;
+      background: linear-gradient(90deg, rgba(89,59,20,0.48), rgba(255,239,184,0.72), rgba(93,62,22,0.36));
+      box-shadow: 1px 0 rgba(255,250,221,0.32);
+    }
+    .note-card.note-paper-a .note-copy-tab { --note-tab-bottom: 17%; }
+    .note-card.note-paper-b .note-copy-tab { --note-tab-bottom: 27%; }
+    .note-card.note-paper-c .note-copy-tab { --note-tab-bottom: 18%; }
+    .note-card:hover .note-copy-tab {
+      transform:
+        translate(calc(var(--note-tab-offset-x, 0px) + 2px), var(--note-tab-offset-y, 0px))
+        rotate(var(--note-tab-rotation, 0deg));
+      filter: brightness(1.1);
+    }
+    .note-card:active .note-copy-tab {
+      transform:
+        translate(calc(var(--note-tab-offset-x, 0px) + 1px), var(--note-tab-offset-y, 0px))
+        rotate(var(--note-tab-rotation, 0deg));
     }
 
     .note-decoration {
@@ -918,14 +969,6 @@
       width: 16%;
       transform: translateX(-50%);
     }
-    .note-decoration-fold {
-      right: -3%;
-      bottom: -3%;
-      width: 23%;
-      opacity: 0.68;
-      transform-origin: bottom right;
-    }
-
     .pride-card.copied {
       color: var(--note-ink) !important;
       border: 0 !important;
@@ -934,35 +977,51 @@
     }
     .pride-card.copied .card-content-wrap {
       display: flex !important;
-      opacity: 0.16 !important;
+      opacity: 0.3 !important;
+    }
+    .pride-card.copied .note-copy-tab {
+      z-index: 10;
+      opacity: 1;
+      color: #f0cf72;
+      border-color: #42170f;
+      border-left-color: #a47738;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,226,155,0.05) 0 1px, rgba(43,11,7,0.08) 1px 2px),
+        linear-gradient(180deg, #8b4030 0%, #68271e 48%, #4a1913 100%);
+      background-blend-mode: soft-light, normal;
+      text-shadow: 0 1px rgba(255,235,178,0.25), 0 -1px rgba(28,7,4,0.72);
+      box-shadow:
+        inset 0 1px rgba(255,222,145,0.24),
+        inset 0 -1px rgba(30,7,4,0.58),
+        0 3px 3px rgba(25,9,5,0.62),
+        6px 10px 12px rgba(18,7,4,0.58);
+    }
+    .note-copy-label-success { display: none; }
+    .pride-card.copied .note-copy-label-default { display: none; }
+    .pride-card.copied .note-copy-label-success { display: inline; }
+    .pride-card.copied .note-copy-tab::before {
+      background: linear-gradient(90deg, rgba(38,9,5,0.7), rgba(232,190,92,0.62), rgba(38,9,5,0.48));
+      box-shadow: 1px 0 rgba(255,222,143,0.16);
     }
     .pride-card.copied .copied-overlay {
       z-index: 8;
       display: flex !important;
-      color: #1e6138;
       background: transparent;
       transform: none;
     }
-    .copied-paper-overlay {
-      position: absolute;
-      inset: -3.5%;
-      z-index: 0;
-      display: block;
-      width: 107%;
-      height: 107%;
-      object-fit: contain;
-      opacity: 0.84;
-      filter: grayscale(1) brightness(2.35) contrast(0.78) sepia(0.12);
-      user-select: none;
-    }
-    .copied-stamp-image {
+    .copied-sticker-image {
       position: relative;
       z-index: 1;
-      width: 72%;
-      max-width: 12rem;
-      opacity: 0.96;
-      mix-blend-mode: multiply;
-      transform: rotate(-8deg);
+      width: 82%;
+      max-width: 13rem;
+      height: auto;
+      object-fit: contain;
+      user-select: none;
+      transform: none;
+      transform-origin: center;
+      filter:
+        drop-shadow(0 4px 5px rgba(22, 12, 6, 0.58))
+        drop-shadow(7px 12px 15px rgba(18, 9, 4, 0.42));
     }
 
     .pride-banner {
@@ -1017,29 +1076,6 @@
       box-shadow: 5px 10px 20px rgba(13,5,2,0.5) !important;
     }
 
-    #toast-container > .copy-detail-toast {
-      position: relative;
-      overflow: hidden;
-      border: 1px solid #061d13 !important;
-      border-radius: 10px !important;
-      color: #f2e6c7 !important;
-      background:
-        radial-gradient(circle at 12% 15%, rgba(197, 230, 202, 0.13), transparent 30%),
-        url('./assets/textures/paper-fiber.webp'),
-        #0b3b25 !important;
-      background-blend-mode: soft-light, multiply, normal !important;
-      box-shadow: inset 0 3px 8px rgba(199, 229, 201, 0.1), inset 0 -5px 9px rgba(0, 12, 8, 0.48), 6px 12px 24px rgba(3, 15, 10, 0.64) !important;
-      text-shadow: 0 2px 2px #04140d;
-    }
-    #toast-container > .copy-detail-toast::before {
-      content: '';
-      position: absolute;
-      inset: 5px;
-      pointer-events: none;
-      border: 1px dashed rgba(204, 224, 191, 0.28);
-      border-radius: 6px;
-    }
-    .copy-detail-toast-action,
     .copy-detail-modal-done {
       border: 1px solid #402713;
       color: #2e2114;
@@ -1047,7 +1083,6 @@
       box-shadow: inset 0 1px rgba(255,255,255,0.5), inset 0 -2px 3px rgba(63,35,10,0.28), 0 3px 5px rgba(27,13,5,0.4);
       text-shadow: 0 1px rgba(255,255,255,0.4);
     }
-    .copy-detail-toast-action:hover,
     .copy-detail-modal-done:hover {
       background: linear-gradient(#efdca7, #bd8d48);
       transform: translateY(-1px);
@@ -1135,7 +1170,7 @@
     body.copy-detail-open { overflow: hidden; }
 
     @media (max-width: 639px) {
-      .copied-stamp-image { width: 82%; }
+      .copied-sticker-image { width: 84%; }
       .copy-detail-modal-header { padding-inline: 2.7rem; }
       .copy-detail-modal-body { margin: 0.7rem; padding: 1rem; }
     }
@@ -1149,18 +1184,25 @@
       .brand-plaque::after { right: 0.75rem; }
       .catalog-panel { padding: 1.25rem !important; }
       .section-plaque { min-width: 72%; margin-top: 3.5rem !important; padding-inline: 2.25rem !important; transform: rotate(var(--plaque-mobile-rotation)); }
-      .notes-grid { gap: 0.55rem 0.15rem !important; padding-inline: 0; }
+      .notes-grid { gap: 0.7rem 0.75rem !important; padding-inline: 0; }
+      .notes-grid .note-card:nth-child(odd) { z-index: 2; }
+      .notes-grid .note-card:nth-child(even) { z-index: 1; }
+      .notes-grid .note-card:hover { z-index: 20; }
       .pride-card.note-card {
         transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-mobile-rotation));
       }
-      .note-decoration-fold { display: none; }
+      .note-card h3 { -webkit-line-clamp: 3; }
       .note-decoration-tape { width: 54%; }
       .note-decoration-pin { width: 18%; }
-      .note-card .clipboard-icon {
-        min-width: 3.8rem;
-        padding: 0.38rem 0.72rem 0.42rem;
-        font-size: 0.82rem !important;
+      .note-card .note-copy-tab {
+        right: 0;
+        width: 3.6rem;
+        min-height: 1.7rem;
+        padding: 0.28rem 0.55rem 0.32rem 0.75rem;
+        font-size: 0.78rem !important;
       }
+      .note-card.note-paper-a .note-copy-tab { --note-tab-bottom: 6%; }
+      .note-card.note-paper-b .note-copy-tab { --note-tab-bottom: 6%; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1279,6 +1321,14 @@
     let rawMarkdown = "";
     let parsedItems = [];
     let lazyAssetObserver = null;
+    const pageRotationSeed = (() => {
+      if (window.crypto?.getRandomValues) {
+        const values = new Uint32Array(2);
+        window.crypto.getRandomValues(values);
+        return `${values[0]}-${values[1]}`;
+      }
+      return `${Date.now()}-${Math.random()}`;
+    })();
 
     // Helper to get active site configuration
     function getActiveSiteConfig() {
@@ -1735,7 +1785,7 @@
       }
     }
 
-    // The prompt content is the seed, so each note keeps its placement across renders.
+    // A fresh page seed changes rotations on every visit while keeping this render stable.
     function hashString(value) {
       let hash = 2166136261;
       for (let i = 0; i < value.length; i++) {
@@ -1747,14 +1797,23 @@
 
     function getStableNoteLayout(key) {
       const hash = hashString(key);
-      let rotation = -5 + ((hash % 1001) / 1000) * 10;
+      const rotationHash = hashString(`${pageRotationSeed}:note:${key}`);
+      const copyTabRotationHash = hashString(`${pageRotationSeed}:copy-tab:${key}`);
+      const copyTabOffsetHash = hashString(`${pageRotationSeed}:copy-tab-offset:${key}`);
+      let rotation = -5 + ((rotationHash % 1001) / 1000) * 10;
+      const copyTabRotation = -5 + ((copyTabRotationHash % 1001) / 1000) * 10;
+      const copyTabOffsetX = (copyTabOffsetHash % 13) - 6;
+      const copyTabOffsetY = -((copyTabOffsetHash >>> 8) % 7);
       if (Math.abs(rotation) < 0.7) {
-        rotation = (hash & 1) === 0 ? -1.1 : 1.1;
+        rotation = (rotationHash & 1) === 0 ? -1.1 : 1.1;
       }
 
       return {
         rotation: rotation.toFixed(2),
         mobileRotation: rotation.toFixed(2),
+        copyTabRotation: copyTabRotation.toFixed(2),
+        copyTabOffsetX,
+        copyTabOffsetY,
         offsetX: ((hash >>> 11) % 27) - 13,
         offsetY: ((hash >>> 16) % 21) - 10,
         originX: 47 + ((hash >>> 19) % 7),
@@ -1773,7 +1832,7 @@
     }
 
     function getStablePlaqueRotation(key) {
-      const hash = hashString(`plaque:${key}`);
+      const hash = hashString(`${pageRotationSeed}:plaque:${key}`);
       let rotation = -5 + ((hash % 1001) / 1000) * 10;
       if (Math.abs(rotation) < 1.2) {
         rotation = (hash & 1) === 0 ? -1.2 : 1.2;
@@ -1787,7 +1846,7 @@
 
     function applyStableRibbonRotations(scope, namespace = 'page') {
       scope.querySelectorAll('.markdown-ribbon-divider').forEach((ribbon, index) => {
-        const hash = hashString(`ribbon:${namespace}:${index}`);
+        const hash = hashString(`${pageRotationSeed}:ribbon:${namespace}:${index}`);
         const rotation = -5 + ((hash % 1001) / 1000) * 10;
         ribbon.style.setProperty('--ribbon-rotation', `${rotation.toFixed(2)}deg`);
       });
@@ -1883,6 +1942,7 @@
       const paperVariant = ['a', 'b', 'c'][variant % 3];
       const colorName = colorTheme.replace('pride-card-', '');
       return {
+        variant: paperVariant,
         base: `./assets/notes/note-paper-${paperVariant}-${colorName}.webp?v=3`,
         topShadow: `./assets/notes/note-top-shadow-${paperVariant}-${shadowVariant}.webp?v=1`
       };
@@ -1996,10 +2056,13 @@
             const decoration = getNoteDecoration(noteLayout.decoration);
             const paperAsset = getNotePaper((promptCounter - 1) % 3, colorTheme, noteLayout.topShadowVariant);
 
-            promptEl.className = `group/card pride-card note-card ${colorTheme} aspect-square p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between cursor-pointer relative select-none btn-scale`;
+            promptEl.className = `group/card pride-card note-card note-paper-${paperAsset.variant} ${colorTheme} aspect-square p-3.5 sm:p-5 lg:p-6 flex flex-col justify-between cursor-pointer relative select-none btn-scale`;
             promptEl.id = promptId;
             promptEl.style.setProperty('--note-rotation', `${noteLayout.rotation}deg`);
             promptEl.style.setProperty('--note-mobile-rotation', `${noteLayout.mobileRotation}deg`);
+            promptEl.style.setProperty('--note-tab-rotation', `${noteLayout.copyTabRotation}deg`);
+            promptEl.style.setProperty('--note-tab-offset-x', `${noteLayout.copyTabOffsetX}px`);
+            promptEl.style.setProperty('--note-tab-offset-y', `${noteLayout.copyTabOffsetY}px`);
             promptEl.style.setProperty('--note-x', `${noteLayout.offsetX}px`);
             promptEl.style.setProperty('--note-y', `${noteLayout.offsetY}px`);
             promptEl.style.setProperty('--note-origin-x', `${noteLayout.originX}%`);
@@ -2022,21 +2085,28 @@
                 <img class="note-top-shadow lazy-asset" data-src="${paperAsset.topShadow}" loading="lazy" decoding="async" fetchpriority="low" alt="">
               </div>
               ${decoration ? `<img class="note-decoration note-decoration-${decoration.className} lazy-asset" data-src="${decoration.src}" loading="lazy" decoding="async" fetchpriority="low" alt="" aria-hidden="true">` : ''}
-              <div class="card-content-wrap flex flex-col justify-between h-full w-full">
+              <div class="card-content-wrap flex flex-col h-full w-full">
                 <div class="w-full text-left overflow-hidden">
                   <h3 class="text-lg sm:text-xl md:text-2xl lg:text-2xl font-black line-clamp-4 sm:line-clamp-5 leading-snug tracking-tight break-words">
                     ${parseInline(promptItem.title)}
                   </h3>
                 </div>
-                <div class="flex items-center justify-end w-full mt-auto pt-2">
-                  <span class="clipboard-icon group-hover/card:opacity-100 transition-all select-none">复制</span>
-                </div>
               </div>
+              <button type="button" class="note-copy-tab select-none" aria-label="复制提示词；复制成功后可查看详情">
+                <span class="note-copy-label-default">复制</span>
+                <span class="note-copy-label-success">查看</span>
+              </button>
               <div class="copied-overlay hidden absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-                <img class="copied-paper-overlay" data-paper-src="${paperAsset.base}" decoding="async" alt="">
-                <img class="copied-stamp-image" src="./assets/decor/copied-stamp.png" loading="lazy" decoding="async" alt="">
+                <img class="copied-sticker-image" src="./assets/decor/copied-sticker-v6.png?v=6" width="1254" height="1254" decoding="async" alt="">
               </div>
             `;
+
+            promptEl.querySelector('.note-copy-tab')?.addEventListener('click', event => {
+              if (promptEl.classList.contains('copied')) {
+                event.stopPropagation();
+                openCopyDetails(promptEl._promptTitle, promptEl._promptCode);
+              }
+            });
 
             promptEl.addEventListener('click', () => {
               copyPromptCard(promptEl._promptCode, promptId, promptEl._promptTitle);
@@ -2113,7 +2183,6 @@
       // 2. Clipboard API execution in background
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text)
-          .then(() => showCopyDetailToast(title, text))
           .catch(err => {
             console.error('Clipboard copy error: ', err);
             showToast('复制失败，请尝试手动复制', 'error');
@@ -2129,7 +2198,6 @@
           const copied = document.execCommand('copy');
           document.body.removeChild(textarea);
           if (!copied) throw new Error('Fallback copy command returned false');
-          showCopyDetailToast(title, text);
         } catch (err) {
           console.error('Fallback copy failed: ', err);
           showToast('复制失败，请尝试手动复制', 'error');
@@ -2137,7 +2205,7 @@
       }
     }
 
-    // Clipboard UI feedback controller: Card instantly turns green, text disappears, centered huge checkmark ✓ appears
+    // Clipboard UI feedback controller: show the generated sticker immediately while preserving the note color.
     function showCopyFeedback(cardEl, title) {
       if (!cardEl) return;
 
@@ -2145,10 +2213,13 @@
         clearTimeout(cardEl.copyTimeout);
       }
 
-      const paperOverlay = cardEl.querySelector('.copied-paper-overlay');
-      if (paperOverlay && !paperOverlay.getAttribute('src')) {
-        const paperBase = cardEl.querySelector('.note-paper-base');
-        paperOverlay.src = paperBase?.currentSrc || paperBase?.src || paperOverlay.dataset.paperSrc;
+      const stickerEl = cardEl.querySelector('.copied-sticker-image');
+      if (stickerEl) {
+        const rotationDirection = Math.random() < 0.5 ? -1 : 1;
+        const stickerRotation = rotationDirection * (8 + Math.random() * 7);
+        const stickerOffsetX = -16 + Math.random() * 32;
+        const stickerOffsetY = -16 + Math.random() * 32;
+        stickerEl.style.transform = `translate(${stickerOffsetX.toFixed(2)}px, ${stickerOffsetY.toFixed(2)}px) rotate(${stickerRotation.toFixed(2)}deg)`;
       }
 
       cardEl.classList.add('copied');
@@ -2203,80 +2274,12 @@
       document.body.classList.remove('copy-detail-open');
     }
 
-    function showCopyDetailToast(title, markdown) {
-      const container = document.getElementById('toast-container');
-      if (!container) return;
-
-      const toast = document.createElement('div');
-      toast.className = 'copy-detail-toast relative flex items-center gap-3 p-4 opacity-0 translate-y-2 transition-all duration-300';
-
-      const textWrap = document.createElement('div');
-      textWrap.className = 'relative z-[1] flex-1 min-w-0';
-      const messageEl = document.createElement('p');
-      messageEl.className = 'font-bold text-sm';
-      messageEl.textContent = '复制成功';
-      const subtitleEl = document.createElement('p');
-      subtitleEl.className = 'mt-0.5 text-xs opacity-70 truncate';
-      subtitleEl.textContent = title || '已复制内容';
-      textWrap.append(messageEl, subtitleEl);
-
-      const actionButton = document.createElement('button');
-      actionButton.type = 'button';
-      actionButton.className = 'copy-detail-toast-action relative z-[1] shrink-0 rounded-md px-3 py-1.5 text-sm font-bold transition-transform';
-      actionButton.textContent = '查看详情';
-      actionButton.addEventListener('click', () => {
-        openCopyDetails(title, markdown);
-        toast.remove();
-      });
-
-      const closeButton = document.createElement('button');
-      closeButton.type = 'button';
-      closeButton.className = 'relative z-[1] px-1 text-xl font-bold opacity-55 hover:opacity-100';
-      closeButton.setAttribute('aria-label', '关闭提示');
-      closeButton.textContent = '×';
-      closeButton.addEventListener('click', () => toast.remove());
-
-      toast.append(textWrap, actionButton, closeButton);
-      container.appendChild(toast);
-      requestAnimationFrame(() => toast.classList.remove('opacity-0', 'translate-y-2'));
-
-      setTimeout(() => {
-        if (!toast.isConnected) return;
-        toast.classList.add('opacity-0', 'translate-y-2');
-        setTimeout(() => toast.remove(), 320);
-      }, 6500);
-    }
-
     // Toast Alert Manager
     function showToast(message, type = 'success', subtitle = '') {
       const container = document.getElementById('toast-container');
       if (!container) return;
 
       const toast = document.createElement('div');
-
-      if (message === '复制成功') {
-        const wrapper = document.createElement('div');
-        wrapper.className = "fixed inset-0 z-50 flex items-center justify-center pointer-events-none";
-
-        toast.className = `
-          px-6 py-3 rounded-2xl shadow-xl bg-green-600 text-white text-sm font-bold backdrop-blur-sm transform scale-90 opacity-0 transition-all duration-200 ease-out flex items-center justify-center
-        `;
-        toast.innerHTML = `<span>${message}</span>`;
-        wrapper.appendChild(toast);
-        document.body.appendChild(wrapper);
-
-        requestAnimationFrame(() => {
-          toast.classList.remove('scale-90', 'opacity-0');
-        });
-
-        setTimeout(() => {
-          toast.classList.add('opacity-0', 'scale-90');
-          toast.addEventListener('transitionend', () => {
-            wrapper.remove();
-          });
-        }, 1500);
-        return;
-      }
 
       toast.className = `
         flex items-start justify-between gap-3 p-4.5 rounded-2xl shadow-lg border backdrop-blur-md transform translate-y-2 opacity-0 transition-all duration-300 ease-out max-w-sm w-full
