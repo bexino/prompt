@@ -417,6 +417,4 @@ git config --global user.email
 ---
 
 [开源: Apache-2.0 license](https://github.com/bexino/prompt)
-© 2026 bexino. 版权所有
-
----
+© 2026 bexino. 版权所有。

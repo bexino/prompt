@@ -319,6 +319,7 @@
 
     body.skeuo-app {
       position: relative;
+      padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
       font-family: var(--system-serif) !important;
       background-color: var(--wood-dark);
       background-image:
@@ -482,12 +483,12 @@
       flex-wrap: wrap;
       align-items: flex-start;
       justify-content: flex-start;
-      gap: 0.875rem;
+      gap: 0.15rem;
       width: 100%;
     }
     .catalog-panel .toc-item-link {
       position: relative;
-      z-index: 1;
+      z-index: var(--toc-z, 1);
       display: inline-flex;
       flex: 0 0 auto;
       width: max-content;
@@ -499,14 +500,27 @@
       border-radius: 5px !important;
       color: #3f3022 !important;
       background: linear-gradient(rgba(255,255,255,0.12), rgba(92,62,28,0.05)), #d7bc86 !important;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 3px 5px rgba(0,0,0,0.4) !important;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.42),
+        0 2px 2px rgba(32,17,7,0.52),
+        var(--toc-shadow-x, 3px) var(--toc-shadow-y, 7px) var(--toc-shadow-blur, 10px) rgba(20,8,3,0.56) !important;
       text-shadow: 0 1px rgba(255,255,255,0.5);
+      transform:
+        translate(var(--toc-offset-x, 0px), var(--toc-offset-y, 0px))
+        rotate(var(--toc-rotation, 0deg));
+      transform-origin: center;
     }
     .catalog-panel .toc-item-link:hover {
-      transform: translateY(-2px);
+      z-index: 20;
+      transform:
+        translate(var(--toc-offset-x, 0px), calc(var(--toc-offset-y, 0px) - 2px))
+        rotate(var(--toc-rotation, 0deg));
       color: #24180f !important;
       background: #e4cd9c !important;
-      box-shadow: inset 0 1px rgba(255,255,255,0.5), 0 6px 10px rgba(0,0,0,0.45) !important;
+      box-shadow:
+        inset 0 1px rgba(255,255,255,0.5),
+        0 3px 2px rgba(32,17,7,0.58),
+        7px 12px 16px rgba(15,5,2,0.62) !important;
     }
     .catalog-panel .toc-arrow {
       flex: 0 0 auto;
@@ -1012,8 +1026,8 @@
     .copied-sticker-image {
       position: relative;
       z-index: 1;
-      width: 82%;
-      max-width: 13rem;
+      width: 98%;
+      max-width: none;
       height: auto;
       object-fit: contain;
       user-select: none;
@@ -1169,10 +1183,116 @@
     }
     body.copy-detail-open { overflow: hidden; }
 
+    .back-to-top-button {
+      position: fixed;
+      left: 50%;
+      bottom: calc(0.9rem + env(safe-area-inset-bottom, 0px));
+      z-index: 40;
+      display: inline-flex;
+      width: 3.25rem;
+      height: 3.25rem;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid #3f2812;
+      border-radius: 50%;
+      color: #35220f;
+      background:
+        radial-gradient(circle at 36% 27%, rgba(255,244,190,0.76) 0 4%, transparent 18%),
+        repeating-linear-gradient(112deg, rgba(255,255,255,0.045) 0 1px, rgba(66,39,13,0.055) 1px 3px),
+        radial-gradient(circle at 40% 34%, #e8cc7e 0 12%, #b8863e 42%, #765020 72%, #3f2812 100%);
+      box-shadow:
+        inset 0 1px 1px rgba(255,247,206,0.64),
+        inset 0 -3px 5px rgba(45,24,7,0.56),
+        inset 0 0 0 4px rgba(92,59,22,0.35),
+        0 3px 2px rgba(22,10,4,0.48),
+        5px 9px 13px rgba(14,5,2,0.58);
+      cursor: pointer;
+      touch-action: manipulation;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate(-50%, 10px) rotate(-0.8deg) scale(0.92);
+      transform-origin: center;
+      transition: transform 180ms ease, filter 160ms ease, box-shadow 160ms ease, opacity 160ms ease, visibility 160ms ease;
+    }
+    .back-to-top-button::before {
+      content: '';
+      position: absolute;
+      inset: 0.3rem;
+      border: 1px solid rgba(69,42,15,0.72);
+      border-radius: 50%;
+      box-shadow: inset 0 1px rgba(255,237,173,0.42), 0 1px rgba(255,224,145,0.18);
+      pointer-events: none;
+    }
+    .back-to-top-button::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background:
+        radial-gradient(circle at 24% 66%, rgba(49,27,9,0.2) 0 1px, transparent 2px),
+        radial-gradient(circle at 71% 28%, rgba(255,233,155,0.16) 0 1px, transparent 2px),
+        linear-gradient(128deg, transparent 42%, rgba(52,29,10,0.14) 43% 45%, transparent 46%);
+      pointer-events: none;
+    }
+    .back-to-top-button > span {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 0.92rem;
+      height: 0.92rem;
+      margin-top: 0.28rem;
+      border-top: 4px solid #35220f;
+      border-left: 4px solid #35220f;
+      border-radius: 2px 0 0 0;
+      filter: drop-shadow(1px 1px 0 rgba(255,229,151,0.38)) drop-shadow(-1px -1px 0 rgba(43,23,7,0.34));
+      transform: rotate(45deg);
+    }
+    .back-to-top-button.is-visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) rotate(-0.8deg);
+    }
+    .back-to-top-button:hover {
+      filter: brightness(1.12) saturate(1.05);
+      transform: translate(-50%, -3px) rotate(0deg);
+      box-shadow:
+        inset 0 1px 1px rgba(255,247,206,0.7),
+        inset 0 -3px 5px rgba(45,24,7,0.5),
+        inset 0 0 0 4px rgba(92,59,22,0.32),
+        0 4px 3px rgba(22,10,4,0.5),
+        7px 13px 17px rgba(14,5,2,0.62);
+    }
+    .back-to-top-button:active {
+      filter: brightness(0.96);
+      transform: translate(-50%, 1px) rotate(-0.4deg) scale(0.96);
+      box-shadow:
+        inset 0 3px 6px rgba(43,23,7,0.58),
+        inset 0 0 0 4px rgba(78,48,17,0.4),
+        0 2px 2px rgba(16,7,3,0.46);
+    }
+    .back-to-top-button:focus-visible {
+      outline: 3px solid #f1d17b;
+      outline-offset: 4px;
+    }
+
     @media (max-width: 639px) {
-      .copied-sticker-image { width: 84%; }
+      .copied-sticker-image { width: 100%; }
       .copy-detail-modal-header { padding-inline: 2.7rem; }
       .copy-detail-modal-body { margin: 0.7rem; padding: 1rem; }
+      .back-to-top-button {
+        bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        width: 2.875rem;
+        height: 2.875rem;
+      }
+      .back-to-top-button > span {
+        width: 0.82rem;
+        height: 0.82rem;
+        border-width: 3.5px 0 0 3.5px;
+      }
     }
 
     @media (max-width: 639px) {
@@ -1300,8 +1420,8 @@
   <div id="copy-detail-modal" class="hidden fixed inset-0 z-[70] items-center justify-center p-4" role="dialog"
     aria-modal="true" aria-labelledby="copy-detail-modal-title">
     <section class="copy-detail-modal-frame" tabindex="-1">
-      <header class="copy-detail-modal-header flex items-center justify-between gap-4">
-        <div class="min-w-0">
+      <header class="copy-detail-modal-header flex items-center justify-center gap-4 text-center">
+        <div class="min-w-0 w-full">
           <h2 id="copy-detail-modal-title" class="text-xl sm:text-2xl font-bold truncate">已复制内容</h2>
         </div>
       </header>
@@ -1311,6 +1431,11 @@
       </footer>
     </section>
   </div>
+
+  <button id="back-to-top-button" class="back-to-top-button" type="button"
+    aria-label="回到页面顶部" title="回到页面顶部">
+    <span aria-hidden="true"></span>
+  </button>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 max-w-md w-full px-4 sm:px-0"></div>
@@ -1359,6 +1484,7 @@
     window.addEventListener('DOMContentLoaded', async () => {
       initDragAndDrop();
       initCopyDetailModal();
+      initBackToTopButton();
       updateDynamicTexts();
 
       const brandPlaque = document.querySelector('.brand-plaque');
@@ -1785,6 +1911,36 @@
       }
     }
 
+    function initBackToTopButton() {
+      const button = document.getElementById('back-to-top-button');
+      if (!button || button.dataset.initialized === 'true') return;
+      button.dataset.initialized = 'true';
+
+      let scrollFrame = null;
+      const updateVisibility = () => {
+        scrollFrame = null;
+        const isVisible = window.scrollY > 96;
+        button.classList.toggle('is-visible', isVisible);
+        button.tabIndex = isVisible ? 0 : -1;
+        button.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+      };
+
+      window.addEventListener('scroll', () => {
+        if (scrollFrame !== null) return;
+        scrollFrame = window.requestAnimationFrame(updateVisibility);
+      }, { passive: true });
+      updateVisibility();
+
+      button.addEventListener('click', () => {
+        const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: reduceMotion ? 'auto' : 'smooth'
+        });
+      });
+    }
+
     // A fresh page seed changes rotations on every visit while keeping this render stable.
     function hashString(value) {
       let hash = 2166136261;
@@ -1841,6 +1997,24 @@
       return {
         rotation: rotation.toFixed(2),
         mobileRotation: (rotation * 0.65).toFixed(2)
+      };
+    }
+
+    function getStableTocItemLayout(key, index) {
+      const hash = hashString(`${pageRotationSeed}:toc:${index}:${key}`);
+      let rotation = -4 + ((hash % 1001) / 1000) * 8;
+      if (Math.abs(rotation) < 0.7) {
+        rotation = (hash & 1) === 0 ? -0.7 : 0.7;
+      }
+
+      return {
+        rotation: rotation.toFixed(2),
+        offsetX: ((hash >>> 11) % 19) - 9,
+        offsetY: ((hash >>> 16) % 13) - 6,
+        zIndex: 1 + ((hash >>> 21) % 4),
+        shadowX: ((hash >>> 23) % 5) - 1,
+        shadowY: 6 + ((hash >>> 26) % 4),
+        shadowBlur: 9 + ((hash >>> 28) % 5)
       };
     }
 
@@ -1995,7 +2169,15 @@
             tocHtml += `</div>`;
             tocEl.innerHTML = tocHtml;
 
-            tocEl.querySelectorAll('.toc-item-link').forEach(link => {
+            tocEl.querySelectorAll('.toc-item-link').forEach((link, index) => {
+              const layout = getStableTocItemLayout(categories[index]?.title || '', index);
+              link.style.setProperty('--toc-rotation', `${layout.rotation}deg`);
+              link.style.setProperty('--toc-offset-x', `${layout.offsetX}px`);
+              link.style.setProperty('--toc-offset-y', `${layout.offsetY}px`);
+              link.style.setProperty('--toc-z', layout.zIndex);
+              link.style.setProperty('--toc-shadow-x', `${layout.shadowX}px`);
+              link.style.setProperty('--toc-shadow-y', `${layout.shadowY}px`);
+              link.style.setProperty('--toc-shadow-blur', `${layout.shadowBlur}px`);
               link.addEventListener('click', (e) => {
                 const targetId = link.getAttribute('data-target');
                 scrollToSection(e, targetId);
