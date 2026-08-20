@@ -1343,7 +1343,7 @@
       .note-decoration-tape { width: 54%; }
       .note-decoration-pin { width: 18%; }
       .note-card .note-copy-tab {
-        right: 0.4rem;
+        right: -0.2rem;
         width: 3.6rem;
         min-height: 1.7rem;
         padding: 0.28rem 0.55rem 0.32rem 0.75rem;
@@ -2014,7 +2014,7 @@
       const copyTabOffsetHash = hashString(`${pageRotationSeed}:copy-tab-offset:${key}`);
       let rotation = -5 + ((rotationHash % 1001) / 1000) * 10;
       const copyTabRotation = -5 + ((copyTabRotationHash % 1001) / 1000) * 10;
-      const copyTabOffsetX = (copyTabOffsetHash % 13) - 6;
+      const copyTabOffsetX = copyTabOffsetHash % 7;
       const copyTabOffsetY = -((copyTabOffsetHash >>> 8) % 7);
       if (Math.abs(rotation) < 0.7) {
         rotation = (rotationHash & 1) === 0 ? -1.1 : 1.1;
