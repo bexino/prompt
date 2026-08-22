@@ -2013,6 +2013,7 @@
       const rotationHash = hashString(`${pageRotationSeed}:note:${key}`);
       const copyTabRotationHash = hashString(`${pageRotationSeed}:copy-tab:${key}`);
       const copyTabOffsetHash = hashString(`${pageRotationSeed}:copy-tab-offset:${key}`);
+      const decorationHash = hashString(`${pageRotationSeed}:decoration:${key}`);
       let rotation = -5 + ((rotationHash % 1001) / 1000) * 10;
       const copyTabRotation = -5 + ((copyTabRotationHash % 1001) / 1000) * 10;
       const copyTabOffsetX = copyTabOffsetHash % 7;
@@ -2040,8 +2041,28 @@
         paperHoverBrightness: (0.98 + ((hash >>> 24) % 5) / 100).toFixed(2),
         topShadowVariant: (hash >>> 5) % 3,
         topShadowOpacity: (0.18 + ((hash >>> 18) % 21) / 100).toFixed(2),
-        decoration: hash % 8
+        decoration: decorationHash % 10
       };
+    }
+
+    function getVisitNoteColor(index, themes) {
+      const groupIndex = Math.floor(index / themes.length);
+      let randomState = hashString(`${pageRotationSeed}:note-colors:${groupIndex}`) || 0x9e3779b9;
+      const shuffledThemes = [...themes];
+
+      const nextRandom = () => {
+        randomState ^= randomState << 13;
+        randomState ^= randomState >>> 17;
+        randomState ^= randomState << 5;
+        return randomState >>> 0;
+      };
+
+      for (let themeIndex = shuffledThemes.length - 1; themeIndex > 0; themeIndex--) {
+        const swapIndex = nextRandom() % (themeIndex + 1);
+        [shuffledThemes[themeIndex], shuffledThemes[swapIndex]] = [shuffledThemes[swapIndex], shuffledThemes[themeIndex]];
+      }
+
+      return shuffledThemes[index % themes.length];
     }
 
     function getStablePlaqueRotation(key) {
@@ -2146,7 +2167,9 @@
     function getNoteDecoration(decoration) {
       const decorations = {
         0: { className: 'tape', src: './assets/decor/masking-tape.webp' },
-        1: { className: 'pin', src: './assets/decor/brass-pin.webp' }
+        1: { className: 'pin', src: './assets/decor/brass-pin.webp' },
+        2: { className: 'tape', src: './assets/decor/masking-tape.webp' },
+        3: { className: 'pin', src: './assets/decor/brass-pin.webp' }
       };
       return decorations[decoration] || null;
     }
@@ -2265,7 +2288,7 @@
             const promptId = `prompt-${promptIdx}`;
             const promptEl = document.createElement('div');
 
-            const colorTheme = prideColorThemes[promptCounter % 6];
+            const colorTheme = getVisitNoteColor(promptCounter, prideColorThemes);
             promptCounter++;
 
             const noteLayout = getStableNoteLayout(`${promptItem.title}\n${promptItem.code}`);
