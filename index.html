@@ -2041,7 +2041,7 @@
         paperHoverBrightness: (0.98 + ((hash >>> 24) % 5) / 100).toFixed(2),
         topShadowVariant: (hash >>> 5) % 3,
         topShadowOpacity: (0.18 + ((hash >>> 18) % 21) / 100).toFixed(2),
-        decoration: decorationHash % 10
+        decoration: decorationHash % 20
       };
     }
 
@@ -2165,13 +2165,10 @@
     }
 
     function getNoteDecoration(decoration) {
-      const decorations = {
-        0: { className: 'tape', src: './assets/decor/masking-tape.webp' },
-        1: { className: 'pin', src: './assets/decor/brass-pin.webp' },
-        2: { className: 'tape', src: './assets/decor/masking-tape.webp' },
-        3: { className: 'pin', src: './assets/decor/brass-pin.webp' }
-      };
-      return decorations[decoration] || null;
+      if (decoration >= 11) return null;
+      return decoration % 2 === 0
+        ? { className: 'tape', src: './assets/decor/masking-tape.webp' }
+        : { className: 'pin', src: './assets/decor/brass-pin.webp' };
     }
 
     function getNotePaper(variant, colorTheme, shadowVariant) {
