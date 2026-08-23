@@ -1,0 +1,5 @@
+.pn-theme .hidden { display: none !important; }
+.pn-theme .line-clamp-4,
+.pn-theme .line-clamp-5 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.pn-theme .line-clamp-4 { -webkit-line-clamp: 4; }
+.pn-theme .line-clamp-5 { -webkit-line-clamp: 5; }

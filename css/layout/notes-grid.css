@@ -1,0 +1,10 @@
+.pn-theme .pn-notes-grid {
+      width: min(100%, 48rem) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      gap: 0.9rem 1rem !important;
+      padding: 0.35rem 0 0.8rem;
+    }
+    .pn-theme .pn-notes-grid .pn-note-card:nth-child(3n + 1) { z-index: 3; }
+    .pn-theme .pn-notes-grid .pn-note-card:nth-child(3n + 2) { z-index: 2; }
+    .pn-theme .pn-notes-grid .pn-note-card:nth-child(3n) { z-index: 1; }

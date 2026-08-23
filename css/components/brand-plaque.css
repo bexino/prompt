@@ -1,0 +1,168 @@
+.pn-theme .pn-brand-plaque {
+      --plaque-rotation: 0deg;
+      --plaque-mobile-rotation: 0deg;
+      --wear-a-x: 13%;
+      --wear-a-y: 32%;
+      --wear-a-size: 5px;
+      --wear-a-chip-size: 2.4px;
+      --wear-a-chip2-size: 1.8px;
+      --wear-a-alpha: 0.32;
+      --wear-a-light-alpha: 0.2;
+      --wear-a-chip-dx: 1.4%;
+      --wear-a-chip-dy: -7%;
+      --wear-a-chip2-dx: -1.1%;
+      --wear-a-chip2-dy: 6%;
+      --wear-b-x: 73%;
+      --wear-b-y: 68%;
+      --wear-b-size: 7px;
+      --wear-b-chip-size: 3px;
+      --wear-b-chip2-size: 2.1px;
+      --wear-b-alpha: 0.42;
+      --wear-b-light-alpha: 0.27;
+      --wear-b-chip-dx: -1.7%;
+      --wear-b-chip-dy: 9%;
+      --wear-b-chip2-dx: 1.3%;
+      --wear-b-chip2-dy: -7%;
+      --wear-c-x: 88%;
+      --wear-c-y: 24%;
+      --wear-c-size: 4px;
+      --wear-c-alpha: 0.27;
+      --wear-scratch-angle: 174deg;
+      --wear-scratch-stop: 42%;
+      --wear-scratch2-angle: 97deg;
+      --wear-scratch2-stop: 68%;
+      position: relative;
+      margin: 0 auto 2.3rem;
+      width: min(92%, 38rem);
+      padding: 1.15rem 4rem 1.25rem;
+      text-align: center;
+      color: #f5e3bd;
+      border: 1px solid #2b0809;
+      border-radius: 10px;
+      background:
+        radial-gradient(circle var(--wear-a-size) at var(--wear-a-x) var(--wear-a-y), rgba(210, 170, 91, var(--wear-a-alpha)) 0 27%, rgba(29, 5, 7, 0.48) 38%, transparent 76%),
+        radial-gradient(circle var(--wear-a-chip-size) at calc(var(--wear-a-x) + var(--wear-a-chip-dx)) calc(var(--wear-a-y) + var(--wear-a-chip-dy)), rgba(213, 175, 97, var(--wear-a-alpha)) 0 35%, transparent 79%),
+        radial-gradient(circle var(--wear-a-chip2-size) at calc(var(--wear-a-x) + var(--wear-a-chip2-dx)) calc(var(--wear-a-y) + var(--wear-a-chip2-dy)), rgba(25, 3, 5, var(--wear-a-alpha)) 0 36%, transparent 78%),
+        radial-gradient(circle var(--wear-b-size) at var(--wear-b-x) var(--wear-b-y), rgba(24, 3, 5, var(--wear-b-alpha)) 0 31%, rgba(76, 16, 17, 0.2) 52%, transparent 82%),
+        radial-gradient(circle var(--wear-b-chip-size) at calc(var(--wear-b-x) + var(--wear-b-chip-dx)) calc(var(--wear-b-y) + var(--wear-b-chip-dy)), rgba(21, 2, 4, var(--wear-b-alpha)) 0 36%, transparent 80%),
+        radial-gradient(circle var(--wear-b-chip2-size) at calc(var(--wear-b-x) + var(--wear-b-chip2-dx)) calc(var(--wear-b-y) + var(--wear-b-chip2-dy)), rgba(218, 181, 99, var(--wear-b-light-alpha)) 0 34%, transparent 79%),
+        radial-gradient(circle var(--wear-c-size) at var(--wear-c-x) var(--wear-c-y), rgba(218, 181, 99, var(--wear-c-alpha)) 0 30%, transparent 75%),
+        linear-gradient(var(--wear-scratch-angle), transparent 0 calc(var(--wear-scratch-stop) - 0.22%), rgba(211, 194, 143, 0.14) var(--wear-scratch-stop), transparent calc(var(--wear-scratch-stop) + 0.3%)),
+        linear-gradient(var(--wear-scratch2-angle), transparent 0 calc(var(--wear-scratch2-stop) - 0.16%), rgba(25, 3, 5, 0.2) var(--wear-scratch2-stop), transparent calc(var(--wear-scratch2-stop) + 0.22%)),
+        radial-gradient(circle at 22% 12%, rgba(230, 171, 135, 0.11), transparent 30%),
+        linear-gradient(105deg, rgba(255,255,255,0.06), transparent 35%, rgba(0,0,0,0.2)),
+        #571b20;
+      background-blend-mode: normal, normal, multiply, multiply, multiply, screen, screen, screen, multiply, screen, multiply, normal;
+      box-shadow: inset 0 1px 0 rgba(244, 205, 177, 0.12), inset 0 -3px 7px rgba(0,0,0,0.54), inset 0 0 18px rgba(31, 3, 6, 0.4), 0 12px 26px rgba(24, 3, 5, 0.58);
+      text-shadow: 0 1px 0 #210406;
+      transform: rotate(var(--plaque-rotation));
+      transform-origin: 51% 54%;
+    }
+
+    .pn-theme .pn-brand-plaque::before,
+    .pn-theme .pn-brand-plaque::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      background: radial-gradient(circle at 34% 30%, #f1d58c 0 8%, #b6873f 30%, #5b3818 72%, #2d190d 100%);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.16);
+    }
+    .pn-theme .pn-brand-plaque::before { left: 1.25rem; }
+    .pn-theme .pn-brand-plaque::after { right: 1.25rem; }
+    .pn-theme .pn-brand-plaque-logo {
+      display: block;
+      width: min(100%, 34rem);
+      max-height: 7.2rem;
+      margin: 0 auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 1px rgba(20, 2, 4, 0.7));
+    }
+    .pn-theme .pn-brand-plaque h1 {
+      margin: 0.28rem 0 0;
+      color: #ead5a9;
+      font-family: inherit;
+      font-size: clamp(0.86rem, 2vw, 1.05rem);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-shadow: 0 2px 2px #260507;
+    }
+
+
+    .pn-theme .pn-section-plaque {
+      --plaque-rotation: 0deg;
+      --plaque-mobile-rotation: 0deg;
+      --wear-a-x: 12%;
+      --wear-a-y: 38%;
+      --wear-a-size: 4px;
+      --wear-a-chip-size: 2px;
+      --wear-a-chip2-size: 1.5px;
+      --wear-a-alpha: 0.4;
+      --wear-a-light-alpha: 0.24;
+      --wear-a-chip-dx: 2.1%;
+      --wear-a-chip-dy: 8%;
+      --wear-a-chip2-dx: -1.2%;
+      --wear-a-chip2-dy: -7%;
+      --wear-b-x: 68%;
+      --wear-b-y: 72%;
+      --wear-b-size: 6px;
+      --wear-b-chip-size: 2.6px;
+      --wear-b-chip2-size: 1.8px;
+      --wear-b-alpha: 0.38;
+      --wear-b-light-alpha: 0.24;
+      --wear-b-chip-dx: -1.8%;
+      --wear-b-chip-dy: -10%;
+      --wear-b-chip2-dx: 1.4%;
+      --wear-b-chip2-dy: 8%;
+      --wear-c-x: 86%;
+      --wear-c-y: 25%;
+      --wear-c-size: 3px;
+      --wear-c-alpha: 0.28;
+      --wear-scratch-angle: 176deg;
+      --wear-scratch-stop: 47%;
+      --wear-scratch2-angle: 99deg;
+      --wear-scratch2-stop: 66%;
+      position: relative;
+      width: fit-content !important;
+      min-width: min(18rem, 80%);
+      margin: 4.5rem auto 2rem !important;
+      padding: 0.7rem 3.5rem 0.82rem !important;
+      border: 1px solid #41270f !important;
+      border-radius: 5px !important;
+      color: #2c2115 !important;
+      text-align: center;
+      font-family: inherit;
+      background:
+        radial-gradient(circle var(--wear-a-size) at var(--wear-a-x) var(--wear-a-y), rgba(55, 30, 10, var(--wear-a-alpha)) 0 30%, rgba(87, 51, 17, 0.16) 52%, transparent 80%),
+        radial-gradient(circle var(--wear-a-chip-size) at calc(var(--wear-a-x) + var(--wear-a-chip-dx)) calc(var(--wear-a-y) + var(--wear-a-chip-dy)), rgba(48, 25, 7, var(--wear-a-alpha)) 0 34%, transparent 78%),
+        radial-gradient(circle var(--wear-a-chip2-size) at calc(var(--wear-a-x) + var(--wear-a-chip2-dx)) calc(var(--wear-a-y) + var(--wear-a-chip2-dy)), rgba(246, 221, 155, var(--wear-a-light-alpha)) 0 36%, transparent 79%),
+        radial-gradient(circle var(--wear-b-size) at var(--wear-b-x) var(--wear-b-y), rgba(58, 31, 9, var(--wear-b-alpha)) 0 29%, rgba(102, 61, 21, 0.13) 51%, transparent 82%),
+        radial-gradient(circle var(--wear-b-chip-size) at calc(var(--wear-b-x) + var(--wear-b-chip-dx)) calc(var(--wear-b-y) + var(--wear-b-chip-dy)), rgba(48, 25, 7, var(--wear-b-alpha)) 0 34%, transparent 79%),
+        radial-gradient(circle var(--wear-b-chip2-size) at calc(var(--wear-b-x) + var(--wear-b-chip2-dx)) calc(var(--wear-b-y) + var(--wear-b-chip2-dy)), rgba(52, 28, 8, var(--wear-b-alpha)) 0 35%, transparent 80%),
+        radial-gradient(circle var(--wear-c-size) at var(--wear-c-x) var(--wear-c-y), rgba(247, 223, 157, var(--wear-c-alpha)) 0 30%, transparent 76%),
+        linear-gradient(var(--wear-scratch-angle), transparent 0 calc(var(--wear-scratch-stop) - 0.2%), rgba(72, 40, 11, 0.2) var(--wear-scratch-stop), transparent calc(var(--wear-scratch-stop) + 0.28%)),
+        linear-gradient(var(--wear-scratch2-angle), transparent 0 calc(var(--wear-scratch2-stop) - 0.15%), rgba(255, 232, 171, 0.16) var(--wear-scratch2-stop), transparent calc(var(--wear-scratch2-stop) + 0.21%)),
+        linear-gradient(100deg, #755122, #d7b66b 21%, #a97b38 50%, #ddc27b 78%, #6a471d) !important;
+      background-blend-mode: multiply, multiply, screen, multiply, multiply, multiply, screen, multiply, screen, normal;
+      box-shadow: inset 0 1px rgba(255,255,255,0.38), inset 0 -2px 3px rgba(51,29,8,0.58), inset 0 0 12px rgba(58, 31, 9, 0.28), 0 7px 13px rgba(15,6,2,0.55);
+      text-shadow: 0 1px rgba(255,255,255,0.38);
+      transform: rotate(var(--plaque-rotation));
+      transform-origin: 49% 55%;
+    }
+    .pn-theme .pn-section-plaque::before,
+    .pn-theme .pn-section-plaque::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      background: #4b2d12;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.18);
+    }
+    .pn-theme .pn-section-plaque::before { left: 1rem; }
+    .pn-theme .pn-section-plaque::after { right: 1rem; }

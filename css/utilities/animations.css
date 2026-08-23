@@ -1,0 +1,21 @@
+/* 按压动画 */
+    .pn-theme .pn-pressable {
+      transition: transform 0.1s ease;
+    }
+
+    .pn-theme .pn-pressable:active {
+      transform: scale(0.95);
+    }
+
+
+
+    @keyframes copied-sticker-enter {
+      from {
+        opacity: 0;
+        scale: 1.35;
+      }
+      to {
+        opacity: 1;
+        scale: 1;
+      }
+    }

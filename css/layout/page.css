@@ -1,0 +1,47 @@
+html {
+      scroll-behavior: smooth;
+      background: var(--wood-dark);
+    }
+
+    .pn-theme.pn-app {
+      position: relative;
+      padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px)) !important;
+      font-family: var(--system-serif) !important;
+      background-color: var(--wood-dark);
+      background-image:
+        radial-gradient(circle at 50% -10%, rgba(255, 214, 145, 0.16), transparent 42rem),
+        linear-gradient(rgba(30, 13, 7, 0.15), rgba(30, 13, 7, 0.38)),
+        url('../../assets/textures/walnut-desk.webp');
+      background-repeat: no-repeat, no-repeat, repeat;
+      background-size: auto, auto, 627px 627px;
+      background-attachment: fixed;
+      color: #2f2821;
+      text-rendering: optimizeLegibility;
+    }
+    html.low-bandwidth body.pn-app {
+      font-family: Georgia, 'Times New Roman', 'Songti SC', STSong, SimSun, serif !important;
+    }
+
+    .pn-theme.pn-app::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      box-shadow: inset 0 0 10rem rgba(17, 7, 3, 0.72);
+    }
+
+    ::-webkit-scrollbar { width: 13px; height: 13px; }
+    ::-webkit-scrollbar-track {
+      background: #25140e;
+      box-shadow: inset 1px 0 4px rgba(0, 0, 0, 0.75);
+    }
+    ::-webkit-scrollbar-thumb {
+      border: 3px solid #25140e;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #68471f, #c59a4f 48%, #725025);
+      box-shadow: inset 0 0 0 1px rgba(255, 225, 164, 0.3);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(90deg, #805a2a, #dbb96f 48%, #89642f);
+    }

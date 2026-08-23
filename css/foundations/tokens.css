@@ -1,0 +1,22 @@
+/* 彩色渐变 */
+    .pn-gradient-bg {
+      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
+    }
+
+    .pn-gradient-text {
+      background: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+
+
+    :root {
+      --wood-dark: #2b170f;
+      --brass-light: #d8b66c;
+      --brass-mid: #9a6f2f;
+      --brass-dark: #4f3215;
+      --leather: #372219;
+      --system-serif: 'Gelasio Local', 'Prompt Source Han Serif SC', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Songti SC', STSong, SimSun, Georgia, 'Times New Roman', serif;
+    }

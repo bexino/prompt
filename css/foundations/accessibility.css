@@ -1,0 +1,57 @@
+@media (max-width: 639px) {
+      .pn-copied-sticker { width: 100%; }
+      .pn-modal-header { padding-inline: 2.7rem; }
+      .pn-modal-body { margin: 0.7rem; padding: 1rem; }
+      .pn-back-to-top {
+        bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        width: 2.875rem;
+        height: 2.875rem;
+      }
+      .pn-back-to-top > span {
+        width: 0.82rem;
+        height: 0.82rem;
+        border-width: 3.5px 0 0 3.5px;
+      }
+    }
+
+    @media (max-width: 639px) {
+      body.pn-app { background-attachment: scroll; }
+      .pn-workspace { padding-top: 1.3rem !important; }
+      .pn-brand-plaque { width: 94%; margin-bottom: 1.55rem; padding: 0.9rem 2.5rem 1rem; }
+      .pn-brand-plaque { transform: rotate(var(--plaque-mobile-rotation)); }
+      .pn-brand-plaque::before { left: 0.75rem; }
+      .pn-brand-plaque::after { right: 0.75rem; }
+      .pn-catalog-panel { padding: 1.25rem !important; }
+      .pn-section-plaque { min-width: 72%; margin-top: 3.5rem !important; padding-inline: 2.25rem !important; transform: rotate(var(--plaque-mobile-rotation)); }
+      .pn-notes-grid { gap: 0.7rem 0.75rem !important; padding-inline: 0; }
+      .pn-notes-grid .pn-note-card:nth-child(odd) { z-index: 2; }
+      .pn-notes-grid .pn-note-card:nth-child(even) { z-index: 1; }
+      .pn-notes-grid .pn-note-card:hover { z-index: 20; }
+      .pn-note-card {
+        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-mobile-rotation));
+      }
+      .pn-note-card h3 { -webkit-line-clamp: 3; }
+      .pn-note-decoration-tape { width: 54%; }
+      .pn-note-decoration-pin { width: 18%; }
+      .pn-note-card .pn-copy-tab {
+        right: -0.2rem;
+        width: 3.6rem;
+        min-height: 1.7rem;
+        padding: 0.28rem 0.55rem 0.32rem 0.75rem;
+        font-size: 0.78rem !important;
+      }
+      .pn-note-card.pn-note-variant-a .pn-copy-tab { --note-tab-bottom: 18%; }
+      .pn-note-card.pn-note-variant-b .pn-copy-tab { --note-tab-bottom: 25%; }
+      .pn-note-card.pn-note-variant-c .pn-copy-tab { --note-tab-bottom: 20%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+      .pn-note-card:hover {
+        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-rotation));
+      }
+    }

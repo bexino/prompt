@@ -1,0 +1,3 @@
+.example-page { margin: 0; padding: 2rem; background: #eceff3; font-family: system-ui, sans-serif; }
+.example-page h1 { color: #17324d; }
+.example-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 2rem; max-width: 64rem; margin: 2rem auto; }

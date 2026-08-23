@@ -1,0 +1,20 @@
+.pn-theme .pn-drag-overlay {
+  border: 6px dashed;
+  border-image: linear-gradient(135deg, #ef4444, #f97316, #eab308, #22c55e, #3b82f6, #a855f7) 1;
+}
+
+    .pn-theme .pn-drag-overlay {
+      border: 0 !important;
+      background: rgba(35,20,13,0.88) !important;
+    }
+    .pn-theme .pn-drag-overlay > div,
+    .pn-theme .pn-error-state {
+      border: 1px solid #8b6c3b !important;
+      border-radius: 5px !important;
+      color: #3c3023 !important;
+      background: url('../../assets/textures/paper-fiber.webp'), #e8d9b6 !important;
+      background-blend-mode: multiply;
+      box-shadow: 10px 18px 34px rgba(12,5,2,0.55) !important;
+    }
+    .pn-theme .pn-drag-overlay h3, .pn-drag-overlay p,
+    .pn-theme .pn-error-state h3, .pn-error-state p { color: inherit !important; }
