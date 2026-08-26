@@ -120,32 +120,36 @@
       box-shadow: 1px 0 rgba(255,222,143,0.16);
     }
     .pn-theme .pn-copied-overlay {
+      position: absolute;
+      inset: 0;
       z-index: 8;
+      color: transparent;
+      font-size: 0;
       background: transparent;
       transform: none;
       opacity: 0;
       visibility: hidden;
       transition: opacity 280ms ease, visibility 0s linear 280ms;
     }
+    .pn-theme .pn-copied-overlay::before {
+      content: '';
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 98%;
+      height: 98%;
+      background: url('../../assets/decor/copied-sticker-v6.webp?v=7') center / contain no-repeat;
+      filter:
+        drop-shadow(0 4px 5px rgba(22, 12, 6, 0.58))
+        drop-shadow(7px 12px 15px rgba(18, 9, 4, 0.42));
+      transform: translate(var(--copied-sticker-x, 0), var(--copied-sticker-y, 0)) rotate(var(--copied-sticker-rotation, 0deg));
+      transform-origin: center;
+    }
     .pn-theme .pn-note-card.copied .pn-copied-overlay {
       opacity: 1;
       visibility: visible;
       transition: opacity 300ms ease, visibility 0s;
     }
-    .pn-theme .pn-copied-sticker {
-      position: relative;
-      z-index: 1;
-      width: 98%;
-      max-width: none;
-      height: auto;
-      object-fit: contain;
-      user-select: none;
-      transform: none;
-      transform-origin: center;
-      filter:
-        drop-shadow(0 4px 5px rgba(22, 12, 6, 0.58))
-        drop-shadow(7px 12px 15px rgba(18, 9, 4, 0.42));
-    }
-    .pn-theme .pn-note-card.copied .pn-copied-sticker {
+    .pn-theme .pn-note-card.copied .pn-copied-overlay::before {
       animation: copied-sticker-enter 420ms cubic-bezier(.18,.82,.24,1) both;
     }

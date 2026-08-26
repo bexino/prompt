@@ -71,26 +71,6 @@ function getStableNoteLayout(key) {
       };
     }
 
-function getVisitNoteColor(index, themes) {
-      const groupIndex = Math.floor(index / themes.length);
-      let randomState = hashString(`${pageRotationSeed}:note-colors:${groupIndex}`) || 0x9e3779b9;
-      const shuffledThemes = [...themes];
-
-      const nextRandom = () => {
-        randomState ^= randomState << 13;
-        randomState ^= randomState >>> 17;
-        randomState ^= randomState << 5;
-        return randomState >>> 0;
-      };
-
-      for (let themeIndex = shuffledThemes.length - 1; themeIndex > 0; themeIndex--) {
-        const swapIndex = nextRandom() % (themeIndex + 1);
-        [shuffledThemes[themeIndex], shuffledThemes[swapIndex]] = [shuffledThemes[swapIndex], shuffledThemes[themeIndex]];
-      }
-
-      return shuffledThemes[index % themes.length];
-    }
-
 function getStablePlaqueRotation(key) {
       const hash = hashString(`${pageRotationSeed}:plaque:${key}`);
       let rotation = -5 + ((hash % 1001) / 1000) * 10;
@@ -199,12 +179,11 @@ function getNoteDecoration(decoration) {
 
 function getNotePaper(variant, colorTheme, shadowVariant) {
   const paperVariant = ['a', 'b', 'c'][variant % 3];
-  const colorName = colorTheme.replace('pn-note-', '');
+  const color = String(colorTheme || 'yellow').replace('pn-note-', '');
   return {
     variant: paperVariant,
-    base: PromptNotebook.config.assets.note(paperVariant, colorName),
-    topShadow: PromptNotebook.config.assets.noteShadow(paperVariant, shadowVariant)
+    base: PromptNotebook.config.assets.note(paperVariant, color)
   };
 }
 
-Object.assign(PromptNotebook.core, { getBalancedTocToneFlags, getStableNoteLayout, getVisitNoteColor, getStablePlaqueRotation, applyStableRibbonRotations, getStablePlaqueWear, applyStablePlaqueWear, getNoteDecoration, getNotePaper });
+Object.assign(PromptNotebook.core, { getBalancedTocToneFlags, getStableNoteLayout, getStablePlaqueRotation, applyStableRibbonRotations, getStablePlaqueWear, applyStablePlaqueWear, getNoteDecoration, getNotePaper });

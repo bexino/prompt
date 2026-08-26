@@ -1,0 +1,47 @@
+@import url('./index.css');
+
+[data-pn-skin="elegant"].pn-semantic-skin {
+  color: #68452d;
+  background: #ebd8b4;
+  font-family: var(--pn-elegant-font);
+}
+
+[data-pn-skin="elegant"].pn-semantic-skin :is(h1, h2, h3, h4) {
+  margin: 1.25em 0 0.55em;
+  color: #68452d;
+  text-align: left;
+}
+
+[data-pn-skin="elegant"].pn-semantic-skin :is(article, section) {
+  padding: 1.1rem 1.25rem;
+  border: 1px solid #d9cdbd;
+  border-radius: 10px;
+  color: #66452e;
+  background: #f7f5e8;
+  box-shadow: 0 5px 14px rgba(104, 69, 45, 0.09);
+}
+
+[data-pn-skin="elegant"].pn-semantic-skin button {
+  padding: 0.55rem 0.9rem;
+  border: 0;
+  border-radius: 7px;
+  color: #f7f5e8;
+  background: #b6aa96;
+  box-shadow: 0 2px 5px rgba(104, 69, 45, 0.12);
+}
+
+[data-pn-skin="elegant"].pn-semantic-skin :is(ul, ol) {
+  padding-left: 1.4rem;
+}
+
+[data-pn-skin="elegant"].pn-semantic-skin table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #f7f5e8;
+}
+
+[data-pn-skin="elegant"].pn-semantic-skin :is(th, td) {
+  padding: 0.7rem;
+  border: 1px solid #d9cdbd;
+  text-align: left;
+}

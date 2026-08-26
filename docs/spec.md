@@ -16,6 +16,8 @@ prompt/
 ├─ LICENSE
 ├─ css/
 │  ├─ index.css
+│  ├─ app/
+│  │  └─ shell.css
 │  ├─ foundations/
 │  │  ├─ fonts.css
 │  │  ├─ tokens.css
@@ -27,6 +29,7 @@ prompt/
 │  │  └─ notes-grid.css
 │  ├─ components/
 │  │  ├─ brand-plaque.css
+│  │  ├─ top-bar.css
 │  │  ├─ note-card.css
 │  │  ├─ copy-tab.css
 │  │  ├─ ribbon.css
@@ -37,14 +40,25 @@ prompt/
 │  │  ├─ toast.css
 │  │  ├─ drag-overlay.css
 │  │  └─ back-to-top.css
-│  └─ utilities/
-│     ├─ animations.css
-│     └─ states.css
+│  ├─ utilities/
+│  │  ├─ animations.css
+│  │  └─ states.css
+│  └─ themes/
+│     ├─ classic/
+│     │  ├─ index.css
+│     │  └─ semantic.css
+│     └─ elegant/
+│        ├─ index.css
+│        ├─ semantic.css
+│        └─ theme.css
 ├─ js/
 │  ├─ namespace.js
 │  ├─ config/
-│  │  ├─ tailwind-config.js
 │  │  ├─ app-config.js
+│  │  ├─ initial-skin-choice.js
+│  │  ├─ app-loader.js
+│  │  ├─ skin-config.js
+│  │  ├─ font-config.js
 │  │  └─ asset-manifest.js
 │  ├─ core/
 │  │  ├─ hash.js
@@ -60,6 +74,7 @@ prompt/
 │  │  └─ lazy-assets.js
 │  ├─ components/
 │  │  ├─ brand-plaque.js
+│  │  ├─ top-bar.js
 │  │  ├─ note-card.js
 │  │  ├─ ribbon.js
 │  │  ├─ table-of-contents.js
@@ -104,12 +119,23 @@ prompt/
 
 ## CSS 职责
 
-`css/index.css` 是唯一聚合入口，按照基础层、布局层、组件层、工具层的顺序导入样式。
+`css/index.css` 是供外部页面选择一次性加载两套皮肤的聚合入口，只导入 `classic` 与 `elegant` 两个独立皮肤入口。主应用为减少首屏请求，不使用该聚合入口，而由皮肤配置按需加载当前皮肤。
+
+### 主应用层
+
+- `app/shell.css`：只保存主应用实际使用的结构工具类，取代在线 Tailwind 运行时；不属于任何皮肤包，也不包含皮肤素材。
+
+### 皮肤层
+
+- `themes/classic/index.css`：经典拟物皮肤严格组件入口，组合既有基础、布局、组件和素材样式。
+- `themes/elegant/index.css`：优雅扁平皮肤严格组件入口，不导入经典皮肤或图片素材。
+- 两套 `semantic.css`：普通语义 HTML 适配入口，只在 `.pn-semantic-skin` 宿主内生效。
+- 皮肤通过 `data-pn-skin` 和各自宿主类限定作用域，不得读取应用状态、本地存储、内容源或 URL，也不得相互引用。
 
 ### 基础层
 
-- `fonts.css`：声明本地字体及字体回退。
-- `tokens.css`：定义颜色、字体、阴影和主题变量。
+- `fonts.css`：声明本地 `Gelasio`、思源宋体和 `Geist`，并提供皮肤无关的衬线与 `Geist + 系统中文` 两档字体契约。
+- `tokens.css`：定义经典皮肤使用的颜色、字体和阴影变量；优雅皮肤变量由自身入口定义。
 - `reset.css`：提供最小基础重置和滚动条基础样式。
 - `accessibility.css`：集中响应式覆盖、低带宽模式和减少动画偏好。
 
@@ -121,7 +147,7 @@ prompt/
 
 ### 组件层
 
-组件样式文件与同名或语义对应的 JavaScript 组件配套：铭牌、便签、复制标签、丝带、Markdown、目录、状态横幅、弹窗、消息提示、拖放遮罩和返回顶部各自独立。
+既有组件样式文件由经典皮肤入口组合；优雅皮肤在自己的 `theme.css` 内完整实现相同的稳定组件契约。组件 JavaScript 只输出内容、操作、反馈挂载点和 `data-pn-*` 外观属性，不读取当前皮肤。
 
 ### 工具层
 
@@ -141,14 +167,17 @@ prompt/
 ### 配置层
 
 - `namespace.js`：创建唯一全局对象 `window.PromptNotebook`。
-- `tailwind-config.js`：保存主页面遗留的 Tailwind 在线运行时配置。
 - `app-config.js`：解析内容源和站点参数。
+- `initial-skin-choice.js`：在任何应用样式与内容加载前恢复已保存的皮肤；首次访问时使用浏览器原生确认框让用户选择经典拟物或优雅扁平皮肤并立即保存结果，选择完成后才引入应用资源加载器。
+- `app-loader.js`：维护主应用样式与脚本的唯一加载清单和固定顺序，只能由首屏皮肤选择门在文档解析阶段引入。
+- `skin-config.js`：消费首屏皮肤选择，只加载当前皮肤入口，并在用户首次切换时按需加载另一皮肤；公开皮肤读取、异步设置、异步切换、就绪等待和宿主同步能力。
+- `font-config.js`：在首屏样式加载前恢复人工字体偏好；没有偏好时按经典衬线、典雅 `Geist` 选择默认字体，并公开字体读取、设置、切换和皮肤跟随能力。
 - `asset-manifest.js`：维护全局及组件级动态素材根路径和路径生成函数。
 
 ### 核心层
 
 - `hash.js`：提供无副作用哈希函数。
-- `layout-generator.js`：持有当前页面布局种子，并生成便签颜色、旋转、偏移、阴影、铭牌磨损和素材选择结果。
+- `layout-generator.js`：持有当前页面布局种子，并生成经典皮肤所需的旋转、偏移、阴影、铭牌磨损和素材选择结果；不决定便签色调或其他皮肤外观。
 - `markdown-inline.js`：转义并解析行内 Markdown。
 - `markdown-renderer.js`：将 Markdown 文本块渲染为 HTML。
 - `prompt-parser.js`：将 Markdown 文档解析为目录、标题、正文和提示词领域数据。
@@ -168,7 +197,8 @@ prompt/
 ### 组件层
 
 - `brand-plaque.js`：创建可复用铭牌。
-- `note-card.js`：创建可复用便签并通过回调交付复制和详情行为。
+- `top-bar.js`：创建可复用网页顶栏，根据调用方传入的标题、操作项和外观变量生成稳定结构，不读取主题或应用状态。
+- `note-card.js`：创建可复用便签并通过回调交付复制和详情行为；经典皮肤的颜色与纸张变体由素材清单映射到对应彩色位图。
 - `ribbon.js`：创建丝带分隔元素。
 - `table-of-contents.js`：创建锚点目录。
 - `markdown-content.js`：组合 Markdown 渲染器与内容容器。
@@ -184,22 +214,22 @@ prompt/
 
 - `state.js`：只保存当前 Markdown 和解析结果。
 - `explorer-renderer.js`：把领域数据组合为目录、标题、正文和便签列表。
-- `event-controller.js`：绑定页面按钮、文件选择、拖放和页面级事件，协调服务与组件。
+- `event-controller.js`：绑定页面按钮、皮肤切换、文件选择、拖放和页面级事件，协调服务与组件。
 - `bootstrap.js`：唯一启动入口，识别低带宽环境、初始化动态素材与组件、加载内容、执行缓存降级并触发首次渲染。
 
 应用层可以依赖其前面的所有层级，其他层不得反向依赖应用层。
 
 ### 加载顺序
 
-`index.html` 使用经典 `defer` 脚本，以兼容 `file://`。顺序固定为：命名空间、配置、状态、核心、服务、基础组件、页面服务、应用渲染、事件控制、启动入口。新增依赖必须放在使用方之前，并同步更新本节和 `index.html`。
+`index.html` 先同步加载命名空间与首次皮肤选择门；没有保存值时，页面解析会暂停在浏览器原生确认框，在用户作出选择前不请求结构样式、皮肤或内容。选择完成后，选择门同步引入 `app-loader.js`，由该文件注入主应用结构样式、皮肤配置与字体配置，在首屏内容渲染前设置 `data-pn-skin`、`data-pn-font` 并请求唯一的当前皮肤入口；启动入口等待皮肤样式就绪。其余脚本使用经典 `defer`，顺序固定为：站点与素材配置、状态、核心、服务、基础组件（包括顶栏）、页面服务、应用渲染、事件控制、启动入口。主页面不依赖在线 CSS 运行时。新增依赖必须放在使用方之前，并同步更新本节、`app-loader.js` 和 `index.html`。
 
 ## 素材目录
 
-- `assets/branding/`：Logo 和站点图标。
-- `assets/decor/`：胶带、图钉、丝带和复制贴纸。
-- `assets/fonts/`：字体文件及不可修改的第三方授权文本。
-- `assets/notes/`：便签底图、颜色变体和顶部阴影。
-- `assets/textures/`：木纹和纸张纹理。
+- `assets/branding/`：经典皮肤 Logo 和全局站点图标。
+- `assets/decor/`：经典皮肤胶带、图钉、丝带和复制贴纸。
+- `assets/fonts/`：两档字体模式共用的 `Gelasio`、思源宋体和 `Geist` 本地字体，以及不可修改的第三方授权文本。
+- `assets/notes/`：保存经典皮肤三种纸张变体的六色完整位图与既有顶部阴影素材；颜色、纹理和折角均由位图自身提供。
+- `assets/textures/`：经典皮肤木纹和纸张纹理；优雅皮肤不得引用本目录。
 
 禁止复制相同素材到组件目录。动态 JavaScript 素材路径通过 `PromptNotebook.config.assets` 生成；复用方调用 `setBaseUrl()` 调整根路径。
 
@@ -207,12 +237,22 @@ prompt/
 
 - `PromptNotebook.components.createNote(options)`
 - `PromptNotebook.components.createPlaque(options)`
+- `PromptNotebook.components.createTopBar(options)`
 - `PromptNotebook.components.createRibbon(options)`
 - `PromptNotebook.components.createMarkdownContent(options)`
 - `PromptNotebook.components.createTableOfContents(options)`
 - `PromptNotebook.services.initLazyAssets(container)`
 - `PromptNotebook.config.assets.setBaseUrl(path)`
 - `PromptNotebook.config.assets.at(path)`
+- `PromptNotebook.config.assets.note(variant, color)`
+- `PromptNotebook.config.skin.get()`
+- `PromptNotebook.config.skin.set(name)`，返回皮肤样式加载完成后的 `Promise<string>`
+- `PromptNotebook.config.skin.toggle()`，返回皮肤样式加载完成后的 `Promise<string>`
+- `PromptNotebook.config.skin.ready()`
+- `PromptNotebook.config.font.get()`
+- `PromptNotebook.config.font.set(name)`
+- `PromptNotebook.config.font.toggle()`
+- `PromptNotebook.config.font.followSkin(skinName)`
 
 具体输入、回调和示例见 `docs/component-api.md`。创建函数返回 DOM 元素；宿主负责插入和移除元素。懒加载服务在容器内注册观察，元素移除后由浏览器和观察器自然清理。
 
@@ -240,5 +280,5 @@ prompt/
 
 ## 维护信息
 
-- 结构版本：`1.0.0`
-- 最后同步日期：`2026-08-23`
+- 结构版本：`2.0.0`
+- 最后同步日期：`2026-08-25`

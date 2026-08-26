@@ -5,11 +5,35 @@
 })();
 
 window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    await PromptNotebook.config.skin.ready();
+  } catch (error) {
+    console.warn('当前皮肤样式加载失败，页面将继续使用基础结构样式：', error);
+  }
   document.querySelectorAll('[data-pn-asset]').forEach(element => {
+    if (PromptNotebook.config.skin.get() === 'elegant' && element.hasAttribute('data-pn-classic-asset')) return;
     const [group, name] = element.dataset.pnAsset.split(':');
     const attribute = element.dataset.pnAssetAttribute || 'src';
     if (PromptNotebook.config.assets[group]) element.setAttribute(attribute, PromptNotebook.config.assets[group](name));
   });
+  const topBarRoot = document.getElementById('app-top-bar-root');
+  if (topBarRoot) {
+    topBarRoot.replaceChildren(PromptNotebook.components.createTopBar({
+      title: '一键复制库',
+      titleId: 'brand-subtitle',
+      className: 'pn-app-elegant-top-bar',
+      actionsLabel: '页面显示设置',
+      backgroundColor: '#6d5e4f',
+      actionColor: '#dd6d61',
+      actions: [{
+        id: 'skin-toggle-btn',
+        label: '换肤',
+        title: '切换为优雅扁平皮肤',
+        ariaPressed: false,
+        dataset: { pnSkinToggle: '' }
+      }]
+    }));
+  }
   PromptNotebook.app.initPageEvents();
   PromptNotebook.components.initCopyDetailModal();
   PromptNotebook.components.initBackToTop();

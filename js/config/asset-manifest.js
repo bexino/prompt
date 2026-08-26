@@ -8,7 +8,7 @@
     branding: name => join(`branding/${name}`),
     decor: name => join(`decor/${name}`),
     texture: name => join(`textures/${name}`),
-    note(variant, color) { return join(`notes/note-paper-${variant}-${color}.webp?v=3`); },
+    note(variant, color) { return join(`notes/note-paper-${variant}-${color}.webp?v=4`); },
     noteShadow(variant, shadow) { return join(`notes/note-top-shadow-${variant}-${shadow}.webp?v=1`); },
     at(value) {
       const scopedBase = String(value || './assets').replace(/\/$/, '');
@@ -16,7 +16,7 @@
       return {
         branding: name => scopedJoin(`branding/${name}`),
         decor: name => scopedJoin(`decor/${name}`),
-        note: (variant, color) => scopedJoin(`notes/note-paper-${variant}-${color}.webp?v=3`),
+        note: (variant, color) => scopedJoin(`notes/note-paper-${variant}-${color}.webp?v=4`),
         noteShadow: (variant, shadow) => scopedJoin(`notes/note-top-shadow-${variant}-${shadow}.webp?v=1`)
       };
     }

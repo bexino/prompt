@@ -42,6 +42,7 @@
       background: linear-gradient(rgba(255,255,255,0.12), rgba(92,62,28,0.05)), #d7bc86 !important;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 3px 5px rgba(0,0,0,0.4) !important;
       text-shadow: 0 1px rgba(255,255,255,0.5);
+      text-decoration: none;
     }
     .pn-theme .pn-catalog-panel .pn-toc-item-link:hover {
       transform: translateY(-2px);

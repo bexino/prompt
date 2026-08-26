@@ -4,38 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>一键复制库</title>
-  <link rel="icon" type="image/png" sizes="64x64" data-pn-asset="branding:favicon.png?v=1" data-pn-asset-attribute="href">
-  <link rel="preload" as="image" data-pn-asset="decor:copied-sticker-v6.webp?v=7" data-pn-asset-attribute="href">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="./js/config/tailwind-config.js"></script>
-  <link rel="stylesheet" href="./css/index.css">
-  <script defer src="./js/namespace.js"></script>
-  <script defer src="./js/config/app-config.js"></script>
-  <script defer src="./js/config/asset-manifest.js"></script>
-  <script defer src="./js/app/state.js"></script>
-  <script defer src="./js/core/hash.js"></script>
-  <script defer src="./js/core/layout-generator.js"></script>
-  <script defer src="./js/core/markdown-inline.js"></script>
-  <script defer src="./js/core/markdown-renderer.js"></script>
-  <script defer src="./js/core/prompt-parser.js"></script>
-  <script defer src="./js/services/local-storage.js"></script>
-  <script defer src="./js/services/content-loader.js"></script>
-  <script defer src="./js/services/lazy-assets.js"></script>
-  <script defer src="./js/components/ribbon.js"></script>
-  <script defer src="./js/components/brand-plaque.js"></script>
-  <script defer src="./js/components/markdown-content.js"></script>
-  <script defer src="./js/components/table-of-contents.js"></script>
-  <script defer src="./js/components/note-card.js"></script>
-  <script defer src="./js/components/status-banner.js"></script>
-  <script defer src="./js/components/back-to-top.js"></script>
-  <script defer src="./js/components/copy-modal.js"></script>
-  <script defer src="./js/components/toast.js"></script>
-  <script defer src="./js/components/drag-overlay.js"></script>
-  <script defer src="./js/services/file-import.js"></script>
-  <script defer src="./js/services/clipboard.js"></script>
-  <script defer src="./js/app/explorer-renderer.js"></script>
-  <script defer src="./js/app/event-controller.js"></script>
-  <script defer src="./js/app/bootstrap.js"></script>
+  <script src="./js/namespace.js"></script>
+  <script src="./js/config/initial-skin-choice.js?v=5"></script>
 </head>
 <body class="pn-theme pn-app min-h-screen flex flex-col font-sans pb-16">
 
@@ -50,14 +20,22 @@
     </div>
   </div>
 
+  <div id="app-top-bar-root"></div>
+
   <!-- 主内容容器，宽屏最多三列 -->
   <main class="pn-workspace flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
-    <header class="pn-brand-plaque" aria-label="Prompt Systems">
-      <img class="pn-brand-plaque-logo" data-pn-asset="branding:prompt-systems-logo.webp?v=2"
-        width="1100" height="362" loading="eager" decoding="async" fetchpriority="high"
-        alt="PROMPT SYSTEMS — Electronic Research, established 1978">
-      <h1 id="brand-subtitle"></h1>
-    </header>
+    <div class="pn-classic-brand-area">
+      <header class="pn-brand-plaque" data-pn-role="brand" aria-label="Prompt Systems">
+        <img class="pn-brand-plaque-logo" data-pn-classic-asset data-pn-asset="branding:prompt-systems-logo.webp?v=2"
+          width="1100" height="362" loading="eager" decoding="async" fetchpriority="high"
+          alt="PROMPT SYSTEMS — Electronic Research, established 1978">
+        <h1 id="classic-brand-subtitle"></h1>
+      </header>
+      <div class="pn-brand-plaque-controls" aria-label="页面显示设置">
+        <button class="pn-brand-plaque-control" type="button" data-pn-skin-toggle
+          aria-pressed="false" title="切换为优雅扁平皮肤">换肤</button>
+      </div>
+    </div>
     <div class="flex flex-col gap-6 w-full">
 
       <!-- 本地离线模式横幅 -->

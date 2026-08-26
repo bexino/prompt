@@ -17,7 +17,8 @@
     @media (max-width: 639px) {
       body.pn-app { background-attachment: scroll; }
       .pn-workspace { padding-top: 1.3rem !important; }
-      .pn-brand-plaque { width: 94%; margin-bottom: 1.55rem; padding: 0.9rem 2.5rem 1rem; }
+      .pn-brand-plaque { width: 94%; margin-bottom: 0.95rem; padding: 0.9rem 2.5rem 1rem; }
+      .pn-brand-plaque-controls { margin-bottom: 1.1rem; }
       .pn-brand-plaque { transform: rotate(var(--plaque-mobile-rotation)); }
       .pn-brand-plaque::before { left: 0.75rem; }
       .pn-brand-plaque::after { right: 0.75rem; }

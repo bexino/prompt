@@ -18,10 +18,6 @@ html {
       color: #2f2821;
       text-rendering: optimizeLegibility;
     }
-    html.low-bandwidth body.pn-app {
-      font-family: Georgia, 'Times New Roman', 'Songti SC', STSong, SimSun, serif !important;
-    }
-
     .pn-theme.pn-app::before {
       content: '';
       position: fixed;

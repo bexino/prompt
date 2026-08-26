@@ -112,7 +112,6 @@
       --note-contact-shadow-opacity: 0.74;
       --pn-note-variant-brightness: 0.96;
       --pn-note-variant-hover-brightness: 1;
-      --pn-note-top-shadow-opacity: 0.28;
       isolation: isolate;
       overflow: visible !important;
       border: 0 !important;
@@ -139,52 +138,28 @@
       transform: translate(var(--note-x), calc(var(--note-y) - 2px)) rotate(0deg) scale(0.985) !important;
     }
 
-    .pn-theme .pn-note-red { --note-color: #b65f55; --note-ink: #f8e6dc; }
-    .pn-theme .pn-note-orange { --note-color: #be7d3f; --note-ink: #fff0d2; }
-    .pn-theme .pn-note-yellow { --note-color: #c4a33e; --note-ink: #fff6d2; }
-    .pn-theme .pn-note-green { --note-color: #658e67; --note-ink: #edf5e2; }
-    .pn-theme .pn-note-blue { --note-color: #5d8292; --note-ink: #edf5f6; }
-    .pn-theme .pn-note-purple { --note-color: #75648d; --note-ink: #f4ecfa; }
+    .pn-theme .pn-note-red { --note-ink: #f8e6dc; }
+    .pn-theme .pn-note-orange { --note-ink: #fff0d2; }
+    .pn-theme .pn-note-yellow { --note-ink: #fff6d2; }
+    .pn-theme .pn-note-green { --note-ink: #edf5e2; }
+    .pn-theme .pn-note-blue { --note-ink: #edf5f6; }
+    .pn-theme .pn-note-purple { --note-ink: #f4ecfa; }
 
     .pn-theme .pn-note-paper {
       position: absolute;
       inset: -3.5%;
       z-index: 0;
       pointer-events: none;
-      isolation: isolate;
-      filter: none;
-    }
-
-    .pn-theme .pn-note-paper::before {
-      content: '';
-      position: absolute;
-      inset: 3%;
-      z-index: 0;
-      pointer-events: none;
-      background: linear-gradient(155deg, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12)), var(--note-color);
-      clip-path: polygon(2% 1%, 95% 0, 100% 5%, 98% 95%, 94% 100%, 4% 98%, 0 94%, 1% 5%);
-      opacity: 1;
-      transition: opacity 160ms ease;
-    }
-    .pn-theme .pn-note-card.pn-note-assets-ready .pn-note-paper::before {
-      opacity: 0;
-    }
-
-    .pn-theme .pn-note-card:hover .pn-note-paper {
-      filter: none;
-    }
-
-    .pn-theme .pn-note-paper-base,
-    .pn-theme .pn-note-top-shadow {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      overflow: visible;
     }
 
     .pn-theme .pn-note-paper-base {
+      position: absolute;
+      inset: 0;
       z-index: 1;
       display: block;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
       user-select: none;
       opacity: 0;
@@ -200,7 +175,10 @@
         );
       transition: filter 220ms ease, opacity 160ms ease;
     }
-    .pn-theme .pn-note-card.pn-note-assets-ready .pn-note-paper-base { opacity: 1; }
+
+    .pn-theme .pn-note-card.pn-note-paper-ready .pn-note-paper-base {
+      opacity: 1;
+    }
 
     .pn-theme .pn-note-card:hover .pn-note-paper-base {
       filter:
@@ -213,19 +191,6 @@
           calc(var(--note-shadow-blur) + 1px)
           rgba(0, 0, 0, var(--note-shadow-opacity))
         );
-    }
-
-    .pn-theme .pn-note-top-shadow {
-      z-index: 2;
-      display: block;
-      object-fit: contain;
-      opacity: 0;
-      user-select: none;
-      mix-blend-mode: multiply;
-      transition: opacity 220ms ease;
-    }
-    .pn-theme .pn-note-card.pn-note-assets-ready .pn-note-top-shadow {
-      opacity: var(--pn-note-top-shadow-opacity);
     }
 
     .pn-theme .pn-note-card .pn-note-content {

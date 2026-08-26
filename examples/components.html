@@ -4,28 +4,51 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prompt Notebook 组件示例</title>
-  <link rel="stylesheet" href="../css/index.css">
+  <link rel="stylesheet" href="../css/themes/classic/semantic.css?v=9">
+  <link rel="stylesheet" href="../css/themes/elegant/semantic.css?v=2">
   <link rel="stylesheet" href="./components.css">
   <script defer src="../js/namespace.js"></script>
   <script defer src="../js/config/app-config.js"></script>
-  <script defer src="../js/config/asset-manifest.js"></script>
+  <script defer src="../js/config/asset-manifest.js?v=5"></script>
   <script defer src="../js/core/hash.js"></script>
-  <script defer src="../js/core/layout-generator.js"></script>
+  <script defer src="../js/core/layout-generator.js?v=4"></script>
   <script defer src="../js/core/markdown-inline.js"></script>
   <script defer src="../js/core/markdown-renderer.js"></script>
   <script defer src="../js/core/prompt-parser.js"></script>
   <script defer src="../js/services/local-storage.js"></script>
   <script defer src="../js/services/content-loader.js"></script>
-  <script defer src="../js/services/lazy-assets.js"></script>
+  <script defer src="../js/services/lazy-assets.js?v=4"></script>
   <script defer src="../js/components/ribbon.js"></script>
   <script defer src="../js/components/brand-plaque.js"></script>
+  <script defer src="../js/components/top-bar.js?v=2"></script>
   <script defer src="../js/components/markdown-content.js"></script>
   <script defer src="../js/components/table-of-contents.js"></script>
-  <script defer src="../js/components/note-card.js"></script>
+  <script defer src="../js/components/note-card.js?v=8"></script>
   <script defer src="./components.js"></script>
 </head>
-<body class="example-page pn-theme">
-  <h1>独立组件复用示例</h1>
-  <main id="example-root" class="example-grid"></main>
+<body class="example-page">
+  <h1>独立皮肤与组件复用示例</h1>
+  <main class="example-sections">
+    <section class="example-section">
+      <h2>通用顶栏组件</h2>
+      <div id="top-bar-root"></div>
+    </section>
+    <section class="example-section pn-theme" data-pn-skin="classic">
+      <h2>经典皮肤：pn-* 契约</h2>
+      <div id="classic-root" class="example-grid"></div>
+    </section>
+    <section class="example-section pn-theme-elegant" data-pn-skin="elegant">
+      <h2>优雅皮肤：pn-* 契约</h2>
+      <div id="elegant-root" class="example-grid"></div>
+    </section>
+    <section class="example-section pn-semantic-skin" data-pn-skin="classic">
+      <h2>经典皮肤：普通语义 HTML</h2>
+      <article><h3>普通文章</h3><p>适配层只在显式宿主容器内生效。</p><button type="button">操作</button></article>
+    </section>
+    <section class="example-section pn-semantic-skin" data-pn-skin="elegant">
+      <h2>优雅皮肤：普通语义 HTML</h2>
+      <article><h3>普通文章</h3><p>未添加宿主类的页面内容不会受到影响。</p><button type="button">操作</button></article>
+    </section>
+  </main>
 </body>
 </html>

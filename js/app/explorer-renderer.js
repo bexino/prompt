@@ -6,14 +6,16 @@ function parseAndRender() {
     }
 
 function updateBrandSubtitle(markdown) {
-      const subtitle = document.getElementById('brand-subtitle');
-      if (!subtitle) return;
       const titleMatch = markdown.match(/^\s*#\s+(.+?)\s*$/m);
-      subtitle.innerHTML = titleMatch ? parseInline(titleMatch[1].trim()) : '';
-      const plaque = subtitle.closest('.pn-brand-plaque');
-      if (plaque && subtitle.textContent.trim()) {
-        plaque.setAttribute('aria-label', `Prompt Systems — ${subtitle.textContent.trim()}`);
-      }
+      const titleMarkup = titleMatch ? parseInline(titleMatch[1].trim()) : '';
+      const subtitles = [
+        document.getElementById('brand-subtitle'),
+        document.getElementById('classic-brand-subtitle')
+      ].filter(Boolean);
+      subtitles.forEach(subtitle => { subtitle.innerHTML = titleMarkup; });
+      const titleText = subtitles[0]?.textContent.trim() || subtitles[1]?.textContent.trim();
+      document.querySelector('.pn-top-bar')?.setAttribute('aria-label', titleText || '页面顶栏');
+      document.querySelector('.pn-brand-plaque')?.setAttribute('aria-label', titleText ? `Prompt Systems — ${titleText}` : 'Prompt Systems');
     }
 
     // 平滑滚动辅助函数
@@ -23,7 +25,7 @@ function renderExplorer() {
       if (!root) return;
       root.innerHTML = "";
 
-      const prideColorThemes = [
+      const classicNoteThemes = [
         'pn-note-red',
         'pn-note-orange',
         'pn-note-yellow',
@@ -89,10 +91,20 @@ function renderExplorer() {
           root.appendChild(h2El);
           i++;
         } else if (item.type === 'h3_heading') {
+          const groupEl = document.createElement('section');
+          groupEl.className = 'pn-subheading-group w-full';
           const h3El = document.createElement('h3');
           h3El.className = "pn-subheading-slip text-lg sm:text-xl font-bold mt-8 mb-4 select-none w-full";
           h3El.innerHTML = parseInline(item.title);
-          root.appendChild(h3El);
+          groupEl.appendChild(h3El);
+          if (parsedItems[i + 1]?.type === 'html') {
+            const contentEl = document.createElement('div');
+            contentEl.className = 'pn-markdown-paper text-base sm:text-lg leading-relaxed my-3 w-full';
+            contentEl.innerHTML = parsedItems[i + 1].content;
+            groupEl.appendChild(contentEl);
+            i++;
+          }
+          root.appendChild(groupEl);
           i++;
         } else if (item.type === 'divider') {
           const dividerEl = document.createElement('div');
@@ -119,9 +131,10 @@ function renderExplorer() {
 
           promptGroup.forEach(({ item: promptItem, idx: promptIdx }) => {
             const promptId = `prompt-${promptIdx}`;
-            const colorTheme = getVisitNoteColor(promptCounter, prideColorThemes);
             promptCounter++;
-            const noteLayout = getStableNoteLayout(`${promptItem.title}\n${promptItem.code}`);
+            const noteKey = `${promptItem.title}\n${promptItem.code}`;
+            const colorTheme = classicNoteThemes[hashString(noteKey) % classicNoteThemes.length];
+            const noteLayout = getStableNoteLayout(noteKey);
             const promptEl = PromptNotebook.components.createNote({
               id: promptId,
               title: promptItem.title,
@@ -130,7 +143,11 @@ function renderExplorer() {
               variant: (promptCounter - 1) % 3,
               layout: noteLayout,
               onCopy(options) {
-                copyPromptCard(options.content, promptId, options.title);
+                const elegant = PromptNotebook.config.skin.get() === 'elegant';
+                copyPromptCard(options.content, promptId, options.title, {
+                  duration: elegant ? 4000 : 2000,
+                  randomizeSticker: !elegant
+                });
               },
               onOpenDetails(options) {
                 openCopyDetails(options.title, options.content);

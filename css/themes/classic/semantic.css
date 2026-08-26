@@ -1,0 +1,28 @@
+@import url('./index.css?v=10');
+
+[data-pn-skin="classic"].pn-semantic-skin {
+  color: #3a291d;
+  background: #ddc998;
+  font-family: var(--system-serif);
+}
+
+[data-pn-skin="classic"].pn-semantic-skin :is(h1, h2, h3, h4) {
+  color: #342318;
+  text-shadow: 0 1px rgba(255, 247, 220, 0.45);
+}
+
+[data-pn-skin="classic"].pn-semantic-skin article {
+  padding: 1.25rem;
+  border: 1px solid #5a3b24;
+  color: #3a291d;
+  background: #ddc998;
+  box-shadow: 0 7px 13px rgba(12, 4, 2, 0.32);
+}
+
+[data-pn-skin="classic"].pn-semantic-skin button {
+  padding: 0.55rem 0.9rem;
+  border: 1px solid #513415;
+  border-radius: 5px;
+  color: #2f2112;
+  background: linear-gradient(#e1c581, #a97a38);
+}

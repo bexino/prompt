@@ -4,6 +4,8 @@ function initBackToTopButton() {
       button.dataset.initialized = 'true';
 
       let scrollFrame = null;
+      let returnFrame = null;
+      let previousScrollBehavior = null;
       const updateVisibility = () => {
         scrollFrame = null;
         const isVisible = window.scrollY > 96;
@@ -18,13 +20,50 @@ function initBackToTopButton() {
       }, { passive: true });
       updateVisibility();
 
+      const cancelReturnAnimation = () => {
+        if (returnFrame !== null) {
+          window.cancelAnimationFrame(returnFrame);
+          returnFrame = null;
+        }
+        if (previousScrollBehavior !== null) {
+          document.documentElement.style.scrollBehavior = previousScrollBehavior;
+          previousScrollBehavior = null;
+        }
+      };
+
+      ['wheel', 'touchstart'].forEach(eventName => {
+        window.addEventListener(eventName, cancelReturnAnimation, { passive: true });
+      });
+
       button.addEventListener('click', () => {
         const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: reduceMotion ? 'auto' : 'smooth'
-        });
+        cancelReturnAnimation();
+
+        const startY = window.scrollY;
+        if (reduceMotion || startY <= 0) {
+          window.scrollTo(0, 0);
+          return;
+        }
+
+        const startTime = performance.now();
+        const duration = 560;
+        previousScrollBehavior = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = 'auto';
+        const animateReturn = currentTime => {
+          const progress = Math.min((currentTime - startTime) / duration, 1);
+          const easedProgress = 1 - Math.pow(1 - progress, 3);
+          window.scrollTo(0, Math.round(startY * (1 - easedProgress)));
+
+          if (progress < 1) {
+            returnFrame = window.requestAnimationFrame(animateReturn);
+          } else {
+            returnFrame = null;
+            document.documentElement.style.scrollBehavior = previousScrollBehavior;
+            previousScrollBehavior = null;
+          }
+        };
+
+        returnFrame = window.requestAnimationFrame(animateReturn);
       });
     }
 

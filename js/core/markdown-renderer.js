@@ -59,7 +59,7 @@ function renderMarkdownToHtml(mdText) {
 
         if (trimmed.startsWith('# ')) {
           closeList();
-          result.push(`<h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter pn-gradient-text my-8 sm:my-12 leading-none select-none">${parseInline(trimmed.substring(2))}</h1>`);
+          result.push(`<h1 class="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter my-8 sm:my-12 leading-none select-none">${parseInline(trimmed.substring(2))}</h1>`);
           continue;
         }
         if (trimmed.startsWith('## ')) {

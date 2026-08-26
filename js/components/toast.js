@@ -7,7 +7,7 @@ function showToast(message, type = 'success', subtitle = '') {
       toast.className = `
         flex items-start justify-between gap-3 p-4.5 rounded-2xl shadow-lg border backdrop-blur-md transform translate-y-2 opacity-0 transition-all duration-300 ease-out max-w-sm w-full
         ${type === 'success'
-          ? 'pn-gradient-bg text-white border-transparent shadow-md shadow-orange-500/5'
+          ? 'pn-toast-success text-white border-transparent shadow-md'
           : 'bg-white/95 border-rose-500/30 text-slate-800 shadow-rose-500/5'}
       `;
 

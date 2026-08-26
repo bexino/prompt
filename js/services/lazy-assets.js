@@ -18,16 +18,18 @@ function initLazyAssets(scope) {
 
         const source = target.dataset.src;
         if (!source) return;
-        if (target.classList.contains('pn-note-paper-base')) {
+        const isNotePaper = target.classList.contains('pn-note-paper-base');
+        const isNoteAsset = isNotePaper || target.classList.contains('pn-note-top-shadow');
+        if (isNoteAsset) {
           const card = target.closest('.pn-note-card');
-          const markReady = () => card?.classList.add('pn-note-assets-ready');
+          const markReady = () => card?.classList.add(isNotePaper ? 'pn-note-paper-ready' : 'pn-note-assets-ready');
           target.addEventListener('load', markReady, { once: true });
           target.addEventListener('error', () => card?.classList.add('note-assets-failed'), { once: true });
         }
         target.src = source;
         target.removeAttribute('data-src');
-        if (target.classList.contains('pn-note-paper-base') && target.complete && target.naturalWidth > 0) {
-          target.closest('.pn-note-card')?.classList.add('pn-note-assets-ready');
+        if (isNoteAsset && target.complete && target.naturalWidth > 0) {
+          target.closest('.pn-note-card')?.classList.add(isNotePaper ? 'pn-note-paper-ready' : 'pn-note-assets-ready');
         }
       };
 
@@ -43,7 +45,7 @@ function initLazyAssets(scope) {
           lazyAssetObserver.unobserve(entry.target);
         });
       }, {
-        rootMargin: document.documentElement.classList.contains('low-bandwidth') ? '220px 0px' : '700px 0px',
+        rootMargin: document.documentElement.classList.contains('low-bandwidth') ? '160px 0px' : '320px 0px',
         threshold: 0.01
       });
 

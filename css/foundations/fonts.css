@@ -13,3 +13,21 @@
       font-weight: 250 900;
       font-display: swap;
     }
+
+    @font-face {
+      font-family: 'Geist Local';
+      src: url('../../assets/fonts/geist-sans-variable.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    :root {
+      --pn-font-serif: 'Gelasio Local', 'Prompt Source Han Serif SC', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Songti SC', STSong, SimSun, Georgia, 'Times New Roman', serif;
+      --pn-font-geist: 'Geist Local', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', Arial, sans-serif;
+    }
+
+    html[data-pn-font="geist"] body.pn-app,
+    html[data-pn-font="geist"] body.pn-app * {
+      font-family: var(--pn-font-geist) !important;
+    }
