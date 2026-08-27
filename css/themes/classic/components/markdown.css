@@ -7,7 +7,7 @@
       background:
         radial-gradient(circle at 18% 14%, rgba(255, 250, 225, 0.34), transparent 34%),
         linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(105, 69, 34, 0.08)),
-        url('../../assets/textures/paper-fiber.webp'),
+        url('../../../../assets/textures/paper-fiber.webp'),
         #ddc998;
       background-blend-mode: soft-light, multiply, multiply, normal;
       box-shadow:

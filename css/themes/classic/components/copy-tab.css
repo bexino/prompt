@@ -138,7 +138,7 @@
       display: block;
       width: 98%;
       height: 98%;
-      background: url('../../assets/decor/copied-sticker-v6.webp?v=7') center / contain no-repeat;
+      background: url('../../../../assets/decor/copied-sticker-v6.webp?v=7') center / contain no-repeat;
       filter:
         drop-shadow(0 4px 5px rgba(22, 12, 6, 0.58))
         drop-shadow(7px 12px 15px rgba(18, 9, 4, 0.42));

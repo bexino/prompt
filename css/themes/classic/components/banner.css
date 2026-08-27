@@ -2,7 +2,7 @@
       border: 1px solid #8c713f !important;
       border-radius: 4px !important;
       color: #3c3124;
-      background: linear-gradient(rgba(255,255,255,0.12), rgba(73,51,23,0.06)), url('../../assets/textures/paper-fiber.webp'), #e5d5ae !important;
+      background: linear-gradient(rgba(255,255,255,0.12), rgba(73,51,23,0.06)), url('../../../../assets/textures/paper-fiber.webp'), #e5d5ae !important;
       background-blend-mode: soft-light, multiply, normal;
       box-shadow: 4px 7px 14px rgba(19,8,3,0.42) !important;
       transform: rotate(-0.25deg);

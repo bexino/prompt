@@ -28,7 +28,7 @@ async function applyImportedFile(file) {
     const imported = await PromptNotebook.services.readMarkdownFile(file);
     rawMarkdown = imported.content;
     PromptNotebook.services.storage.write(imported.content, imported.filename);
-    parseAndRender();
+    await PromptNotebook.app.prepareAndReveal({ render: true, message: `正在载入 ${imported.filename}…` });
     PromptNotebook.components.updateStatusBanner({ visible: window.location.protocol === 'file:', imported: true, filename: imported.filename, updated: new Date().toLocaleString() });
     PromptNotebook.components.showToast(`${imported.filename} 导入成功并已更新`, 'success');
   } catch (error) {
@@ -51,6 +51,7 @@ function initPageEvents() {
   const toggleSkin = async () => {
     if (skinToggles.some(skinToggle => skinToggle.getAttribute('aria-busy') === 'true')) return;
     skinToggles.forEach(skinToggle => skinToggle.setAttribute('aria-busy', 'true'));
+    PromptNotebook.components.showLoadingScreen('正在切换主题…');
     try {
       const selected = await PromptNotebook.config.skin.toggle();
       PromptNotebook.config.font.followSkin(selected);
@@ -61,10 +62,12 @@ function initPageEvents() {
           if (PromptNotebook.config.assets[group]) element.setAttribute(attribute, PromptNotebook.config.assets[group](name));
         });
       }
+      await PromptNotebook.app.prepareAndReveal({ alreadyVisible: true });
       updateSkinToggle();
     } catch (error) {
       PromptNotebook.components.showToast(error.message || '皮肤加载失败，请重试', 'error');
     } finally {
+      PromptNotebook.components.hideLoadingScreen();
       skinToggles.forEach(skinToggle => skinToggle.removeAttribute('aria-busy'));
     }
   };

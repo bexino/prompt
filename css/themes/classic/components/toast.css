@@ -1,7 +1,7 @@
 .pn-theme .pn-toast-container > div {
       border-radius: 4px !important;
       color: #3a2d20 !important;
-      background: url('../../assets/textures/paper-fiber.webp'), #e7d5ad !important;
+      background: url('../../../../assets/textures/paper-fiber.webp'), #e7d5ad !important;
       background-blend-mode: multiply;
       border-color: #896b3e !important;
       box-shadow: 5px 10px 20px rgba(13,5,2,0.5) !important;

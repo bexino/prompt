@@ -68,8 +68,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   if (loaded) {
     PromptNotebook.app.hideErrorOverlay();
-    PromptNotebook.app.parseAndRender();
+    await PromptNotebook.app.prepareAndReveal({ render: true, alreadyVisible: true });
   } else {
     PromptNotebook.app.showErrorOverlay();
+    await PromptNotebook.app.prepareAndReveal({ alreadyVisible: true });
   }
 });

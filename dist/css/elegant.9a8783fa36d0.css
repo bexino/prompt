@@ -1,3 +1,167 @@
+@font-face {
+      font-family: 'Gelasio Local';
+      src: url('../assets/fonts/gelasio-variable.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Prompt Source Han Serif SC';
+      src: url('../assets/fonts/source-han-serif-sc-subset-variable.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 250 900;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Geist Local';
+      src: url('../assets/fonts/geist-sans-variable.woff2') format('woff2');
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
+
+    :root {
+      --pn-font-serif: 'Gelasio Local', 'Prompt Source Han Serif SC', 'Source Han Serif SC', 'Noto Serif CJK SC', 'Songti SC', STSong, SimSun, Georgia, 'Times New Roman', serif;
+      --pn-font-geist: 'Geist Local', 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans CJK SC', Arial, sans-serif;
+    }
+
+    html[data-pn-font="geist"] body.pn-app,
+    html[data-pn-font="geist"] body.pn-app * {
+      font-family: var(--pn-font-geist) !important;
+    }
+
+/* 自定义滚动条 */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+.pn-theme .hidden { display: none !important; }
+.pn-theme .line-clamp-4,
+.pn-theme .line-clamp-5 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+.pn-theme .line-clamp-4 { -webkit-line-clamp: 4; }
+.pn-theme .line-clamp-5 { -webkit-line-clamp: 5; }
+
+.pn-top-bar {
+  --pn-top-bar-background: #6d5e4f;
+  --pn-top-bar-action-background: #dd6d61;
+  --pn-top-bar-content-width: 64rem;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  width: 100%;
+  color: #fffaf4;
+  background: var(--pn-top-bar-background);
+  box-shadow: 0 2px 10px rgba(40, 31, 24, 0.2);
+}
+
+.pn-top-bar.pn-top-bar-static {
+  position: relative;
+}
+
+.pn-top-bar-inner {
+  display: flex;
+  width: min(100%, var(--pn-top-bar-content-width));
+  min-height: 4rem;
+  margin: 0 auto;
+  padding: 0.7rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pn-top-bar-title {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: inherit;
+  font: inherit;
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  text-shadow: none;
+  white-space: nowrap;
+}
+
+.pn-top-bar-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.pn-top-bar-action {
+  min-width: 4.5rem;
+  min-height: 2.35rem;
+  padding: 0.5rem 0.9rem;
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  background: var(--pn-top-bar-action-background);
+  box-shadow: 0 2px 5px rgba(66, 38, 34, 0.2);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: filter 160ms ease, box-shadow 160ms ease, transform 120ms ease, opacity 160ms ease;
+}
+
+.pn-top-bar-action:not(:disabled):hover {
+  filter: brightness(1.06);
+  box-shadow: 0 4px 9px rgba(66, 38, 34, 0.25);
+  transform: translateY(-1px);
+}
+
+.pn-top-bar-action:not(:disabled):active,
+.pn-top-bar-action[aria-pressed="true"] {
+  filter: brightness(0.94);
+  box-shadow: inset 0 2px 4px rgba(76, 31, 27, 0.18);
+  transform: translateY(1px);
+}
+
+.pn-top-bar-action:focus-visible {
+  outline: 2px solid #fffaf4;
+  outline-offset: 3px;
+}
+
+.pn-top-bar-action:disabled,
+.pn-top-bar-action[aria-busy="true"] {
+  cursor: default;
+  opacity: 0.68;
+}
+
+@media (max-width: 639px) {
+  .pn-top-bar-inner {
+    min-height: 3.6rem;
+    padding-inline: 1rem;
+  }
+
+  .pn-top-bar-action {
+    min-width: 4rem;
+    min-height: 2.2rem;
+    padding-inline: 0.75rem;
+  }
+}
+
 [data-pn-skin="elegant"] {
   --pn-elegant-page: #ebd8b4;
   --pn-elegant-surface: #f7f5e8;
@@ -781,3 +945,4 @@ html[data-pn-skin="elegant"] ::-webkit-scrollbar-thumb {
     animation-duration: 0.01ms !important;
   }
 }
+

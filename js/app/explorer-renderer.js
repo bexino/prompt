@@ -2,7 +2,7 @@ function parseAndRender() {
       const parsed = parseMarkdown(rawMarkdown);
       parsedItems = parsed.items;
       updateBrandSubtitle(rawMarkdown);
-      renderExplorer();
+      return renderExplorer();
     }
 
 function updateBrandSubtitle(markdown) {
@@ -23,7 +23,10 @@ function updateBrandSubtitle(markdown) {
 function renderExplorer() {
       const root = document.getElementById('prompts-list-root');
       if (!root) return;
-      root.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+      const categories = parsedItems
+        .map((item, index) => ({ item, index }))
+        .filter(entry => entry.item.type === 'h2');
 
       const classicNoteThemes = [
         'pn-note-red',
@@ -40,10 +43,9 @@ function renderExplorer() {
         const item = parsedItems[i];
 
         if (item.type === 'toc') {
-          const categories = parsedItems.filter(it => it.type === 'h2');
           if (categories.length > 0) {
             const tocEl = document.createElement('div');
-            tocEl.className = "pn-catalog-panel p-6 sm:p-8 my-6 select-none w-full";
+            tocEl.className = "pn-catalog-panel pn-render-block p-6 sm:p-8 my-6 select-none w-full";
 
             let tocHtml = `
               <div class="flex items-center gap-2 text-sm sm:text-base font-bold text-slate-500 uppercase tracking-wider mb-4">
@@ -52,10 +54,9 @@ function renderExplorer() {
               <div class="pn-toc-list">
             `;
 
-            const tocToneFlags = getBalancedTocToneFlags(categories);
+            const tocToneFlags = getBalancedTocToneFlags(categories.map(entry => entry.item));
 
-            categories.forEach((catItem, categoryIndex) => {
-              const catIdx = parsedItems.indexOf(catItem);
+            categories.forEach(({ item: catItem, index: catIdx }, categoryIndex) => {
               const toneClass = tocToneFlags[categoryIndex] ? ' toc-item-deep' : '';
               tocHtml += `
                 <a href="#category-${catIdx}" data-target="category-${catIdx}"
@@ -76,7 +77,7 @@ function renderExplorer() {
               });
             });
 
-            root.appendChild(tocEl);
+            fragment.appendChild(tocEl);
           }
           i++;
         } else if (item.type === 'h2') {
@@ -88,11 +89,11 @@ function renderExplorer() {
           h2El.style.setProperty('--plaque-mobile-rotation', `${plaqueRotation.mobileRotation}deg`);
           applyStablePlaqueWear(h2El, item.title);
           h2El.innerHTML = parseInline(item.title);
-          root.appendChild(h2El);
+          fragment.appendChild(h2El);
           i++;
         } else if (item.type === 'h3_heading') {
           const groupEl = document.createElement('section');
-          groupEl.className = 'pn-subheading-group w-full';
+          groupEl.className = 'pn-subheading-group pn-render-block w-full';
           const h3El = document.createElement('h3');
           h3El.className = "pn-subheading-slip text-lg sm:text-xl font-bold mt-8 mb-4 select-none w-full";
           h3El.innerHTML = parseInline(item.title);
@@ -104,19 +105,19 @@ function renderExplorer() {
             groupEl.appendChild(contentEl);
             i++;
           }
-          root.appendChild(groupEl);
+          fragment.appendChild(groupEl);
           i++;
         } else if (item.type === 'divider') {
           const dividerEl = document.createElement('div');
           dividerEl.className = "pn-divider-only w-full";
           dividerEl.innerHTML = item.content;
-          root.appendChild(dividerEl);
+          fragment.appendChild(dividerEl);
           i++;
         } else if (item.type === 'html') {
           const div = document.createElement('div');
-          div.className = "pn-markdown-paper text-base sm:text-lg leading-relaxed my-3 w-full";
+          div.className = "pn-markdown-paper pn-render-block text-base sm:text-lg leading-relaxed my-3 w-full";
           div.innerHTML = item.content;
-          root.appendChild(div);
+          fragment.appendChild(div);
           i++;
         } else if (item.type === 'prompt') {
           // 将连续提示词卡片收集到响应式网格中，移动端两列，宽屏最多三列
@@ -156,12 +157,13 @@ function renderExplorer() {
             gridEl.appendChild(promptEl);
           });
 
-          root.appendChild(gridEl);
+          fragment.appendChild(gridEl);
         } else {
           i++;
         }
       }
-      initializeLazyAssets(root);
+      root.replaceChildren(fragment);
+      return root;
     }
 
 function showErrorOverlay() {

@@ -29,5 +29,5 @@
   }
 
   PromptNotebook.config.initialSkinChoice = selectedSkin;
-  document.write('<script src="./js/config/app-loader.js?v=4"><\/script>');
+  document.write('<script src="./js/config/app-loader.js?v=6"><\/script>');
 })();

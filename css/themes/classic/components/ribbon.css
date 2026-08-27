@@ -11,7 +11,7 @@
       transition: opacity 180ms ease, transform 180ms ease;
     }
     .pn-theme .pn-ribbon.pn-lazy-bg-loaded {
-      background-image: url('../../assets/decor/markdown-ribbon-navy.webp');
+      background-image: url('../../../../assets/decor/markdown-ribbon-navy.webp');
       filter:
         brightness(1.9)
         saturate(1.24)

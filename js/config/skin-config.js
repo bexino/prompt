@@ -1,7 +1,7 @@
 (() => {
   const storageKey = 'prompt_notebook_skin';
   const supportedSkins = new Set(['classic', 'elegant']);
-  const stylesheetVersions = { classic: '14', elegant: '11' };
+  const stylesheetVersions = { classic: '16', elegant: '12' };
   const stylesheetPromises = new Map();
 
   function ensureSkinStylesheet(skin) {

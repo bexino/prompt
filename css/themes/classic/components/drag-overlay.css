@@ -7,7 +7,7 @@
       border: 1px solid #8b6c3b !important;
       border-radius: 5px !important;
       color: #3c3023 !important;
-      background: url('../../assets/textures/paper-fiber.webp'), #e8d9b6 !important;
+      background: url('../../../../assets/textures/paper-fiber.webp'), #e8d9b6 !important;
       background-blend-mode: multiply;
       box-shadow: 10px 18px 34px rgba(12,5,2,0.55) !important;
     }

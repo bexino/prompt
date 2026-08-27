@@ -1,0 +1,43 @@
+@media (max-width: 639px) {
+  [data-pn-skin="elegant"] .pn-workspace {
+    padding-top: 1.4rem !important;
+  }
+
+  [data-pn-skin="elegant"] .pn-brand-plaque {
+    width: 100%;
+    margin-bottom: 1.15rem;
+    padding: 0;
+    transform: none !important;
+  }
+
+  [data-pn-skin="elegant"] .pn-brand-plaque-controls {
+    margin-bottom: 1.55rem;
+  }
+
+  [data-pn-skin="elegant"] .pn-notes-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  [data-pn-skin="elegant"] .pn-note-card {
+    min-height: 4.25rem;
+    padding: 0.85rem 0.85rem 0.85rem 1rem !important;
+    transform: none !important;
+  }
+
+  [data-pn-skin="elegant"] .pn-note-card .pn-copy-tab {
+    right: auto;
+    width: auto;
+    min-height: 2.05rem;
+    padding: 0.45rem 0.65rem;
+    font-size: 0.78rem !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-pn-skin="elegant"] *,
+  [data-pn-skin="elegant"] *::before,
+  [data-pn-skin="elegant"] *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

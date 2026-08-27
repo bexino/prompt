@@ -1,0 +1,166 @@
+[data-pn-skin="elegant"] .pn-notes-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  margin: 1rem 0 !important;
+  padding: 0 !important;
+  align-items: stretch;
+  gap: 0.75rem !important;
+}
+
+[data-pn-skin="elegant"] .pn-notes-grid .pn-note-card {
+  z-index: auto !important;
+}
+
+[data-pn-skin="elegant"] .pn-note-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  width: 100%;
+  min-height: 4.6rem;
+  aspect-ratio: auto !important;
+  padding: 1rem 1rem 1rem 1.15rem !important;
+  align-items: center;
+  overflow: hidden !important;
+  border: 1px solid var(--pn-elegant-border) !important;
+  border-radius: 9px !important;
+  color: var(--pn-elegant-note-text) !important;
+  background: var(--pn-elegant-surface) !important;
+  box-shadow: 0 4px 12px rgba(104, 69, 45, 0.08) !important;
+  filter: none !important;
+  text-align: left;
+  transform: none !important;
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease !important;
+}
+
+[data-pn-skin="elegant"] .pn-note-card:hover {
+  z-index: auto;
+  border-color: #c4b4a1 !important;
+  background: #fbf9ee !important;
+  box-shadow: 0 6px 16px rgba(104, 69, 45, 0.11) !important;
+  transform: none !important;
+}
+
+[data-pn-skin="elegant"] .pn-note-card:active {
+  transform: none !important;
+}
+
+[data-pn-skin="elegant"] .pn-note-paper,
+[data-pn-skin="elegant"] .pn-note-decoration,
+[data-pn-skin="elegant"] .pn-copied-sticker {
+  display: none !important;
+}
+
+[data-pn-skin="elegant"] .pn-copied-overlay {
+  position: static !important;
+  display: none !important;
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--pn-elegant-surface);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.65;
+  text-align: left;
+}
+
+[data-pn-skin="elegant"] .pn-note-card .pn-note-content {
+  position: relative;
+  z-index: 1;
+  display: block !important;
+  width: 100%;
+  height: auto !important;
+  overflow: visible;
+  opacity: 1 !important;
+  text-align: left;
+  text-shadow: none;
+}
+
+[data-pn-skin="elegant"] .pn-note-card .pn-note-content h3 {
+  display: block;
+  margin: 0;
+  color: inherit;
+  font-size: clamp(1rem, 2.4vw, 1.15rem) !important;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.35;
+  text-align: left;
+  -webkit-line-clamp: unset;
+}
+
+[data-pn-skin="elegant"] .pn-note-card .pn-copy-tab {
+  position: static;
+  z-index: 2;
+  display: inline-flex;
+  width: auto;
+  min-width: 3.9rem;
+  min-height: 2.15rem;
+  padding: 0.5rem 0.7rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 7px;
+  color: var(--pn-elegant-surface);
+  background: var(--pn-elegant-action);
+  box-shadow: 0 2px 5px rgba(104, 69, 45, 0.12);
+  font: inherit;
+  font-size: 0.82rem !important;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-indent: 0;
+  text-shadow: none;
+  filter: none;
+  transform: none !important;
+  transition: box-shadow 160ms ease, filter 160ms ease;
+}
+
+[data-pn-skin="elegant"] .pn-note-card .pn-copy-tab::before {
+  display: none;
+}
+
+[data-pn-skin="elegant"] .pn-note-card .pn-copy-tab:hover {
+  box-shadow: 0 4px 9px rgba(104, 69, 45, 0.17);
+  filter: brightness(0.98);
+  transform: none !important;
+}
+
+[data-pn-skin="elegant"] .pn-copy-label-success {
+  display: none;
+}
+
+[data-pn-skin="elegant"] .pn-note-card.copied {
+  color: var(--pn-elegant-surface) !important;
+  border-color: var(--pn-elegant-success) !important;
+  background: var(--pn-elegant-success) !important;
+  box-shadow: 0 5px 14px rgba(74, 93, 62, 0.18) !important;
+}
+
+[data-pn-skin="elegant"] .pn-note-card.copied:hover {
+  background: var(--pn-elegant-success) !important;
+}
+
+[data-pn-skin="elegant"] .pn-note-card.copied .pn-note-content h3 {
+  display: none;
+}
+
+[data-pn-skin="elegant"] .pn-note-card.copied .pn-note-content {
+  display: none !important;
+}
+
+[data-pn-skin="elegant"] .pn-note-card.copied .pn-copied-overlay {
+  display: block !important;
+}
+
+[data-pn-skin="elegant"] .pn-note-card.copied .pn-copy-tab {
+  color: var(--pn-elegant-success);
+  background: var(--pn-elegant-surface);
+  box-shadow: 0 2px 5px rgba(39, 50, 33, 0.2);
+}
+
+[data-pn-skin="elegant"] .pn-note-card.copied .pn-copy-label-default {
+  display: none;
+}
+
+[data-pn-skin="elegant"] .pn-note-card.copied .pn-copy-label-success {
+  display: inline;
+}

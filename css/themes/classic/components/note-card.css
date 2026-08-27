@@ -122,7 +122,6 @@
       transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-rotation));
       box-shadow: none !important;
       transition: transform 220ms cubic-bezier(.2,.85,.25,1), box-shadow 220ms ease, filter 220ms ease !important;
-      will-change: transform;
       padding: clamp(1.2rem, 2.7vw, 2.2rem) !important;
     }
     .pn-theme .pn-note-card::before {
@@ -130,12 +129,16 @@
     }
     .pn-theme .pn-note-card:hover {
       z-index: 20;
+      will-change: transform, filter;
       filter: saturate(1.05) brightness(1.03);
       transform: translate(var(--note-x), calc(var(--note-y) - 6px)) rotate(0deg) scale(1.015);
       box-shadow: none !important;
     }
     .pn-theme .pn-note-card:active {
       transform: translate(var(--note-x), calc(var(--note-y) - 2px)) rotate(0deg) scale(0.985) !important;
+    }
+    .pn-theme .pn-note-card:focus-within {
+      will-change: transform, filter;
     }
 
     .pn-theme .pn-note-red { --note-ink: #f8e6dc; }

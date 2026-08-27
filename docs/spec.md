@@ -14,6 +14,23 @@ prompt/
 ├─ index.html
 ├─ README.md
 ├─ LICENSE
+├─ scripts/
+│  └─ build.mjs
+├─ dist/                         # 由构建脚本生成，禁止手工修改
+│  ├─ index.html
+│  ├─ sw.js
+│  ├─ README.md
+│  ├─ LICENSE
+│  ├─ assets/
+│  ├─ docs/
+│  │  └─ fam.md
+│  ├─ css/
+│  │  ├─ shell.<hash>.css
+│  │  ├─ classic.<hash>.css
+│  │  └─ elegant.<hash>.css
+│  └─ js/
+│     ├─ startup.<hash>.js
+│     └─ app.<hash>.js
 ├─ css/
 │  ├─ index.css
 │  ├─ app/
@@ -28,29 +45,35 @@ prompt/
 │  │  ├─ workspace.css
 │  │  └─ notes-grid.css
 │  ├─ components/
-│  │  ├─ brand-plaque.css
-│  │  ├─ top-bar.css
-│  │  ├─ note-card.css
-│  │  ├─ copy-tab.css
-│  │  ├─ ribbon.css
-│  │  ├─ markdown.css
-│  │  ├─ table-of-contents.css
-│  │  ├─ banner.css
-│  │  ├─ modal.css
-│  │  ├─ toast.css
-│  │  ├─ drag-overlay.css
-│  │  └─ back-to-top.css
+│  │  └─ top-bar.css
 │  ├─ utilities/
 │  │  ├─ animations.css
 │  │  └─ states.css
 │  └─ themes/
 │     ├─ classic/
 │     │  ├─ index.css
-│     │  └─ semantic.css
+│     │  ├─ semantic.css
+│     │  └─ components/
+│     │     ├─ brand-plaque.css
+│     │     ├─ note-card.css
+│     │     ├─ copy-tab.css
+│     │     ├─ ribbon.css
+│     │     ├─ markdown.css
+│     │     ├─ table-of-contents.css
+│     │     ├─ banner.css
+│     │     ├─ modal.css
+│     │     ├─ toast.css
+│     │     ├─ drag-overlay.css
+│     │     └─ back-to-top.css
 │     └─ elegant/
 │        ├─ index.css
 │        ├─ semantic.css
-│        └─ theme.css
+│        ├─ base.css
+│        ├─ brand.css
+│        ├─ content.css
+│        ├─ note-card.css
+│        ├─ feedback.css
+│        └─ responsive.css
 ├─ js/
 │  ├─ namespace.js
 │  ├─ config/
@@ -71,7 +94,8 @@ prompt/
 │  │  ├─ local-storage.js
 │  │  ├─ file-import.js
 │  │  ├─ clipboard.js
-│  │  └─ lazy-assets.js
+│  │  ├─ lazy-assets.js
+│  │  └─ view-assets.js
 │  ├─ components/
 │  │  ├─ brand-plaque.js
 │  │  ├─ top-bar.js
@@ -83,11 +107,13 @@ prompt/
 │  │  ├─ copy-modal.js
 │  │  ├─ toast.js
 │  │  ├─ drag-overlay.js
-│  │  └─ back-to-top.js
+│  │  ├─ back-to-top.js
+│  │  └─ loading-screen.js
 │  └─ app/
 │     ├─ state.js
 │     ├─ explorer-renderer.js
 │     ├─ event-controller.js
+│     ├─ view-coordinator.js
 │     └─ bootstrap.js
 ├─ examples/
 │  ├─ components.html
@@ -117,6 +143,13 @@ prompt/
 | `README.md` | 面向使用者介绍项目、内容格式和部署方式 |
 | `LICENSE` | 保存第三方可识别的授权原文，不进行翻译 |
 
+## 构建与发布职责
+
+- `scripts/build.mjs`：零依赖发布脚本，递归展开主题 CSS、重写素材路径、按规范顺序合并应用脚本、生成内容哈希文件和版本化 Service Worker。
+- `node scripts/build.mjs`：重新生成完整 `dist/`；该目录是可直接部署的静态站点产物，不得手工修改。
+- `node scripts/build.mjs --check`：只读校验当前 `dist/` 是否与源码构建结果完全一致。
+- `dist/sw.js`：预缓存发布外壳，对哈希资源和图片使用缓存优先策略，对页面导航与 Markdown 内容使用网络优先、缓存降级策略；`file://` 环境不注册。
+
 ## CSS 职责
 
 `css/index.css` 是供外部页面选择一次性加载两套皮肤的聚合入口，只导入 `classic` 与 `elegant` 两个独立皮肤入口。主应用为减少首屏请求，不使用该聚合入口，而由皮肤配置按需加载当前皮肤。
@@ -128,7 +161,7 @@ prompt/
 ### 皮肤层
 
 - `themes/classic/index.css`：经典拟物皮肤严格组件入口，组合既有基础、布局、组件和素材样式。
-- `themes/elegant/index.css`：优雅扁平皮肤严格组件入口，不导入经典皮肤或图片素材。
+- `themes/elegant/index.css`：优雅扁平皮肤严格组件入口，不导入经典皮肤或图片素材；其外观按基础页面、品牌、正文目录、便签、反馈弹层和响应式规则分别保存在同目录文件中。
 - 两套 `semantic.css`：普通语义 HTML 适配入口，只在 `.pn-semantic-skin` 宿主内生效。
 - 皮肤通过 `data-pn-skin` 和各自宿主类限定作用域，不得读取应用状态、本地存储、内容源或 URL，也不得相互引用。
 
@@ -147,7 +180,7 @@ prompt/
 
 ### 组件层
 
-既有组件样式文件由经典皮肤入口组合；优雅皮肤在自己的 `theme.css` 内完整实现相同的稳定组件契约。组件 JavaScript 只输出内容、操作、反馈挂载点和 `data-pn-*` 外观属性，不读取当前皮肤。
+`css/components/` 只保存主题无关的稳定组件结构；经典皮肤外观按组件存放在 `themes/classic/components/`，典雅皮肤按基础页面、品牌、正文目录、便签、反馈弹层和响应式职责拆分。两套皮肤实现相同的稳定组件契约。组件 JavaScript 只输出内容、操作、反馈挂载点和 `data-pn-*` 外观属性，不读取当前皮肤。
 
 ### 工具层
 
@@ -161,6 +194,7 @@ prompt/
 - 组件不得依赖 Tailwind 工具类。`index.html` 中保留的 Tailwind 类只服务主应用骨架。
 - CSS 自身无法调用 JavaScript 素材清单，因此字体和背景资源路径只允许出现在对应 CSS 文件中，并相对于该文件使用 `../../assets/`。业务 JavaScript 中的动态素材必须经过 `asset-manifest.js`。
 - 响应式或无障碍覆盖集中在 `accessibility.css`；新增组件级媒体查询时，应优先与组件放置，只有跨组件协调时才放入该文件。
+- 便签、复制标签等依赖越界阴影、装饰和堆叠的组件不得使用会启用绘制包含的 `content-visibility` 或 `contain: paint`；其父级网格同样必须允许内容溢出。
 
 ## JavaScript 职责与依赖
 
@@ -191,6 +225,7 @@ prompt/
 - `file-import.js`：封装拖放监听和文件文本读取，通过回调向应用层返回结果。
 - `clipboard.js`：封装剪贴板写入和兼容降级；当前还负责触发现有复制反馈，后续调整需保持服务不读取应用状态。
 - `lazy-assets.js`：持有懒加载观察器，根据 `data-src` 延迟加载图片和背景素材，公开 `initLazyAssets(container)`。
+- `view-assets.js`：在主应用统一揭示页面前，收集当前皮肤的唯一字体和图片资源，执行加载与解码、进度汇报、单资源超时和全局超时降级；不改变公开懒加载接口。
 
 服务层可以使用浏览器能力，但不得决定页面布局或内容源业务流程。
 
@@ -207,6 +242,7 @@ prompt/
 - `toast.js`：创建和移除消息提示。
 - `drag-overlay.js`：提供拖放遮罩元素访问接口。
 - `back-to-top.js`：控制返回顶部按钮可见性和滚动行为。
+- `loading-screen.js`：控制全屏 Loading 的显示、真实进度和统一揭示，不读取应用状态或内容源。
 
 可复用组件不得读取应用状态、内容源或本地存储；业务结果通过配置和回调传递。
 
@@ -215,13 +251,16 @@ prompt/
 - `state.js`：只保存当前 Markdown 和解析结果。
 - `explorer-renderer.js`：把领域数据组合为目录、标题、正文和便签列表。
 - `event-controller.js`：绑定页面按钮、皮肤切换、文件选择、拖放和页面级事件，协调服务与组件。
+- `view-coordinator.js`：协调内容渲染、当前皮肤资源预加载、剩余资源懒加载和 Loading 揭示；用于首屏、首次换肤和文件导入。
 - `bootstrap.js`：唯一启动入口，识别低带宽环境、初始化动态素材与组件、加载内容、执行缓存降级并触发首次渲染。
 
 应用层可以依赖其前面的所有层级，其他层不得反向依赖应用层。
 
 ### 加载顺序
 
-`index.html` 先同步加载命名空间与首次皮肤选择门；没有保存值时，页面解析会暂停在浏览器原生确认框，在用户作出选择前不请求结构样式、皮肤或内容。选择完成后，选择门同步引入 `app-loader.js`，由该文件注入主应用结构样式、皮肤配置与字体配置，在首屏内容渲染前设置 `data-pn-skin`、`data-pn-font` 并请求唯一的当前皮肤入口；启动入口等待皮肤样式就绪。其余脚本使用经典 `defer`，顺序固定为：站点与素材配置、状态、核心、服务、基础组件（包括顶栏）、页面服务、应用渲染、事件控制、启动入口。主页面不依赖在线 CSS 运行时。新增依赖必须放在使用方之前，并同步更新本节、`app-loader.js` 和 `index.html`。
+源码模式下，`index.html` 先同步加载命名空间与首次皮肤选择门；没有保存值时，页面解析会暂停在浏览器原生确认框，在用户作出选择前不请求结构样式、皮肤或内容。选择完成后，选择门同步引入 `app-loader.js`，由该文件注入主应用结构样式、皮肤配置与字体配置，在首屏内容渲染前设置 `data-pn-skin`、`data-pn-font` 并请求唯一的当前皮肤入口。其余脚本使用经典 `defer`，顺序固定为：站点与素材配置、状态、核心、服务、基础组件、Loading 组件、页面服务、资源预加载服务、应用渲染、视图协调、事件控制、启动入口。
+
+启动入口等待皮肤样式与内容加载完成，在 `DocumentFragment` 中一次构建页面，再由视图协调器等待当前皮肤全部唯一字体和图片完成加载与解码；成功、失败或达到保护超时后统一揭示页面。首次加载另一皮肤和文件导入沿用相同流程。发布模式由 `startup.<hash>.js` 保留同步皮肤门和字体配置，由 `app.<hash>.js` 按相同依赖顺序提供其余逻辑；运行时只请求当前主题 bundle。新增依赖必须同时更新本节、`app-loader.js` 和 `scripts/build.mjs` 的脚本清单。
 
 ## 素材目录
 
@@ -260,7 +299,7 @@ prompt/
 
 1. 无 DOM、网络和存储依赖的确定性转换或计算放入 `js/core/`。
 2. 对浏览器外部能力的封装放入 `js/services/`。
-3. 可独立创建或控制的视觉单元放入 `js/components/` 和 `css/components/`。
+3. 可独立创建或控制的视觉单元放入 `js/components/`；主题无关结构放入 `css/components/`，皮肤外观放入对应 `css/themes/<skin>/`。
 4. 多个组件之间的排列放入 `css/layout/`。
 5. 业务状态、页面流程和跨层协调放入 `js/app/`。
 6. 站点、主题或素材路径配置放入 `js/config/`。
@@ -277,8 +316,9 @@ prompt/
 - 自有代码注释和自然语言 Markdown 使用简体中文。
 - 动态素材没有新增散落路径。
 - JavaScript 语法检查、资源路径检查、主页面和独立示例验证均通过。
+- `node scripts/build.mjs --check` 已确认发布产物与源码一致。
 
 ## 维护信息
 
-- 结构版本：`2.0.0`
-- 最后同步日期：`2026-08-25`
+- 结构版本：`2.1.0`
+- 最后同步日期：`2026-08-27`
