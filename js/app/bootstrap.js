@@ -17,7 +17,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (PromptNotebook.config.assets[group]) element.setAttribute(attribute, PromptNotebook.config.assets[group](name));
   });
   const topBarRoot = document.getElementById('app-top-bar-root');
-  if (topBarRoot) {
+  if (PromptNotebook.config.skin.get() === 'elegant') {
+    document.querySelector('.pn-classic-brand-area')?.remove();
+    document.querySelector('.pn-classic-skin-footer')?.remove();
+  } else {
+    topBarRoot?.remove();
+  }
+  if (topBarRoot && PromptNotebook.config.skin.get() === 'elegant') {
     topBarRoot.replaceChildren(PromptNotebook.components.createTopBar({
       title: '一键复制库',
       titleId: 'brand-subtitle',
@@ -28,8 +34,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       actions: [{
         id: 'skin-toggle-btn',
         label: '换肤',
-        title: '切换为优雅扁平皮肤',
-        ariaPressed: false,
+        title: '切换为经典拟物皮肤',
+        ariaPressed: true,
         dataset: { pnSkinToggle: '' }
       }]
     }));

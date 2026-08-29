@@ -4,33 +4,13 @@ window.PromptNotebook = window.PromptNotebook || {
 
 ;
 (() => {
-  const storageKey = 'prompt_notebook_skin';
-  const supportedSkins = new Set(['classic', 'elegant']);
+  const url = new URL(window.location.href);
+  const selectedSkin = url.searchParams.get('skin') === 'elegant' ? 'elegant' : 'classic';
 
-  function readStoredSkin() {
-    try {
-      const stored = localStorage.getItem(storageKey);
-      return supportedSkins.has(stored) ? stored : null;
-    } catch (_error) {
-      return null;
-    }
-  }
-
-  function saveSkin(skin) {
-    try {
-      localStorage.setItem(storageKey, skin);
-    } catch (_error) {
-      // 浏览器禁用本地存储时，本次选择仍会在当前页面内生效。
-    }
-  }
-
-  let selectedSkin = readStoredSkin();
-  if (!selectedSkin) {
-    const useElegantSkin = window.confirm(
-      '请选择网页皮肤：\n\n确定：优雅扁平皮肤\n取消：经典拟物皮肤'
-    );
-    selectedSkin = useElegantSkin ? 'elegant' : 'classic';
-    saveSkin(selectedSkin);
+  // 经典主题使用无 skin 参数的规范网址，避免产生两个等价入口。
+  if (selectedSkin === 'classic' && url.searchParams.has('skin')) {
+    url.searchParams.delete('skin');
+    window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
   }
 
   PromptNotebook.config.initialSkinChoice = selectedSkin;
@@ -38,9 +18,8 @@ window.PromptNotebook = window.PromptNotebook || {
 
 ;
 (() => {
-  const storageKey = 'prompt_notebook_skin';
   const supportedSkins = new Set(['classic', 'elegant']);
-  const stylesheetUrls = {"classic":"./css/classic.26d470e275c4.css","elegant":"./css/elegant.9a8783fa36d0.css"};
+  const stylesheetUrls = {"classic":"./css/classic.d752ba4f6e21.css","elegant":"./css/elegant.9a8783fa36d0.css"};
   const stylesheetPromises = new Map();
 
   function ensureSkinStylesheet(skin) {
@@ -65,47 +44,40 @@ window.PromptNotebook = window.PromptNotebook || {
     return promise;
   }
 
-  function readStoredSkin() {
-    try {
-      const stored = localStorage.getItem(storageKey);
-      return supportedSkins.has(stored) ? stored : 'classic';
-    } catch (_error) {
-      return 'classic';
-    }
-  }
-
-  function applySkin(skin, persist = false) {
+  function applySkin(skin) {
     const selected = supportedSkins.has(skin) ? skin : 'classic';
     document.documentElement.dataset.pnSkin = selected;
     if (document.body) {
       document.body.classList.toggle('pn-theme', selected === 'classic');
       document.body.classList.toggle('pn-theme-elegant', selected === 'elegant');
     }
-    if (persist) {
-      try {
-        localStorage.setItem(storageKey, selected);
-      } catch (_error) {
-        // 浏览器禁用本地存储时，皮肤仍在当前页面内生效。
-      }
-    }
     return selected;
   }
 
-  let currentSkin = applySkin(PromptNotebook.config.initialSkinChoice || readStoredSkin());
+  function getUrl(nextSkin) {
+    const selected = supportedSkins.has(nextSkin) ? nextSkin : 'classic';
+    const url = new URL(window.location.href);
+    if (selected === 'elegant') url.searchParams.set('skin', 'elegant');
+    else url.searchParams.delete('skin');
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  const currentSkin = applySkin(PromptNotebook.config.initialSkinChoice || 'classic');
   const ready = ensureSkinStylesheet(currentSkin);
   const skin = {
     get() {
       return currentSkin;
     },
-    async set(nextSkin) {
+    getUrl,
+    navigate(nextSkin) {
       const selected = supportedSkins.has(nextSkin) ? nextSkin : 'classic';
       if (selected === currentSkin) return currentSkin;
-      await ensureSkinStylesheet(selected);
-      currentSkin = applySkin(selected, true);
-      return currentSkin;
+      PromptNotebook.config.font?.followSkin(selected);
+      window.location.assign(getUrl(selected));
+      return selected;
     },
-    async toggle() {
-      return this.set(currentSkin === 'classic' ? 'elegant' : 'classic');
+    toggle() {
+      return this.navigate(currentSkin === 'classic' ? 'elegant' : 'classic');
     },
     ready() {
       return ready;
@@ -184,6 +156,6 @@ window.PromptNotebook = window.PromptNotebook || {
 ;
 document.write([
       '<link rel="icon" type="image/png" sizes="64x64" href="./assets/branding/favicon.png?v=1">',
-      '<link rel="stylesheet" href="./css/shell.7e3b3b35b620.css">',
-      '<script defer src="./js/app.40d658ada096.js"><\/script>'
+      '<link rel="stylesheet" href="./css/shell.732c60ec68b2.css">',
+      '<script defer src="./js/app.32a5d5823353.js"><\/script>'
     ].join('\n'));

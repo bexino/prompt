@@ -1,7 +1,6 @@
 @import url('../../foundations/fonts.css');
 @import url('../../foundations/tokens.css');
 @import url('../../foundations/reset.css');
-@import url('../../foundations/accessibility.css');
 @import url('../../layout/page.css');
 @import url('../../layout/workspace.css');
 @import url('../../layout/notes-grid.css');
@@ -10,12 +9,13 @@
 @import url('./components/table-of-contents.css');
 @import url('./components/markdown.css');
 @import url('./components/ribbon.css');
-@import url('./components/note-card.css?v=14');
-@import url('./components/copy-tab.css?v=2');
+@import url('./components/note-card.css?v=15');
+@import url('./components/copy-tab.css?v=3');
 @import url('./components/banner.css');
 @import url('./components/drag-overlay.css');
 @import url('./components/toast.css');
-@import url('./components/modal.css');
+@import url('./components/modal.css?v=2');
 @import url('./components/back-to-top.css');
 @import url('../../utilities/animations.css');
 @import url('../../utilities/states.css');
+@import url('../../foundations/accessibility.css?v=2');

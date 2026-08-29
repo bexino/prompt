@@ -41,38 +41,10 @@ function initPageEvents() {
   const skinToggles = [...document.querySelectorAll('[data-pn-skin-toggle]')];
   document.getElementById('local-import-btn')?.addEventListener('click', () => input?.click());
   document.getElementById('error-import-btn')?.addEventListener('click', () => input?.click());
-  const updateSkinToggle = () => {
-    const useElegantSkin = PromptNotebook.config.skin.get() === 'elegant';
-    skinToggles.forEach(skinToggle => {
-      skinToggle.setAttribute('aria-pressed', String(useElegantSkin));
-      skinToggle.title = useElegantSkin ? '切换为经典拟物皮肤' : '切换为优雅扁平皮肤';
-    });
-  };
-  const toggleSkin = async () => {
-    if (skinToggles.some(skinToggle => skinToggle.getAttribute('aria-busy') === 'true')) return;
-    skinToggles.forEach(skinToggle => skinToggle.setAttribute('aria-busy', 'true'));
-    PromptNotebook.components.showLoadingScreen('正在切换主题…');
-    try {
-      const selected = await PromptNotebook.config.skin.toggle();
-      PromptNotebook.config.font.followSkin(selected);
-      if (selected === 'classic') {
-        document.querySelectorAll('[data-pn-classic-asset][data-pn-asset]').forEach(element => {
-          const [group, name] = element.dataset.pnAsset.split(':');
-          const attribute = element.dataset.pnAssetAttribute || 'src';
-          if (PromptNotebook.config.assets[group]) element.setAttribute(attribute, PromptNotebook.config.assets[group](name));
-        });
-      }
-      await PromptNotebook.app.prepareAndReveal({ alreadyVisible: true });
-      updateSkinToggle();
-    } catch (error) {
-      PromptNotebook.components.showToast(error.message || '皮肤加载失败，请重试', 'error');
-    } finally {
-      PromptNotebook.components.hideLoadingScreen();
-      skinToggles.forEach(skinToggle => skinToggle.removeAttribute('aria-busy'));
-    }
-  };
-  skinToggles.forEach(skinToggle => skinToggle.addEventListener('click', toggleSkin));
-  updateSkinToggle();
+  skinToggles.forEach(skinToggle => skinToggle.addEventListener('click', () => {
+    skinToggle.setAttribute('aria-busy', 'true');
+    PromptNotebook.config.skin.toggle();
+  }));
   document.getElementById('local-mode-reset-btn')?.addEventListener('click', () => {
     PromptNotebook.services.storage.clear();
     window.location.reload();

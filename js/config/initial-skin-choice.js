@@ -1,33 +1,13 @@
 (() => {
-  const storageKey = 'prompt_notebook_skin';
-  const supportedSkins = new Set(['classic', 'elegant']);
+  const url = new URL(window.location.href);
+  const selectedSkin = url.searchParams.get('skin') === 'elegant' ? 'elegant' : 'classic';
 
-  function readStoredSkin() {
-    try {
-      const stored = localStorage.getItem(storageKey);
-      return supportedSkins.has(stored) ? stored : null;
-    } catch (_error) {
-      return null;
-    }
-  }
-
-  function saveSkin(skin) {
-    try {
-      localStorage.setItem(storageKey, skin);
-    } catch (_error) {
-      // 浏览器禁用本地存储时，本次选择仍会在当前页面内生效。
-    }
-  }
-
-  let selectedSkin = readStoredSkin();
-  if (!selectedSkin) {
-    const useElegantSkin = window.confirm(
-      '请选择网页皮肤：\n\n确定：优雅扁平皮肤\n取消：经典拟物皮肤'
-    );
-    selectedSkin = useElegantSkin ? 'elegant' : 'classic';
-    saveSkin(selectedSkin);
+  // 经典主题使用无 skin 参数的规范网址，避免产生两个等价入口。
+  if (selectedSkin === 'classic' && url.searchParams.has('skin')) {
+    url.searchParams.delete('skin');
+    window.history.replaceState(window.history.state, '', `${url.pathname}${url.search}${url.hash}`);
   }
 
   PromptNotebook.config.initialSkinChoice = selectedSkin;
-  document.write('<script src="./js/config/app-loader.js?v=6"><\/script>');
+  document.write('<script src="./js/config/app-loader.js?v=11"><\/script>');
 })();

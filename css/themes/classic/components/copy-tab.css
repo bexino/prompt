@@ -20,11 +20,7 @@
         linear-gradient(180deg, #f3e4b8 0%, #c8a65e 46%, #e1c77f 100%);
       background-blend-mode: soft-light, normal;
       box-shadow:
-        inset 0 1px rgba(255,255,255,0.58),
-        inset 0 -1px rgba(83,56,19,0.32),
-        -4px -3px 7px rgba(30,16,6,0.4),
-        0 2px 2px rgba(44,29,10,0.35),
-        4px 7px 9px rgba(32,19,6,0.36);
+        0 1px 2px rgba(44,29,10,0.28);
       font-family: inherit;
       font-size: 0.9rem !important;
       font-weight: 800;
@@ -33,12 +29,22 @@
       line-height: 1;
       cursor: pointer;
       text-shadow: 0 1px rgba(255,248,218,0.58), 0 -1px rgba(78,53,19,0.18);
+      filter: none;
+      transform: none;
+      transform-origin: left center;
+      transition: transform 180ms ease, filter 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
+    }
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-copy-tab {
+      box-shadow:
+        inset 0 1px rgba(255,255,255,0.58),
+        inset 0 -1px rgba(83,56,19,0.32),
+        -4px -3px 7px rgba(30,16,6,0.4),
+        0 2px 2px rgba(44,29,10,0.35),
+        4px 7px 9px rgba(32,19,6,0.36);
       filter: brightness(0.98);
       transform:
         translate(var(--note-tab-offset-x, 0px), var(--note-tab-offset-y, 0px))
         rotate(var(--note-tab-rotation, 0deg));
-      transform-origin: left center;
-      transition: transform 180ms ease, filter 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
     }
     .pn-theme .pn-note-card .pn-copy-tab::before {
       content: '';
@@ -53,13 +59,13 @@
     .pn-theme .pn-note-card.pn-note-variant-a .pn-copy-tab { --note-tab-bottom: 17%; }
     .pn-theme .pn-note-card.pn-note-variant-b .pn-copy-tab { --note-tab-bottom: 27%; }
     .pn-theme .pn-note-card.pn-note-variant-c .pn-copy-tab { --note-tab-bottom: 18%; }
-    .pn-theme .pn-note-card:hover .pn-copy-tab {
+    .pn-theme .pn-note-card.pn-note-detail-active:hover .pn-copy-tab {
       transform:
         translate(calc(var(--note-tab-offset-x, 0px) + 2px), var(--note-tab-offset-y, 0px))
         rotate(var(--note-tab-rotation, 0deg));
       filter: brightness(1.1);
     }
-    .pn-theme .pn-note-card:active .pn-copy-tab {
+    .pn-theme .pn-note-card.pn-note-detail-active:active .pn-copy-tab {
       transform:
         translate(calc(var(--note-tab-offset-x, 0px) + 1px), var(--note-tab-offset-y, 0px))
         rotate(var(--note-tab-rotation, 0deg));
@@ -70,15 +76,23 @@
       z-index: 5;
       pointer-events: none;
       user-select: none;
+      visibility: hidden;
+      opacity: 0;
+      filter: none;
+      transform: none;
+    }
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration {
+      visibility: visible;
+      opacity: 1;
       filter: drop-shadow(2px 4px 3px rgba(28,13,5,0.24));
     }
-    .pn-theme .pn-note-decoration-tape {
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration-tape {
       top: -7%;
       left: 50%;
       width: 48%;
       transform: translateX(-50%) rotate(-1.5deg);
     }
-    .pn-theme .pn-note-decoration-pin {
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration-pin {
       top: -4.5%;
       left: 50%;
       width: 16%;

@@ -60,65 +60,6 @@
       background: rgba(0, 0, 0, 0.2);
     }
 
-@media (max-width: 639px) {
-      .pn-copied-sticker { width: 100%; }
-      .pn-modal-header { padding-inline: 2.7rem; }
-      .pn-modal-body { margin: 0.7rem; padding: 1rem; }
-      .pn-back-to-top {
-        bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
-        width: 2.875rem;
-        height: 2.875rem;
-      }
-      .pn-back-to-top > span {
-        width: 0.82rem;
-        height: 0.82rem;
-        border-width: 3.5px 0 0 3.5px;
-      }
-    }
-
-    @media (max-width: 639px) {
-      body.pn-app { background-attachment: scroll; }
-      .pn-workspace { padding-top: 1.3rem !important; }
-      .pn-brand-plaque { width: 94%; margin-bottom: 0.95rem; padding: 0.9rem 2.5rem 1rem; }
-      .pn-brand-plaque-controls { margin-bottom: 1.1rem; }
-      .pn-brand-plaque { transform: rotate(var(--plaque-mobile-rotation)); }
-      .pn-brand-plaque::before { left: 0.75rem; }
-      .pn-brand-plaque::after { right: 0.75rem; }
-      .pn-catalog-panel { padding: 1.25rem !important; }
-      .pn-section-plaque { min-width: 72%; margin-top: 3.5rem !important; padding-inline: 2.25rem !important; transform: rotate(var(--plaque-mobile-rotation)); }
-      .pn-notes-grid { gap: 0.7rem 0.75rem !important; padding-inline: 0; }
-      .pn-notes-grid .pn-note-card:nth-child(odd) { z-index: 2; }
-      .pn-notes-grid .pn-note-card:nth-child(even) { z-index: 1; }
-      .pn-notes-grid .pn-note-card:hover { z-index: 20; }
-      .pn-note-card {
-        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-mobile-rotation));
-      }
-      .pn-note-card h3 { -webkit-line-clamp: 3; }
-      .pn-note-decoration-tape { width: 54%; }
-      .pn-note-decoration-pin { width: 18%; }
-      .pn-note-card .pn-copy-tab {
-        right: -0.2rem;
-        width: 3.6rem;
-        min-height: 1.7rem;
-        padding: 0.28rem 0.55rem 0.32rem 0.75rem;
-        font-size: 0.78rem !important;
-      }
-      .pn-note-card.pn-note-variant-a .pn-copy-tab { --note-tab-bottom: 18%; }
-      .pn-note-card.pn-note-variant-b .pn-copy-tab { --note-tab-bottom: 25%; }
-      .pn-note-card.pn-note-variant-c .pn-copy-tab { --note-tab-bottom: 20%; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-      }
-      .pn-note-card:hover {
-        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-rotation));
-      }
-    }
-
 html {
       scroll-behavior: smooth;
       background: var(--wood-dark);
@@ -262,11 +203,13 @@ html {
       object-fit: contain;
       filter: drop-shadow(0 2px 1px rgba(20, 2, 4, 0.7));
     }
-    .pn-theme .pn-brand-plaque-controls {
+    .pn-theme .pn-classic-skin-footer {
       display: flex;
       justify-content: center;
       gap: 0.7rem;
-      margin: 0 auto 1.65rem;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1rem 1.75rem;
     }
     .pn-theme .pn-brand-plaque-control {
       position: relative;
@@ -753,12 +696,12 @@ html {
     .pn-theme .pn-note-card {
       position: relative;
       background-color: white;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: background-color 0.3s ease, color 0.3s ease;
       border-width: 3px;
       border-style: solid;
     }
 
-    .pn-theme .pn-note-card:hover {
+    .pn-theme .pn-note-card.pn-note-detail-active:hover {
       transform: translateY(-3px);
     }
 
@@ -767,7 +710,7 @@ html {
       border-color: #ef4444;
       color: #dc2626;
     }
-    .pn-theme .pn-note-red:hover {
+    .pn-theme .pn-note-red.pn-note-detail-active:hover {
       background-color: rgba(254, 242, 242, 0.6);
       box-shadow: 0 12px 24px -6px rgba(239, 68, 68, 0.25);
     }
@@ -776,7 +719,7 @@ html {
       border-color: #f97316;
       color: #ea580c;
     }
-    .pn-theme .pn-note-orange:hover {
+    .pn-theme .pn-note-orange.pn-note-detail-active:hover {
       background-color: rgba(255, 247, 237, 0.6);
       box-shadow: 0 12px 24px -6px rgba(249, 115, 22, 0.25);
     }
@@ -785,7 +728,7 @@ html {
       border-color: #eab308;
       color: #ca8a04;
     }
-    .pn-theme .pn-note-yellow:hover {
+    .pn-theme .pn-note-yellow.pn-note-detail-active:hover {
       background-color: rgba(254, 252, 232, 0.6);
       box-shadow: 0 12px 24px -6px rgba(234, 179, 8, 0.25);
     }
@@ -794,7 +737,7 @@ html {
       border-color: #22c55e;
       color: #16a34a;
     }
-    .pn-theme .pn-note-green:hover {
+    .pn-theme .pn-note-green.pn-note-detail-active:hover {
       background-color: rgba(240, 253, 244, 0.6);
       box-shadow: 0 12px 24px -6px rgba(34, 197, 94, 0.25);
     }
@@ -803,7 +746,7 @@ html {
       border-color: #3b82f6;
       color: #2563eb;
     }
-    .pn-theme .pn-note-blue:hover {
+    .pn-theme .pn-note-blue.pn-note-detail-active:hover {
       background-color: rgba(239, 246, 255, 0.6);
       box-shadow: 0 12px 24px -6px rgba(59, 130, 246, 0.25);
     }
@@ -812,7 +755,7 @@ html {
       border-color: #a855f7;
       color: #9333ea;
     }
-    .pn-theme .pn-note-purple:hover {
+    .pn-theme .pn-note-purple.pn-note-detail-active:hover {
       background-color: rgba(250, 245, 255, 0.6);
       box-shadow: 0 12px 24px -6px rgba(168, 85, 247, 0.25);
     }
@@ -863,41 +806,45 @@ html {
       --note-contact-shadow-opacity: 0.74;
       --pn-note-variant-brightness: 0.96;
       --pn-note-variant-hover-brightness: 1;
+      --note-active-rotation: var(--note-rotation);
+      --note-fallback-paper: #f3e8c4;
+      --note-fallback-ink: #493a28;
       isolation: isolate;
       overflow: visible !important;
+      border: 1px solid rgba(83, 57, 28, 0.28) !important;
+      border-radius: 3px !important;
+      color: var(--note-fallback-ink) !important;
+      background: var(--note-fallback-paper) !important;
+      transform-origin: var(--note-origin-x) var(--note-origin-y);
+      transform: none;
+      box-shadow: 0 2px 5px rgba(42, 24, 10, 0.2) !important;
+      filter: none;
+      transition: transform 220ms cubic-bezier(.2,.85,.25,1), background-color 160ms ease, color 160ms ease !important;
+      padding: clamp(1.2rem, 2.7vw, 2.2rem) !important;
+    }
+    .pn-theme .pn-note-card.pn-note-detail-active {
+      transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-active-rotation));
+    }
+    .pn-theme .pn-note-card.pn-note-detail-active.pn-note-paper-ready {
       border: 0 !important;
       border-radius: 0 !important;
       color: var(--note-ink) !important;
       background: transparent !important;
-      transform-origin: var(--note-origin-x) var(--note-origin-y);
-      transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-rotation));
       box-shadow: none !important;
-      transition: transform 220ms cubic-bezier(.2,.85,.25,1), box-shadow 220ms ease, filter 220ms ease !important;
-      padding: clamp(1.2rem, 2.7vw, 2.2rem) !important;
     }
     .pn-theme .pn-note-card::before {
       display: none;
     }
-    .pn-theme .pn-note-card:hover {
-      z-index: 20;
-      will-change: transform, filter;
-      filter: saturate(1.05) brightness(1.03);
-      transform: translate(var(--note-x), calc(var(--note-y) - 6px)) rotate(0deg) scale(1.015);
-      box-shadow: none !important;
-    }
-    .pn-theme .pn-note-card:active {
+    .pn-theme .pn-note-card.pn-note-detail-active:active {
       transform: translate(var(--note-x), calc(var(--note-y) - 2px)) rotate(0deg) scale(0.985) !important;
     }
-    .pn-theme .pn-note-card:focus-within {
-      will-change: transform, filter;
-    }
 
-    .pn-theme .pn-note-red { --note-ink: #f8e6dc; }
-    .pn-theme .pn-note-orange { --note-ink: #fff0d2; }
-    .pn-theme .pn-note-yellow { --note-ink: #fff6d2; }
-    .pn-theme .pn-note-green { --note-ink: #edf5e2; }
-    .pn-theme .pn-note-blue { --note-ink: #edf5f6; }
-    .pn-theme .pn-note-purple { --note-ink: #f4ecfa; }
+    .pn-theme .pn-note-red { --note-ink: #f8e6dc; --note-fallback-paper: #f1d7cd; --note-fallback-ink: #682d28; }
+    .pn-theme .pn-note-orange { --note-ink: #fff0d2; --note-fallback-paper: #f3dfbe; --note-fallback-ink: #674224; }
+    .pn-theme .pn-note-yellow { --note-ink: #fff6d2; --note-fallback-paper: #f2e8bd; --note-fallback-ink: #5b4b25; }
+    .pn-theme .pn-note-green { --note-ink: #edf5e2; --note-fallback-paper: #dae6c6; --note-fallback-ink: #344d2b; }
+    .pn-theme .pn-note-blue { --note-ink: #edf5f6; --note-fallback-paper: #d5e2df; --note-fallback-ink: #294b50; }
+    .pn-theme .pn-note-purple { --note-ink: #f4ecfa; --note-fallback-paper: #e3d7e8; --note-fallback-ink: #50385c; }
 
     .pn-theme .pn-note-paper {
       position: absolute;
@@ -917,6 +864,12 @@ html {
       object-fit: contain;
       user-select: none;
       opacity: 0;
+      filter: none;
+      transition: opacity 160ms ease;
+    }
+
+    .pn-theme .pn-note-card.pn-note-detail-active.pn-note-paper-ready .pn-note-paper-base {
+      opacity: 1;
       filter:
         contrast(1.18)
         brightness(var(--pn-note-variant-brightness))
@@ -927,14 +880,9 @@ html {
           var(--note-shadow-blur)
           rgba(0, 0, 0, var(--note-shadow-opacity))
         );
-      transition: filter 220ms ease, opacity 160ms ease;
     }
 
-    .pn-theme .pn-note-card.pn-note-paper-ready .pn-note-paper-base {
-      opacity: 1;
-    }
-
-    .pn-theme .pn-note-card:hover .pn-note-paper-base {
+    .pn-theme .pn-note-card.pn-note-detail-active:hover .pn-note-paper-base {
       filter:
         contrast(1.2)
         brightness(var(--pn-note-variant-hover-brightness))
@@ -951,6 +899,10 @@ html {
       position: relative;
       z-index: 3;
       overflow: hidden;
+      text-shadow: none;
+    }
+
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-content {
       text-shadow: 0 1px 1px rgba(28, 13, 9, 0.58);
     }
 
@@ -959,19 +911,36 @@ html {
       z-index: 5;
       pointer-events: none;
       user-select: none;
+      visibility: hidden;
+      opacity: 0;
+      filter: none;
+      transform: none;
+    }
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration {
+      visibility: visible;
+      opacity: 1;
       filter: drop-shadow(2px 4px 3px rgba(28,13,5,0.24));
     }
-    .pn-theme .pn-note-decoration-tape {
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration-tape {
       top: -7%;
       left: 50%;
       width: 48%;
       transform: translateX(-50%) rotate(-1.5deg);
     }
-    .pn-theme .pn-note-decoration-pin {
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration-pin {
       top: -4.5%;
       left: 50%;
       width: 16%;
       transform: translateX(-50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .pn-theme .pn-note-card.pn-note-detail-active:hover {
+        z-index: 20;
+        filter: saturate(1.05) brightness(1.03);
+        transform: translate(var(--note-x), calc(var(--note-y) - 6px)) rotate(0deg) scale(1.015);
+        box-shadow: none !important;
+      }
     }
 
 .pn-theme .pn-note-card .pn-copy-tab {
@@ -996,11 +965,7 @@ html {
         linear-gradient(180deg, #f3e4b8 0%, #c8a65e 46%, #e1c77f 100%);
       background-blend-mode: soft-light, normal;
       box-shadow:
-        inset 0 1px rgba(255,255,255,0.58),
-        inset 0 -1px rgba(83,56,19,0.32),
-        -4px -3px 7px rgba(30,16,6,0.4),
-        0 2px 2px rgba(44,29,10,0.35),
-        4px 7px 9px rgba(32,19,6,0.36);
+        0 1px 2px rgba(44,29,10,0.28);
       font-family: inherit;
       font-size: 0.9rem !important;
       font-weight: 800;
@@ -1009,12 +974,22 @@ html {
       line-height: 1;
       cursor: pointer;
       text-shadow: 0 1px rgba(255,248,218,0.58), 0 -1px rgba(78,53,19,0.18);
+      filter: none;
+      transform: none;
+      transform-origin: left center;
+      transition: transform 180ms ease, filter 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
+    }
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-copy-tab {
+      box-shadow:
+        inset 0 1px rgba(255,255,255,0.58),
+        inset 0 -1px rgba(83,56,19,0.32),
+        -4px -3px 7px rgba(30,16,6,0.4),
+        0 2px 2px rgba(44,29,10,0.35),
+        4px 7px 9px rgba(32,19,6,0.36);
       filter: brightness(0.98);
       transform:
         translate(var(--note-tab-offset-x, 0px), var(--note-tab-offset-y, 0px))
         rotate(var(--note-tab-rotation, 0deg));
-      transform-origin: left center;
-      transition: transform 180ms ease, filter 180ms ease, opacity 180ms ease, box-shadow 180ms ease;
     }
     .pn-theme .pn-note-card .pn-copy-tab::before {
       content: '';
@@ -1029,13 +1004,13 @@ html {
     .pn-theme .pn-note-card.pn-note-variant-a .pn-copy-tab { --note-tab-bottom: 17%; }
     .pn-theme .pn-note-card.pn-note-variant-b .pn-copy-tab { --note-tab-bottom: 27%; }
     .pn-theme .pn-note-card.pn-note-variant-c .pn-copy-tab { --note-tab-bottom: 18%; }
-    .pn-theme .pn-note-card:hover .pn-copy-tab {
+    .pn-theme .pn-note-card.pn-note-detail-active:hover .pn-copy-tab {
       transform:
         translate(calc(var(--note-tab-offset-x, 0px) + 2px), var(--note-tab-offset-y, 0px))
         rotate(var(--note-tab-rotation, 0deg));
       filter: brightness(1.1);
     }
-    .pn-theme .pn-note-card:active .pn-copy-tab {
+    .pn-theme .pn-note-card.pn-note-detail-active:active .pn-copy-tab {
       transform:
         translate(calc(var(--note-tab-offset-x, 0px) + 1px), var(--note-tab-offset-y, 0px))
         rotate(var(--note-tab-rotation, 0deg));
@@ -1046,15 +1021,23 @@ html {
       z-index: 5;
       pointer-events: none;
       user-select: none;
+      visibility: hidden;
+      opacity: 0;
+      filter: none;
+      transform: none;
+    }
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration {
+      visibility: visible;
+      opacity: 1;
       filter: drop-shadow(2px 4px 3px rgba(28,13,5,0.24));
     }
-    .pn-theme .pn-note-decoration-tape {
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration-tape {
       top: -7%;
       left: 50%;
       width: 48%;
       transform: translateX(-50%) rotate(-1.5deg);
     }
-    .pn-theme .pn-note-decoration-pin {
+    .pn-theme .pn-note-card.pn-note-detail-active .pn-note-decoration-pin {
       top: -4.5%;
       left: 50%;
       width: 16%;
@@ -1200,6 +1183,8 @@ html {
     }
     .pn-theme .pn-modal-frame {
       position: relative;
+      display: flex;
+      flex-direction: column;
       width: min(92vw, 58rem);
       max-height: min(86vh, 52rem);
       overflow: hidden;
@@ -1226,16 +1211,24 @@ html {
     .pn-theme .pn-modal-frame::before { left: 1.25rem; }
     .pn-theme .pn-modal-frame::after { right: 1.25rem; }
     .pn-theme .pn-modal-header {
-      padding: 1rem 3.25rem;
+      box-sizing: border-box;
+      flex: 0 0 4rem;
+      min-height: 4rem;
+      padding: 0.65rem 3.25rem;
       border-bottom: 1px solid #11251c;
       background: linear-gradient(110deg, #1d503d, #12382a 58%, #0b281d);
       box-shadow: inset 0 1px rgba(214,239,217,0.1), inset 0 -4px 8px rgba(0,0,0,0.35);
       text-shadow: 0 2px 2px #06120d;
     }
+    .pn-theme .pn-modal-header h2 {
+      margin: 0;
+      line-height: 1.25;
+    }
     .pn-theme .pn-modal-body {
+      flex: 1 1 auto;
+      min-height: 0;
       margin: 1rem;
       padding: 1.35rem 1.5rem;
-      max-height: calc(min(86vh, 52rem) - 9.5rem);
       overflow: auto;
       border: 1px solid #5a3b24;
       border-radius: 10px;
@@ -1270,6 +1263,7 @@ html {
     .pn-theme .pn-modal-body .pn-markdown-quote { color: #f4e2bc !important; }
     .pn-theme .pn-modal-footer {
       display: flex;
+      flex: 0 0 auto;
       justify-content: flex-end;
       padding: 0 1rem 1rem;
     }
@@ -1398,4 +1392,64 @@ html {
 .pn-theme .line-clamp-5 { display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
 .pn-theme .line-clamp-4 { -webkit-line-clamp: 4; }
 .pn-theme .line-clamp-5 { -webkit-line-clamp: 5; }
+
+@media (max-width: 639px) {
+      .pn-copied-sticker { width: 100%; }
+      .pn-modal-header { padding-inline: 2.7rem; }
+      .pn-modal-body { margin: 0.7rem; padding: 1rem; }
+      .pn-back-to-top {
+        bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+        width: 2.875rem;
+        height: 2.875rem;
+      }
+      .pn-back-to-top > span {
+        width: 0.82rem;
+        height: 0.82rem;
+        border-width: 3.5px 0 0 3.5px;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .pn-theme.pn-app { background-attachment: scroll; }
+      .pn-theme.pn-app::before { display: none; }
+      .pn-workspace { padding-top: 1.3rem !important; }
+      .pn-brand-plaque { width: 94%; margin-bottom: 0.95rem; padding: 0.9rem 2.5rem 1rem; }
+      .pn-brand-plaque-controls { margin-bottom: 1.1rem; }
+      .pn-brand-plaque { transform: rotate(var(--plaque-mobile-rotation)); }
+      .pn-brand-plaque::before { left: 0.75rem; }
+      .pn-brand-plaque::after { right: 0.75rem; }
+      .pn-catalog-panel { padding: 1.25rem !important; }
+      .pn-section-plaque { min-width: 72%; margin-top: 3.5rem !important; padding-inline: 2.25rem !important; transform: rotate(var(--plaque-mobile-rotation)); }
+      .pn-notes-grid { gap: 0.7rem 0.75rem !important; padding-inline: 0; }
+      .pn-notes-grid .pn-note-card:nth-child(odd) { z-index: 2; }
+      .pn-notes-grid .pn-note-card:nth-child(even) { z-index: 1; }
+      .pn-notes-grid .pn-note-card.pn-note-detail-active:hover { z-index: 20; }
+      .pn-theme .pn-note-card {
+        --note-active-rotation: var(--note-mobile-rotation);
+      }
+      .pn-note-card h3 { -webkit-line-clamp: 3; }
+      .pn-note-decoration-tape { width: 54%; }
+      .pn-note-decoration-pin { width: 18%; }
+      .pn-note-card .pn-copy-tab {
+        right: -0.2rem;
+        width: 3.6rem;
+        min-height: 1.7rem;
+        padding: 0.28rem 0.55rem 0.32rem 0.75rem;
+        font-size: 0.78rem !important;
+      }
+      .pn-note-card.pn-note-variant-a .pn-copy-tab { --note-tab-bottom: 18%; }
+      .pn-note-card.pn-note-variant-b .pn-copy-tab { --note-tab-bottom: 25%; }
+      .pn-note-card.pn-note-variant-c .pn-copy-tab { --note-tab-bottom: 20%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+      .pn-theme .pn-note-card.pn-note-detail-active:hover {
+        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-active-rotation));
+      }
+    }
 

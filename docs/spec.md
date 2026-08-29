@@ -122,6 +122,7 @@ prompt/
 ├─ docs/
 │  ├─ spec.md
 │  ├─ component-api.md
+│  ├─ HANDOFF.md
 │  ├─ fam.md
 │  └─ legacy.md
 └─ assets/
@@ -143,12 +144,14 @@ prompt/
 | `README.md` | 面向使用者介绍项目、内容格式和部署方式 |
 | `LICENSE` | 保存第三方可识别的授权原文，不进行翻译 |
 
+`docs/HANDOFF.md` 保存当前开发任务、已完成工作、阻塞状态、下一步计划和禁止重复的历史踩坑，供无上下文的新会话接续；每次重大任务交接时按实际工作区状态更新。
+
 ## 构建与发布职责
 
 - `scripts/build.mjs`：零依赖发布脚本，递归展开主题 CSS、重写素材路径、按规范顺序合并应用脚本、生成内容哈希文件和版本化 Service Worker。
 - `node scripts/build.mjs`：重新生成完整 `dist/`；该目录是可直接部署的静态站点产物，不得手工修改。
 - `node scripts/build.mjs --check`：只读校验当前 `dist/` 是否与源码构建结果完全一致。
-- `dist/sw.js`：预缓存发布外壳，对哈希资源和图片使用缓存优先策略，对页面导航与 Markdown 内容使用网络优先、缓存降级策略；`file://` 环境不注册。
+- `dist/sw.js`：预缓存不含主题包的发布外壳；当前网址选中的主题包及图片首次请求后使用缓存优先策略，另一主题不会因 Service Worker 安装而预取；页面导航与 Markdown 内容使用网络优先、缓存降级策略；`file://` 环境不注册。
 
 ## CSS 职责
 
@@ -170,7 +173,7 @@ prompt/
 - `fonts.css`：声明本地 `Gelasio`、思源宋体和 `Geist`，并提供皮肤无关的衬线与 `Geist + 系统中文` 两档字体契约。
 - `tokens.css`：定义经典皮肤使用的颜色、字体和阴影变量；优雅皮肤变量由自身入口定义。
 - `reset.css`：提供最小基础重置和滚动条基础样式。
-- `accessibility.css`：集中响应式覆盖、低带宽模式和减少动画偏好。
+- `accessibility.css`：集中经典主题的响应式覆盖、低带宽模式和减少动画偏好；在经典入口末尾加载，以保证移动端滚动背景和固定阴影降级能够覆盖基础页面样式。
 
 ### 布局层
 
@@ -202,9 +205,9 @@ prompt/
 
 - `namespace.js`：创建唯一全局对象 `window.PromptNotebook`。
 - `app-config.js`：解析内容源和站点参数。
-- `initial-skin-choice.js`：在任何应用样式与内容加载前恢复已保存的皮肤；首次访问时使用浏览器原生确认框让用户选择经典拟物或优雅扁平皮肤并立即保存结果，选择完成后才引入应用资源加载器。
-- `app-loader.js`：维护主应用样式与脚本的唯一加载清单和固定顺序，只能由首屏皮肤选择门在文档解析阶段引入。
-- `skin-config.js`：消费首屏皮肤选择，只加载当前皮肤入口，并在用户首次切换时按需加载另一皮肤；公开皮肤读取、异步设置、异步切换、就绪等待和宿主同步能力。
+- `initial-skin-choice.js`：在任何应用样式与内容加载前读取网址参数；仅 `skin=elegant` 进入优雅扁平主题，无 `skin` 参数默认进入经典拟物主题，经典主题不使用本地存储或选择弹窗，并在确定主题后引入应用资源加载器。
+- `app-loader.js`：维护主应用样式与脚本的唯一加载清单和固定顺序，只能由首屏网址主题门在文档解析阶段引入。
+- `skin-config.js`：消费首屏网址主题，只加载当前主题入口；公开当前主题读取、目标网址生成、整页导航切换、就绪等待和宿主同步能力。主题切换必须保留 `site` 等无关参数，进入经典主题时删除 `skin`，进入优雅主题时设置 `skin=elegant`，不得在当前文档中加载另一套主题。
 - `font-config.js`：在首屏样式加载前恢复人工字体偏好；没有偏好时按经典衬线、典雅 `Geist` 选择默认字体，并公开字体读取、设置、切换和皮肤跟随能力。
 - `asset-manifest.js`：维护全局及组件级动态素材根路径和路径生成函数。
 
@@ -224,8 +227,8 @@ prompt/
 - `local-storage.js`：封装导入内容的读取、写入和清理。
 - `file-import.js`：封装拖放监听和文件文本读取，通过回调向应用层返回结果。
 - `clipboard.js`：封装剪贴板写入和兼容降级；当前还负责触发现有复制反馈，后续调整需保持服务不读取应用状态。
-- `lazy-assets.js`：持有懒加载观察器，根据 `data-src` 延迟加载图片和背景素材，公开 `initLazyAssets(container)`。
-- `view-assets.js`：在主应用统一揭示页面前，收集当前皮肤的唯一字体和图片资源，执行加载与解码、进度汇报、单资源超时和全局超时降级；不改变公开懒加载接口。
+- `lazy-assets.js`：持有素材与便签详情观察器，根据 `data-src` 只加载视口邻近区域的图片和背景素材，并动态增删经典主题内部状态类 `pn-note-detail-active`；图片离开区域后保留缓存，但昂贵的纹理滤镜、旋转、装饰和完整阴影停止绘制；公开 `initLazyAssets(container)`。
+- `view-assets.js`：保留统一揭示流程使用的兼容就绪边界，只更新 Loading 无障碍消息并立即完成；字体依靠 `font-display: swap`，纸张与装饰图片完全交由 `lazy-assets.js` 渐进加载，不得提前消费 `data-src`。
 
 服务层可以使用浏览器能力，但不得决定页面布局或内容源业务流程。
 
@@ -242,7 +245,7 @@ prompt/
 - `toast.js`：创建和移除消息提示。
 - `drag-overlay.js`：提供拖放遮罩元素访问接口。
 - `back-to-top.js`：控制返回顶部按钮可见性和滚动行为。
-- `loading-screen.js`：控制全屏 Loading 的显示、真实进度和统一揭示，不读取应用状态或内容源。
+- `loading-screen.js`：控制只显示加载圆圈的全屏 Loading、无障碍状态播报和统一揭示，不读取应用状态或内容源。
 
 可复用组件不得读取应用状态、内容源或本地存储；业务结果通过配置和回调传递。
 
@@ -250,17 +253,17 @@ prompt/
 
 - `state.js`：只保存当前 Markdown 和解析结果。
 - `explorer-renderer.js`：把领域数据组合为目录、标题、正文和便签列表。
-- `event-controller.js`：绑定页面按钮、皮肤切换、文件选择、拖放和页面级事件，协调服务与组件。
-- `view-coordinator.js`：协调内容渲染、当前皮肤资源预加载、剩余资源懒加载和 Loading 揭示；用于首屏、首次换肤和文件导入。
+- `event-controller.js`：绑定页面按钮、网址主题导航、文件选择、拖放和页面级事件，协调服务与组件。
+- `view-coordinator.js`：协调内容渲染、懒加载观察器注册和 Loading 揭示；页面结构生成后立即注册素材与详情观察器，不等待字体、纸张或装饰图片，用于首屏和文件导入。
 - `bootstrap.js`：唯一启动入口，识别低带宽环境、初始化动态素材与组件、加载内容、执行缓存降级并触发首次渲染。
 
 应用层可以依赖其前面的所有层级，其他层不得反向依赖应用层。
 
 ### 加载顺序
 
-源码模式下，`index.html` 先同步加载命名空间与首次皮肤选择门；没有保存值时，页面解析会暂停在浏览器原生确认框，在用户作出选择前不请求结构样式、皮肤或内容。选择完成后，选择门同步引入 `app-loader.js`，由该文件注入主应用结构样式、皮肤配置与字体配置，在首屏内容渲染前设置 `data-pn-skin`、`data-pn-font` 并请求唯一的当前皮肤入口。其余脚本使用经典 `defer`，顺序固定为：站点与素材配置、状态、核心、服务、基础组件、Loading 组件、页面服务、资源预加载服务、应用渲染、视图协调、事件控制、启动入口。
+源码模式下，`index.html` 先同步加载命名空间与网址主题门。网址仅在 `skin=elegant` 时选择优雅扁平主题，无 `skin` 参数或其他值均选择经典拟物主题；经典主题入口会移除无效或冗余的 `skin` 参数。主题门同步引入 `app-loader.js`，由该文件注入主应用结构样式、皮肤配置与字体配置，在首屏内容渲染前设置 `data-pn-skin`、`data-pn-font` 并只请求当前主题入口。其余脚本使用经典 `defer`，顺序固定为：站点与素材配置、状态、核心、服务、基础组件、Loading 组件、页面服务、资源预加载服务、应用渲染、视图协调、事件控制、启动入口。
 
-启动入口等待皮肤样式与内容加载完成，在 `DocumentFragment` 中一次构建页面，再由视图协调器等待当前皮肤全部唯一字体和图片完成加载与解码；成功、失败或达到保护超时后统一揭示页面。首次加载另一皮肤和文件导入沿用相同流程。发布模式由 `startup.<hash>.js` 保留同步皮肤门和字体配置，由 `app.<hash>.js` 按相同依赖顺序提供其余逻辑；运行时只请求当前主题 bundle。新增依赖必须同时更新本节、`app-loader.js` 和 `scripts/build.mjs` 的脚本清单。
+启动入口等待当前主题样式与 Markdown 内容完成，在 `DocumentFragment` 中一次构建页面；视图协调器随即注册渐进式素材与详情观察器并统一揭示页面，不等待字体、纸张图片或装饰素材。经典便签在素材到达前使用轻量纯色纸张与可读文字，只有视口及邻近区域保留 `pn-note-detail-active` 并绘制完整纹理、旋转、装饰与阴影；离开邻近区域后移除详情状态，但已加载图片继续由浏览器缓存。移动端经典页面强制使用滚动背景并关闭全屏固定阴影层。主题按钮通过网址整页导航，经典主题按钮位于主内容之后的页面底部，优雅主题按钮位于其专用顶栏。文件导入沿用相同资源协调流程。发布模式由 `startup.<hash>.js` 保留同步网址主题门和字体配置，由 `app.<hash>.js` 按相同依赖顺序提供其余逻辑；运行时只请求当前主题 bundle。新增依赖必须同时更新本节、`app-loader.js` 和 `scripts/build.mjs` 的脚本清单。
 
 ## 素材目录
 
@@ -285,8 +288,9 @@ prompt/
 - `PromptNotebook.config.assets.at(path)`
 - `PromptNotebook.config.assets.note(variant, color)`
 - `PromptNotebook.config.skin.get()`
-- `PromptNotebook.config.skin.set(name)`，返回皮肤样式加载完成后的 `Promise<string>`
-- `PromptNotebook.config.skin.toggle()`，返回皮肤样式加载完成后的 `Promise<string>`
+- `PromptNotebook.config.skin.getUrl(name)`
+- `PromptNotebook.config.skin.navigate(name)`
+- `PromptNotebook.config.skin.toggle()`
 - `PromptNotebook.config.skin.ready()`
 - `PromptNotebook.config.font.get()`
 - `PromptNotebook.config.font.set(name)`
@@ -320,5 +324,5 @@ prompt/
 
 ## 维护信息
 
-- 结构版本：`2.1.0`
-- 最后同步日期：`2026-08-27`
+- 结构版本：`2.3.0`
+- 最后同步日期：`2026-08-29`

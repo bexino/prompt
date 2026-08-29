@@ -1,12 +1,10 @@
-const CACHE_NAME = 'prompt-notebook-15a4ee3b40d7';
+const CACHE_NAME = 'prompt-notebook-f5be63839504';
 const PRECACHE = [
   "./",
   "./index.html",
-  "./js/startup.442d36605a06.js",
-  "./js/app.40d658ada096.js",
-  "./css/shell.7e3b3b35b620.css",
-  "./css/classic.26d470e275c4.css",
-  "./css/elegant.9a8783fa36d0.css"
+  "./js/startup.9b83580fa962.js",
+  "./js/app.32a5d5823353.js",
+  "./css/shell.732c60ec68b2.css"
 ];
 
 self.addEventListener('install', event => {

@@ -4,17 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>一键复制库</title>
-  <script src="./js/startup.442d36605a06.js"></script>
+  <script src="./js/startup.9b83580fa962.js"></script>
 </head>
 <body class="pn-theme pn-app pn-loading min-h-screen flex flex-col font-sans pb-16" aria-busy="true">
 
-  <div id="pn-loading-screen" class="pn-loading-screen" role="status" aria-live="polite" aria-atomic="true">
+  <div id="pn-loading-screen" class="pn-loading-screen" role="status" aria-label="正在准备页面…" aria-live="polite" aria-atomic="true">
     <div class="pn-loading-panel">
       <span class="pn-loading-spinner" aria-hidden="true"></span>
-      <p id="pn-loading-status">正在准备页面…</p>
-      <div class="pn-loading-track" aria-hidden="true">
-        <span id="pn-loading-progress"></span>
-      </div>
     </div>
   </div>
 
@@ -40,10 +36,6 @@
           alt="PROMPT SYSTEMS — Electronic Research, established 1978">
         <h1 id="classic-brand-subtitle"></h1>
       </header>
-      <div class="pn-brand-plaque-controls" aria-label="页面显示设置">
-        <button class="pn-brand-plaque-control" type="button" data-pn-skin-toggle
-          aria-pressed="false" title="切换为优雅扁平皮肤">换肤</button>
-      </div>
     </div>
     <div class="flex flex-col gap-6 w-full">
 
@@ -97,7 +89,10 @@
     </div>
   </main>
 
-
+  <footer class="pn-classic-skin-footer" aria-label="页面显示设置">
+    <button class="pn-brand-plaque-control" type="button" data-pn-skin-toggle
+      aria-pressed="false" title="切换为优雅扁平皮肤">换肤</button>
+  </footer>
 
   <!-- 已复制 Markdown 详情弹窗 -->
   <div id="copy-detail-modal" class="hidden fixed inset-0 z-[70] items-center justify-center p-4" role="dialog"

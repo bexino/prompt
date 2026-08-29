@@ -10,8 +10,8 @@
     }
 
     try {
-      const result = await PromptNotebook.services.preloadViewAssets(root, PromptNotebook.config.skin.get());
       PromptNotebook.services.initLazyAssets(root);
+      const result = await PromptNotebook.services.preloadViewAssets(root, PromptNotebook.config.skin.get());
       if (result.failures.length || result.timedOut) {
         console.warn('部分页面资源未能在限定时间内完成，已使用降级显示。', result);
       }

@@ -546,9 +546,11 @@ PromptNotebook.services.loadContent = async function loadContent(site) {
 ;
 /* js/services/lazy-assets.js */
 let lazyAssetObserver = null;
+let noteDetailObserver = null;
 
 function initLazyAssets(scope) {
       if (lazyAssetObserver) lazyAssetObserver.disconnect();
+      if (noteDetailObserver) noteDetailObserver.disconnect();
 
       applyStableRibbonRotations(scope);
 
@@ -556,6 +558,7 @@ function initLazyAssets(scope) {
         ...scope.querySelectorAll('.pn-lazy-asset[data-src]'),
         ...scope.querySelectorAll('.pn-ribbon:not(.pn-lazy-bg-loaded)')
       ];
+      const noteCards = [...scope.querySelectorAll('.pn-note-card')];
 
       const loadTarget = target => {
         if (target.classList.contains('pn-ribbon')) {
@@ -582,8 +585,12 @@ function initLazyAssets(scope) {
 
       if (!('IntersectionObserver' in window)) {
         targets.forEach(loadTarget);
+        noteCards.forEach(card => card.classList.add('pn-note-detail-active'));
         return;
       }
+
+      const isLowBandwidth = document.documentElement.classList.contains('low-bandwidth');
+      const isCompactViewport = window.matchMedia('(max-width: 639px)').matches;
 
       lazyAssetObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
@@ -592,11 +599,22 @@ function initLazyAssets(scope) {
           lazyAssetObserver.unobserve(entry.target);
         });
       }, {
-        rootMargin: document.documentElement.classList.contains('low-bandwidth') ? '160px 0px' : '320px 0px',
+        rootMargin: isLowBandwidth ? '120px 0px' : (isCompactViewport ? '180px 0px' : '320px 0px'),
         threshold: 0.01
       });
 
       targets.forEach(target => lazyAssetObserver.observe(target));
+
+      noteDetailObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          entry.target.classList.toggle('pn-note-detail-active', entry.isIntersecting);
+        });
+      }, {
+        rootMargin: isLowBandwidth ? '64px 0px' : (isCompactViewport ? '120px 0px' : '240px 0px'),
+        threshold: 0.01
+      });
+
+      noteCards.forEach(card => noteDetailObserver.observe(card));
     }
 
     // 同步显示即时反馈，并在后台执行剪贴板写入
@@ -990,9 +1008,7 @@ PromptNotebook.components.getDragOverlay = function getDragOverlay() { return do
 (() => {
   function getElements() {
     return {
-      screen: document.getElementById('pn-loading-screen'),
-      status: document.getElementById('pn-loading-status'),
-      progress: document.getElementById('pn-loading-progress')
+      screen: document.getElementById('pn-loading-screen')
     };
   }
 
@@ -1001,17 +1017,12 @@ PromptNotebook.components.getDragOverlay = function getDragOverlay() { return do
     document.body.classList.add('pn-loading');
     document.body.setAttribute('aria-busy', 'true');
     if (elements.screen) elements.screen.hidden = false;
-    if (elements.status) elements.status.textContent = message;
-    if (elements.progress) elements.progress.style.width = '0%';
+    if (elements.screen) elements.screen.setAttribute('aria-label', message);
   }
 
-  function updateLoadingScreen({ message, completed = 0, total = 0 } = {}) {
+  function updateLoadingScreen({ message } = {}) {
     const elements = getElements();
-    if (message && elements.status) elements.status.textContent = message;
-    if (elements.progress) {
-      const percentage = total > 0 ? Math.min(100, Math.round((completed / total) * 100)) : 0;
-      elements.progress.style.width = `${percentage}%`;
-    }
+    if (message && elements.screen) elements.screen.setAttribute('aria-label', message);
   }
 
   function hideLoadingScreen() {
@@ -1124,123 +1135,9 @@ PromptNotebook.services.copyPromptCard = copyPromptCard;
 ;
 /* js/services/view-assets.js */
 (() => {
-  const resourceTimeout = 15000;
-  const viewTimeout = 30000;
-
-  function withTimeout(promise, timeout, message) {
-    return new Promise((resolve, reject) => {
-      const timer = window.setTimeout(() => reject(new Error(message)), timeout);
-      promise.then(
-        value => { window.clearTimeout(timer); resolve(value); },
-        error => { window.clearTimeout(timer); reject(error); }
-      );
-    });
-  }
-
-  async function decodeImage(url, targets) {
-    const probe = new Image();
-    probe.decoding = 'async';
-    const loaded = new Promise((resolve, reject) => {
-      probe.addEventListener('load', resolve, { once: true });
-      probe.addEventListener('error', () => reject(new Error(`图片加载失败：${url}`)), { once: true });
-    });
-    probe.src = url;
-    await withTimeout(
-      probe.complete && probe.naturalWidth > 0 ? Promise.resolve() : loaded,
-      resourceTimeout,
-      `图片加载超时：${url}`
-    );
-    if (typeof probe.decode === 'function') {
-      await Promise.race([
-        probe.decode().catch(() => {}),
-        new Promise(resolve => window.setTimeout(resolve, 3000))
-      ]);
-    }
-
-    await Promise.all(targets.map(async target => {
-      const targetLoaded = new Promise((resolve, reject) => {
-        target.addEventListener('load', resolve, { once: true });
-        target.addEventListener('error', reject, { once: true });
-      });
-      target.src = url;
-      target.removeAttribute('data-src');
-      if (!(target.complete && target.naturalWidth > 0)) {
-        await withTimeout(targetLoaded, resourceTimeout, `卡片图片加载超时：${url}`);
-      }
-      if (typeof target.decode === 'function') {
-        await Promise.race([
-          target.decode().catch(() => {}),
-          new Promise(resolve => window.setTimeout(resolve, 3000))
-        ]);
-      }
-      if (target.classList.contains('pn-note-paper-base')) {
-        target.closest('.pn-note-card')?.classList.add('pn-note-paper-ready');
-      }
-    }));
-  }
-
-  function collectImageResources(scope, skinName) {
-    const resources = new Map();
-    const add = (url, target = null) => {
-      if (!url) return;
-      if (!resources.has(url)) resources.set(url, []);
-      if (target) resources.get(url).push(target);
-    };
-
-    PromptNotebook.config.assets.view(skinName).forEach(url => add(url));
-    if (skinName === 'classic') {
-      scope.querySelectorAll('img[data-src]').forEach(target => add(target.dataset.src, target));
-      document.querySelectorAll('img[data-pn-classic-asset][src]').forEach(target => add(target.getAttribute('src')));
-    }
-    return resources;
-  }
-
-  function getFontTasks(skinName) {
-    if (!document.fonts?.load) return [];
-    const fonts = skinName === 'classic'
-      ? [
-          ['400 16px "Gelasio Local"', 'Prompt Systems'],
-          ['400 16px "Prompt Source Han Serif SC"', '正在加载经典主题']
-        ]
-      : [['400 16px "Geist Local"', 'Prompt Systems']];
-    return fonts.map(([font, sample]) => async () => {
-      const loaded = await withTimeout(document.fonts.load(font, sample), resourceTimeout, `字体加载超时：${font}`);
-      if (!loaded.length) throw new Error(`字体加载失败：${font}`);
-    });
-  }
-
-  async function preloadViewAssets(scope, skinName) {
-    const label = skinName === 'classic' ? '经典主题' : '典雅主题';
-    const imageResources = collectImageResources(scope, skinName);
-    const tasks = [
-      ...[...imageResources.entries()].map(([url, targets]) => () => decodeImage(url, targets)),
-      ...getFontTasks(skinName)
-    ];
-    let completed = 0;
-    const failures = [];
-    PromptNotebook.components.updateLoadingScreen({ message: `正在加载${label} 0/${tasks.length}`, completed, total: tasks.length });
-
-    const work = Promise.all(tasks.map(async task => {
-      try {
-        await task();
-      } catch (error) {
-        failures.push(error);
-      } finally {
-        completed += 1;
-        PromptNotebook.components.updateLoadingScreen({
-          message: `正在加载${label} ${completed}/${tasks.length}`,
-          completed,
-          total: tasks.length
-        });
-      }
-    }));
-
-    let timedOut = false;
-    await Promise.race([
-      work,
-      new Promise(resolve => window.setTimeout(() => { timedOut = true; resolve(); }, viewTimeout))
-    ]);
-    return { completed, total: tasks.length, failures, timedOut };
+  function preloadViewAssets() {
+    PromptNotebook.components.updateLoadingScreen({ message: '正在准备页面…' });
+    return Promise.resolve({ completed: 0, total: 0, failures: [], timedOut: false });
   }
 
   PromptNotebook.services.preloadViewAssets = preloadViewAssets;
@@ -1469,8 +1366,8 @@ Object.assign(PromptNotebook.app, { parseAndRender, renderExplorer, showErrorOve
     }
 
     try {
-      const result = await PromptNotebook.services.preloadViewAssets(root, PromptNotebook.config.skin.get());
       PromptNotebook.services.initLazyAssets(root);
+      const result = await PromptNotebook.services.preloadViewAssets(root, PromptNotebook.config.skin.get());
       if (result.failures.length || result.timedOut) {
         console.warn('部分页面资源未能在限定时间内完成，已使用降级显示。', result);
       }
@@ -1528,38 +1425,10 @@ function initPageEvents() {
   const skinToggles = [...document.querySelectorAll('[data-pn-skin-toggle]')];
   document.getElementById('local-import-btn')?.addEventListener('click', () => input?.click());
   document.getElementById('error-import-btn')?.addEventListener('click', () => input?.click());
-  const updateSkinToggle = () => {
-    const useElegantSkin = PromptNotebook.config.skin.get() === 'elegant';
-    skinToggles.forEach(skinToggle => {
-      skinToggle.setAttribute('aria-pressed', String(useElegantSkin));
-      skinToggle.title = useElegantSkin ? '切换为经典拟物皮肤' : '切换为优雅扁平皮肤';
-    });
-  };
-  const toggleSkin = async () => {
-    if (skinToggles.some(skinToggle => skinToggle.getAttribute('aria-busy') === 'true')) return;
-    skinToggles.forEach(skinToggle => skinToggle.setAttribute('aria-busy', 'true'));
-    PromptNotebook.components.showLoadingScreen('正在切换主题…');
-    try {
-      const selected = await PromptNotebook.config.skin.toggle();
-      PromptNotebook.config.font.followSkin(selected);
-      if (selected === 'classic') {
-        document.querySelectorAll('[data-pn-classic-asset][data-pn-asset]').forEach(element => {
-          const [group, name] = element.dataset.pnAsset.split(':');
-          const attribute = element.dataset.pnAssetAttribute || 'src';
-          if (PromptNotebook.config.assets[group]) element.setAttribute(attribute, PromptNotebook.config.assets[group](name));
-        });
-      }
-      await PromptNotebook.app.prepareAndReveal({ alreadyVisible: true });
-      updateSkinToggle();
-    } catch (error) {
-      PromptNotebook.components.showToast(error.message || '皮肤加载失败，请重试', 'error');
-    } finally {
-      PromptNotebook.components.hideLoadingScreen();
-      skinToggles.forEach(skinToggle => skinToggle.removeAttribute('aria-busy'));
-    }
-  };
-  skinToggles.forEach(skinToggle => skinToggle.addEventListener('click', toggleSkin));
-  updateSkinToggle();
+  skinToggles.forEach(skinToggle => skinToggle.addEventListener('click', () => {
+    skinToggle.setAttribute('aria-busy', 'true');
+    PromptNotebook.config.skin.toggle();
+  }));
   document.getElementById('local-mode-reset-btn')?.addEventListener('click', () => {
     PromptNotebook.services.storage.clear();
     window.location.reload();
@@ -1597,7 +1466,13 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (PromptNotebook.config.assets[group]) element.setAttribute(attribute, PromptNotebook.config.assets[group](name));
   });
   const topBarRoot = document.getElementById('app-top-bar-root');
-  if (topBarRoot) {
+  if (PromptNotebook.config.skin.get() === 'elegant') {
+    document.querySelector('.pn-classic-brand-area')?.remove();
+    document.querySelector('.pn-classic-skin-footer')?.remove();
+  } else {
+    topBarRoot?.remove();
+  }
+  if (topBarRoot && PromptNotebook.config.skin.get() === 'elegant') {
     topBarRoot.replaceChildren(PromptNotebook.components.createTopBar({
       title: '一键复制库',
       titleId: 'brand-subtitle',
@@ -1608,8 +1483,8 @@ window.addEventListener('DOMContentLoaded', async () => {
       actions: [{
         id: 'skin-toggle-btn',
         label: '换肤',
-        title: '切换为优雅扁平皮肤',
-        ariaPressed: false,
+        title: '切换为经典拟物皮肤',
+        ariaPressed: true,
         dataset: { pnSkinToggle: '' }
       }]
     }));

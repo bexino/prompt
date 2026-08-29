@@ -81,11 +81,13 @@
       object-fit: contain;
       filter: drop-shadow(0 2px 1px rgba(20, 2, 4, 0.7));
     }
-    .pn-theme .pn-brand-plaque-controls {
+    .pn-theme .pn-classic-skin-footer {
       display: flex;
       justify-content: center;
       gap: 0.7rem;
-      margin: 0 auto 1.65rem;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2rem 1rem 1.75rem;
     }
     .pn-theme .pn-brand-plaque-control {
       position: relative;

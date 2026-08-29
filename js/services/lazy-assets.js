@@ -1,7 +1,9 @@
 let lazyAssetObserver = null;
+let noteDetailObserver = null;
 
 function initLazyAssets(scope) {
       if (lazyAssetObserver) lazyAssetObserver.disconnect();
+      if (noteDetailObserver) noteDetailObserver.disconnect();
 
       applyStableRibbonRotations(scope);
 
@@ -9,6 +11,7 @@ function initLazyAssets(scope) {
         ...scope.querySelectorAll('.pn-lazy-asset[data-src]'),
         ...scope.querySelectorAll('.pn-ribbon:not(.pn-lazy-bg-loaded)')
       ];
+      const noteCards = [...scope.querySelectorAll('.pn-note-card')];
 
       const loadTarget = target => {
         if (target.classList.contains('pn-ribbon')) {
@@ -35,8 +38,12 @@ function initLazyAssets(scope) {
 
       if (!('IntersectionObserver' in window)) {
         targets.forEach(loadTarget);
+        noteCards.forEach(card => card.classList.add('pn-note-detail-active'));
         return;
       }
+
+      const isLowBandwidth = document.documentElement.classList.contains('low-bandwidth');
+      const isCompactViewport = window.matchMedia('(max-width: 639px)').matches;
 
       lazyAssetObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
@@ -45,11 +52,22 @@ function initLazyAssets(scope) {
           lazyAssetObserver.unobserve(entry.target);
         });
       }, {
-        rootMargin: document.documentElement.classList.contains('low-bandwidth') ? '160px 0px' : '320px 0px',
+        rootMargin: isLowBandwidth ? '120px 0px' : (isCompactViewport ? '180px 0px' : '320px 0px'),
         threshold: 0.01
       });
 
       targets.forEach(target => lazyAssetObserver.observe(target));
+
+      noteDetailObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          entry.target.classList.toggle('pn-note-detail-active', entry.isIntersecting);
+        });
+      }, {
+        rootMargin: isLowBandwidth ? '64px 0px' : (isCompactViewport ? '120px 0px' : '240px 0px'),
+        threshold: 0.01
+      });
+
+      noteCards.forEach(card => noteDetailObserver.observe(card));
     }
 
     // 同步显示即时反馈，并在后台执行剪贴板写入

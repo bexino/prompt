@@ -155,7 +155,7 @@ window.addEventListener('load', () => {
   add('index.html', html);
 
   const cacheVersion = hash(`${startupName}:${appName}:${shellName}:${Object.values(themeNames).join(':')}`);
-  const precache = ['./', './index.html', `./js/${startupName}`, `./js/${appName}`, `./css/${shellName}`, ...Object.values(themeNames)];
+  const precache = ['./', './index.html', `./js/${startupName}`, `./js/${appName}`, `./css/${shellName}`];
   const serviceWorker = `const CACHE_NAME = 'prompt-notebook-${cacheVersion}';
 const PRECACHE = ${JSON.stringify(precache, null, 2)};
 

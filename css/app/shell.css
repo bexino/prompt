@@ -15,7 +15,6 @@ button, input { font: inherit; }
 }
 .pn-loading-screen[hidden] { display: none; }
 .pn-loading-panel {
-  width: min(22rem, 100%);
   text-align: center;
 }
 .pn-loading-spinner {
@@ -27,25 +26,6 @@ button, input { font: inherit; }
   border-radius: 50%;
   animation: pn-loading-spin 800ms linear infinite;
 }
-.pn-loading-panel p {
-  min-height: 1.5rem;
-  margin: 0.9rem 0 0.65rem;
-  font-weight: 700;
-}
-.pn-loading-track {
-  height: 0.35rem;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(91, 70, 54, 0.16);
-}
-.pn-loading-track > span {
-  display: block;
-  width: 0;
-  height: 100%;
-  border-radius: inherit;
-  background: #6d5e4f;
-  transition: width 160ms ease;
-}
 .pn-render-block {
   content-visibility: auto;
   contain-intrinsic-size: auto 20rem;
@@ -53,7 +33,6 @@ button, input { font: inherit; }
 @keyframes pn-loading-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) {
   .pn-loading-spinner { animation: none; }
-  .pn-loading-track > span { transition: none; }
 }
 .hidden { display: none !important; }
 .flex { display: flex; }
@@ -187,7 +166,8 @@ button, input { font: inherit; }
 .hover\:underline:hover { text-decoration-line: underline; }
 
 html[data-pn-skin="classic"] .pn-app-elegant-top-bar,
-html[data-pn-skin="elegant"] .pn-classic-brand-area {
+html[data-pn-skin="elegant"] .pn-classic-brand-area,
+html[data-pn-skin="elegant"] .pn-classic-skin-footer {
   display: none;
 }
 .group:hover .group-hover\:translate-x-1 { transform: translateX(0.25rem); }

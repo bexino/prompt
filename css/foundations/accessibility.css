@@ -15,7 +15,8 @@
     }
 
     @media (max-width: 639px) {
-      body.pn-app { background-attachment: scroll; }
+      .pn-theme.pn-app { background-attachment: scroll; }
+      .pn-theme.pn-app::before { display: none; }
       .pn-workspace { padding-top: 1.3rem !important; }
       .pn-brand-plaque { width: 94%; margin-bottom: 0.95rem; padding: 0.9rem 2.5rem 1rem; }
       .pn-brand-plaque-controls { margin-bottom: 1.1rem; }
@@ -27,9 +28,9 @@
       .pn-notes-grid { gap: 0.7rem 0.75rem !important; padding-inline: 0; }
       .pn-notes-grid .pn-note-card:nth-child(odd) { z-index: 2; }
       .pn-notes-grid .pn-note-card:nth-child(even) { z-index: 1; }
-      .pn-notes-grid .pn-note-card:hover { z-index: 20; }
-      .pn-note-card {
-        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-mobile-rotation));
+      .pn-notes-grid .pn-note-card.pn-note-detail-active:hover { z-index: 20; }
+      .pn-theme .pn-note-card {
+        --note-active-rotation: var(--note-mobile-rotation);
       }
       .pn-note-card h3 { -webkit-line-clamp: 3; }
       .pn-note-decoration-tape { width: 54%; }
@@ -52,7 +53,7 @@
         transition-duration: 0.01ms !important;
         animation-duration: 0.01ms !important;
       }
-      .pn-note-card:hover {
-        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-rotation));
+      .pn-theme .pn-note-card.pn-note-detail-active:hover {
+        transform: translate(var(--note-x), var(--note-y)) rotate(var(--note-active-rotation));
       }
     }

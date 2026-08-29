@@ -1,7 +1,6 @@
 (() => {
-  const storageKey = 'prompt_notebook_skin';
   const supportedSkins = new Set(['classic', 'elegant']);
-  const stylesheetVersions = { classic: '16', elegant: '12' };
+  const stylesheetVersions = { classic: '20', elegant: '12' };
   const stylesheetPromises = new Map();
 
   function ensureSkinStylesheet(skin) {
@@ -26,47 +25,40 @@
     return promise;
   }
 
-  function readStoredSkin() {
-    try {
-      const stored = localStorage.getItem(storageKey);
-      return supportedSkins.has(stored) ? stored : 'classic';
-    } catch (_error) {
-      return 'classic';
-    }
-  }
-
-  function applySkin(skin, persist = false) {
+  function applySkin(skin) {
     const selected = supportedSkins.has(skin) ? skin : 'classic';
     document.documentElement.dataset.pnSkin = selected;
     if (document.body) {
       document.body.classList.toggle('pn-theme', selected === 'classic');
       document.body.classList.toggle('pn-theme-elegant', selected === 'elegant');
     }
-    if (persist) {
-      try {
-        localStorage.setItem(storageKey, selected);
-      } catch (_error) {
-        // 浏览器禁用本地存储时，皮肤仍在当前页面内生效。
-      }
-    }
     return selected;
   }
 
-  let currentSkin = applySkin(PromptNotebook.config.initialSkinChoice || readStoredSkin());
+  function getUrl(nextSkin) {
+    const selected = supportedSkins.has(nextSkin) ? nextSkin : 'classic';
+    const url = new URL(window.location.href);
+    if (selected === 'elegant') url.searchParams.set('skin', 'elegant');
+    else url.searchParams.delete('skin');
+    return `${url.pathname}${url.search}${url.hash}`;
+  }
+
+  const currentSkin = applySkin(PromptNotebook.config.initialSkinChoice || 'classic');
   const ready = ensureSkinStylesheet(currentSkin);
   const skin = {
     get() {
       return currentSkin;
     },
-    async set(nextSkin) {
+    getUrl,
+    navigate(nextSkin) {
       const selected = supportedSkins.has(nextSkin) ? nextSkin : 'classic';
       if (selected === currentSkin) return currentSkin;
-      await ensureSkinStylesheet(selected);
-      currentSkin = applySkin(selected, true);
-      return currentSkin;
+      PromptNotebook.config.font?.followSkin(selected);
+      window.location.assign(getUrl(selected));
+      return selected;
     },
-    async toggle() {
-      return this.set(currentSkin === 'classic' ? 'elegant' : 'classic');
+    toggle() {
+      return this.navigate(currentSkin === 'classic' ? 'elegant' : 'classic');
     },
     ready() {
       return ready;
