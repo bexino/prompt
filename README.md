@@ -27,7 +27,7 @@
 使用平衡的、影棚级的电影感灯光，来增强动态范围、对比度和空间纵深感。
 ```
 
-### 低画质，古早游戏建模——起源引擎
+### 低画质游戏建模 (起源引擎)
 
 ```
 将照片调整为 Source引擎（起源引擎）初代风格：
@@ -38,7 +38,7 @@
 - Garry'sMod 的早期视觉质感
 ```
 
-### 黑白老照片修复上色
+### 老照片修复+上色
 
 ```
 # 图像修复
@@ -109,16 +109,6 @@
 根据我们过去所有的聊天内容和你对我的了解（所有窗口，不限于这个窗口），先用文字总结一个我的形象，然后画出来。不限风格，真实一点，不用讨好我，也别诋毁我哈。
 ```
 
-### 抽象线条画
-
-```
-以现代抽象风格创建【何人物】面孔的大胆图形插图。具体要求如下：
-
-1. 视觉风格：风格应该是高度几何和有机的，具有最小的线条、强烈的对比和风格化的面部特征。设计必须让人感觉有趣和富有表现力，就像手绘数字图标或视觉签名一样。
-2. 配色与背景：在白色背景上，只使用平面形状和一种鲜艳的颜色（如纯蓝色）。
-3. 构图与细节：居中构图。避免阴影、纹理或现实主义，保持干净和象征性。
-```
-
 ---
 
 ## 对话
@@ -155,51 +145,6 @@
 请你从某个领域里选择一个研究生水平的概念，然后写一个寓言故事，用间接的方式把这个概念讲清楚，不要一开始就说答案，尽量到故事快结束的时候才让人意识到原来讲的是这个概念，故事结束后再解释这个概念以及故事里的隐喻分别对应什么？
 ```
 
-
-### 自然语言优化为Inpaint Prompt（输出简体中文）
-
-```
-# Role: 图像局部重绘指令师 (AI Inpainting Specialist)
-
-## Context:
-
-用户正在使用 AI 绘图工具（如 Stable Diffusion, Midjourney, Adobe Firefly）的局部重绘功能。用户通过划词 `{selection}` 表达了对图片特定区域的修改想法。
-
-## Task:
-
-请将 `{selection}` 中的自然语言描述重构为一段目标清晰、细节丰富、易于 AI 理解的**简体中文**重绘提示词。
-
-## Strategy:
-
-1. **实体具象化**：将模糊的词汇（如“变好看”）转化为具体的视觉元素（如“精致的蕾丝纹理”、“柔和的丁达尔效应”）。
-2. **环境融合**：在 Prompt 中加入描述光影、透视和边缘衔接的词汇，确保重绘区域不突兀。
-3. **结构化描述**：按照“主体特征 + 材质细节 + 光影环境 + 风格对齐”的逻辑重写。
-
-## Constrains:
-
-- **仅限中文**：所有输出的提示词内容必须使用简体中文。
-- **去口语化**：剔除“请帮我”、“我想把”等无意义前缀，直接输出视觉描述。
-- **强调融合度**：自动添加如“自然过渡”、“与背景光影统一”等增强词。
-
-## Output Format:
-
-请按以下格式输出：
-
-### 重绘指令 (Positive Prompt)
-
-[在此处生成重构后的中文关键词和描述短句]
-
-### 负向约束 (Negative Prompt)
-
-[针对该修改场景应避免出现的元素，如：边缘生硬、比例失调、杂色]
-
-### 专家建议
-
-[简要说明在重绘时需要注意的遮挡关系或重绘强度设置]
-
-**用户原始需求**: "{selection}"
-**重写后的中文重绘指令**:
-```
 ---
 
 ## AICoding
@@ -296,33 +241,20 @@ https://easylist-downloads.adblockplus.org/easylist.txt
 https://easylist-downloads.adblockplus.org/easyprivacy.txt
 ```
 
-### 规则介绍
-
-| **规则库名称**         | **主要功能描述**                         | **侧重领域**               | **适用场景**                         |
-| ---------------------- | ---------------------------------------- | -------------------------- | ------------------------------------ |
-| **EasyList**           | 全球基础规则库，广告拦截界的行业标准。   | 国际通用静态广告           | 拦截 90% 以上的全球通用广告插件。    |
-| **EasyPrivacy**        | 隐私保护库，专注屏蔽后台统计与用户跟踪。 | 反追踪、个人隐私           | 防止行为被记录，减少“精准推送”广告。 |
-| **EasyList China**     | EasyList 的官方中文补充包。              | 中文网页广告               | 针对中文网站环境深度优化。           |
-| **乘风规则 (xinggsf)** | 针对国内视频网站与流氓弹窗的加强库。     | **视频广告**、恶意弹窗     | 国内视频网站，资源下载站。           |
-| **CJX's Annoyance**    | 消除网页中不影响功能但让人烦心的元素。   | **视觉净化**、App 下载引导 | “打开 App 阅读全文”、Cookie 弹窗。   |
-
-### 使用方法  
-
-1. 打开 uBlock Origin 设置选项。
-2. 切换到 “过滤器列表” 标签页。
-3. 滚动到页面底部，勾选 “导入”。
-4. 在文本框中粘贴以上 URL。
-5. 点击上方绿色的 “应用更改”。
+> ## 规则介绍  
+>   
+> | **规则库名称**         | **主要功能描述**                         | **侧重领域**               | **适用场景**                         |
+> | ---------------------- | ---------------------------------------- | -------------------------- | ------------------------------------ |
+> | **EasyList**           | 全球基础规则库，广告拦截界的行业标准。   | 国际通用静态广告           | 拦截 90% 以上的全球通用广告插件。    |
+> | **EasyPrivacy**        | 隐私保护库，专注屏蔽后台统计与用户跟踪。 | 反追踪、个人隐私           | 防止行为被记录，减少“精准推送”广告。 |
+> | **EasyList China**     | EasyList 的官方中文补充包。              | 中文网页广告               | 针对中文网站环境深度优化。           |
+> | **乘风规则 (xinggsf)** | 针对国内视频网站与流氓弹窗的加强库。     | **视频广告**、恶意弹窗     | 国内视频网站，资源下载站。           |
+> | **CJX's Annoyance**    | 消除网页中不影响功能但让人烦心的元素。   | **视觉净化**、App 下载引导 | “打开 App 阅读全文”、Cookie 弹窗。   |
+>
 
 ---
 
-## VSCode商店源链接
-
-1. **打开设置：** 在 Google Antigravity IDE 中，使用快捷键 `Ctrl + ,` (Windows/Linux) 或 `Cmd + ,` (Mac) 打开设置界面。
-
-2. **找到市场配置项：** 在设置页面左侧点击 **“Editor”** 图标，然后在右侧找到 **Marketplace** 相关的配置项。
-
-3. **填入官方源地址：** 在对应的输入框中，将以下两个地址分别复制并填入：
+## VSCode微软源
 
 ### Marketplace Item URL
 
@@ -336,40 +268,119 @@ https://marketplace.visualstudio.com/items
 https://marketplace.visualstudio.com/_apis/public/gallery
 ```
 
-4. **重启生效：** 配置完成后，**彻底关闭并重新打开** Google Antigravity IDE 即可。
-
 ---
 
-## VScode配置git
+## 配置Git
+
+**均为全局配置**
 
 以下内容修改成你自己的真实信息：  
 - "你的名字"：GitHub 用户名；  
 - "你的邮箱"：GitHub 账号邮箱。
 
-> - Windows下请使用："全局替换 - PowerShell"；  
-> - 报错请手动执行："全局替换 - 手动第1行"与"全局替换 - 手动第2行"。  
+> - Windows 下请使用："全局替换 - PowerShell"；  
 
-### 全局替换 - PowerShell
+### PowerShell (Windows)
 ```
 git config --global user.name "你的名字" ; git config --global user.email "你的邮箱"
 ```
 
-### 全局替换 - GitBash
+###  GitBash
 ```
 git config --global user.name "你的名字" && git config --global user.email "你的邮箱"
 ```
 
-### 全局替换 - 手动第1行
-```
-git config --global user.name
-```
-
-### 全局替换 - 手动第2行
-```
-git config --global user.email
-```
-
 ---
+
+## Windows工具
+
+### 右键文件校验 (reg)
+
+```
+Windows Registry Editor Version 5.00
+
+; ============================================
+; 校验
+; ============================================
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash]
+"MUIVerb"="校验"
+"SubCommands"=""
+"Icon"="powershell.exe"
+
+
+; MD5
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\01_MD5]
+"MUIVerb"="MD5"
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\01_MD5\command]
+@="powershell.exe -NoProfile -NoExit -Command \"Get-FileHash -LiteralPath '%1' -Algorithm MD5 | Format-List\""
+
+
+; SHA1
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\02_SHA1]
+"MUIVerb"="SHA1"
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\02_SHA1\command]
+@="powershell.exe -NoProfile -NoExit -Command \"Get-FileHash -LiteralPath '%1' -Algorithm SHA1 | Format-List\""
+
+
+; SHA256
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\03_SHA256]
+"MUIVerb"="SHA256"
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\03_SHA256\command]
+@="powershell.exe -NoProfile -NoExit -Command \"Get-FileHash -LiteralPath '%1' -Algorithm SHA256 | Format-List\""
+
+
+; SHA384
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\04_SHA384]
+"MUIVerb"="SHA384"
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\04_SHA384\command]
+@="powershell.exe -NoProfile -NoExit -Command \"Get-FileHash -LiteralPath '%1' -Algorithm SHA384 | Format-List\""
+
+
+; SHA512
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\05_SHA512]
+"MUIVerb"="SHA512"
+
+[HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash\shell\05_SHA512\command]
+@="powershell.exe -NoProfile -NoExit -Command \"Get-FileHash -LiteralPath '%1' -Algorithm SHA512 | Format-List\""
+```
+
+### 添加美式键盘  (reg)
+```
+Windows Registry Editor Version 5.00
+[HKEY_CURRENT_USER\Keyboard Layout]
+[HKEY_CURRENT_USER\Keyboard Layout\Preload]
+"1"="00000804"
+"2"="d0010804"
+[HKEY_CURRENT_USER\Keyboard Layout\Substitutes]
+"00000804"="00000409"
+"d0010804"="00000804"
+[HKEY_CURRENT_USER\Keyboard Layout\Toggle]
+```
+
+### 清除图标缓存 (bat)
+
+> 可以解决桌面图标变白色方块的问题。
+
+```
+@echo off
+taskkill /f /im explorer.exe
+CD /d %userprofile%\AppData\Local
+DEL IconCache.db /a
+CD /d %userprofile%\AppData\Local\Microsoft\Windows\Explorer
+DEL iconcache*.db /a
+DEL thumbcache*.db /a
+start explorer.exe
+```
 
 ## 娱乐
 
