@@ -4,7 +4,7 @@
 
 ---
 
-## 图片重绘生成
+## 图片
 
 ### 图片8K高清
 
@@ -147,7 +147,7 @@
 
 ---
 
-## AICoding
+## Coding
 
 ### 交接文档 (docs/HANDOFF.md)
 
@@ -179,7 +179,7 @@
 
 ---
 
-## 视频生成
+## 视频
 
 ### 人像转视频 #1
 
@@ -292,7 +292,7 @@ git config --global user.name "你的名字" && git config --global user.email "
 
 ---
 
-## Windows工具
+## Win工具
 
 ### 右键文件校验 (reg)
 
@@ -380,6 +380,20 @@ CD /d %userprofile%\AppData\Local\Microsoft\Windows\Explorer
 DEL iconcache*.db /a
 DEL thumbcache*.db /a
 start explorer.exe
+```
+
+## WorkBuddyLinux
+
+### DEB
+
+```
+https://www.workbuddy.cn/v2/update?platform=workbuddy-linux-x64-deb
+```
+
+### RPM
+
+```
+https://www.workbuddy.cn/v2/update?platform=workbuddy-linux-x64-rpm
 ```
 
 ## 娱乐
