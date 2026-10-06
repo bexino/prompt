@@ -270,7 +270,7 @@ https://marketplace.visualstudio.com/_apis/public/gallery
 
 ---
 
-## 配置Git
+## Git
 
 **均为全局配置**
 
@@ -288,6 +288,14 @@ git config --global user.name "你的名字" ; git config --global user.email "�
 ###  GitBash
 ```
 git config --global user.name "你的名字" && git config --global user.email "你的邮箱"
+```
+
+### 徽章:简中+发布+许可+提交数
+
+> Ctrl+F 替换：`用户名/仓库名`
+
+```
+[![](https://img.shields.io/badge/简体中文-zh__cn-red)](#简体中文) [![GitHub release](https://img.shields.io/github/v/release/用户名/仓库名)](https://github.com/用户名/仓库名/releases) [![License](https://img.shields.io/github/license/用户名/仓库名)](https://github.com/用户名/仓库名/blob/main/LICENSE) ![Commit Activity](https://img.shields.io/github/commit-activity/t/用户名/仓库名) 
 ```
 
 ---
