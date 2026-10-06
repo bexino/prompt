@@ -297,7 +297,7 @@ git config --global user.name "你的名字" && git config --global user.email "
 [![Commit Activity](https://img.shields.io/github/commit-activity/t/bexino/仓库名?color=green)](https://github.com/bexino/仓库名/commits/main/)
 [![License](https://img.shields.io/github/license/bexino/仓库名?color=blue)](https://github.com/bexino/仓库名/blob/main/LICENSE)
 [![MadeWith♥](https://img.shields.io/badge/@bexino-Made_With_♥-purple)](https://github.com/bexino)
-[![ViewInGithub](https://img.shields.io/badge/Github-bexino%2F仓如库如名-white?logo=github&logoColor=auto&labelColor=555555&color=ffffff)](https://github.com/bexino/仓库名/)
+[![ViewInGithub](https://img.shields.io/badge/Github-bexino%2F仓如库如名-white?logo=github&logoColor=auto&labelColor=555555&color=000000)](https://github.com/bexino/仓库名/)
 ```
 #### Shields.io 徽章 
 
