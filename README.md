@@ -1,6 +1,10 @@
-# 一键复制库
+[![Commit Activity](https://img.shields.io/github/commit-activity/t/bexino/prompt?color=green)](https://github.com/bexino/prompt/commits/main/)
+[![License](https://img.shields.io/github/license/bexino/prompt?color=blue)](https://github.com/bexino/prompt/blob/main/LICENSE)
+[![MadeWith♥](https://img.shields.io/badge/@bexino-Made_With_♥-purple)](https://github.com/bexino)
 
 [TOC]
+
+# 一键复制库
 
 ---
 
@@ -290,10 +294,7 @@ git config --global user.name "你的名字" ; git config --global user.email "�
 git config --global user.name "你的名字" && git config --global user.email "你的邮箱"
 ```
 
-### 徽章:简中+开始+发布+许可+提交数
-
-> 用户名：Ctrl+F 替换：`bexino`
-> 仓库名：Ctrl+F 替换：`仓库名`
+### Shields.io
 
 ```
 [![简体中文](https://img.shields.io/badge/简体中文-zh__cn-red)](#简体中文)
@@ -303,6 +304,10 @@ git config --global user.name "你的名字" && git config --global user.email "
 [![License](https://img.shields.io/github/license/bexino/仓库名?color=blue)](https://github.com/bexino/仓库名/blob/main/LICENSE)
 [![MadeWith♥](https://img.shields.io/badge/@bexino-Made_With_♥-purple)](https://github.com/bexino)
 ```
+
+内容：简体中文、快速开始、Releases、许可证、提交数、由 ♥ 制作。
+用户名：Ctrl+F 查找并替换：`bexino`；
+仓库名：Ctrl+F 查找并替换：`仓库名`。
 
 ---
 
