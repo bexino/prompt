@@ -1,12 +1,6 @@
-[![Commit Activity](https://img.shields.io/github/commit-activity/t/bexino/prompt?color=green)](https://github.com/bexino/prompt/commits/main/)
-[![License](https://img.shields.io/github/license/bexino/prompt?color=blue)](https://github.com/bexino/prompt/blob/main/LICENSE)
-[![MadeWith♥](https://img.shields.io/badge/@bexino-Made_With_♥-purple)](https://github.com/bexino)
-
-[TOC]
-
 # 一键复制库
 
----
+[TOC]
 
 ## 图片
 
@@ -304,9 +298,10 @@ git config --global user.name "你的名字" && git config --global user.email "
 [![License](https://img.shields.io/github/license/bexino/仓库名?color=blue)](https://github.com/bexino/仓库名/blob/main/LICENSE)
 [![MadeWith♥](https://img.shields.io/badge/@bexino-Made_With_♥-purple)](https://github.com/bexino)
 ```
+#### Shields.io 徽章 
 
-内容：简体中文、快速开始、Releases、许可证、提交数、由 ♥ 制作。
-用户名：Ctrl+F 查找并替换：`bexino`；
+内容：简体中文、快速开始、Releases、许可证、提交数、由 ♥ 制作。  
+用户名：Ctrl+F 查找并替换：`bexino`； 
 仓库名：Ctrl+F 查找并替换：`仓库名`。
 
 ---
