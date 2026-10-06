@@ -292,16 +292,16 @@ git config --global user.name "你的名字" && git config --global user.email "
 
 ### 徽章:简中+开始+发布+许可+提交数
 
-> Ctrl+F 替换：`用户名/仓库名`
-> Ctrl+F 替换：`用户名/仓库名`
+> 用户名：Ctrl+F 替换：`bexino`
+> 仓库名：Ctrl+F 替换：`仓库名`
 
 ```
 [![简体中文](https://img.shields.io/badge/简体中文-zh__cn-red)](#简体中文)
 [![QuickStart](https://img.shields.io/badge/Quick-Start-orange)](#quick-start)
-[![GitHub release](https://img.shields.io/github/v/release/用户名/仓库名?color=yellow)](https://github.com/用户名/仓库名/releases)
-[![Commit Activity](https://img.shields.io/github/commit-activity/t/用户名/仓库名?color=green)](https://github.com/用户名/仓库名/commits/main/)
-[![License](https://img.shields.io/github/license/用户名/仓库名?color=blue)](https://github.com/用户名/仓库名/blob/main/LICENSE)
-[![MadeWith♥](https://img.shields.io/badge/用户名-Made_With_♥-purple)](https://github.com/用户名)
+[![GitHub release](https://img.shields.io/github/v/release/bexino/仓库名?color=yellow)](https://github.com/bexino/仓库名/releases)
+[![Commit Activity](https://img.shields.io/github/commit-activity/t/bexino/仓库名?color=green)](https://github.com/bexino/仓库名/commits/main/)
+[![License](https://img.shields.io/github/license/bexino/仓库名?color=blue)](https://github.com/bexino/仓库名/blob/main/LICENSE)
+[![MadeWith♥](https://img.shields.io/badge/@bexino-Made_With_♥-purple)](https://github.com/bexino)
 ```
 
 ---
