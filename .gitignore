@@ -39,6 +39,9 @@ Desktop.ini
 .mf/
 .wrangler-deploy/
 
+# 本地开发配置
+.claude/
+
 # 缓存
 .cache/
 .eslintcache
