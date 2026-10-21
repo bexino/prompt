@@ -51,8 +51,7 @@
 
 /* ---------- 本项目 style.css 里的硬编码浅色 ---------- */
 
-/* 页面/site 底色（style.css 用的是 --s-grey-100，自动跟随；阴影弱化） */
-[data-theme="dark"] .s-site { box-shadow: 0 0 24px rgba(0, 0, 0, .5); }
+/* 页面/site 底色（style.css 用的是 --s-grey-100，自动跟随；侧边阴影已移除，无需覆盖） */
 
 /* count 徽章描边 */
 [data-theme="dark"] .s-count { border-color: #3c4a70; }

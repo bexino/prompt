@@ -19,14 +19,35 @@ body.s-page {
   background: var(--s-grey-100);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 24px rgba(0, 0, 0, .06);
 }
 
-/* sticky app bar */
+/* sticky app bar；背景延伸到全屏（按钮、标题位置不变）。
+   sticky + z-index 自成 stacking context，::before 用 100vw 全宽铺满视口。 */
 .s-site .s-appbar {
   position: sticky;
   top: 0;
   z-index: 10;
+  background: transparent;
+  border-bottom-color: transparent;
+}
+.s-site .s-appbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  /* 沉到按钮/标题之下；sticky 自成 stacking context，不会盖到页面内容 */
+  z-index: -1;
+  background: var(--s-white);
+  border-bottom: 1px solid var(--s-appbar-border);
+}
+/* 顶栏下方 8px 渐隐同样延伸到全屏 */
+.s-site .s-appbar--shadow::after {
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
 }
 
 .s-content {
