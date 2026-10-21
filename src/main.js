@@ -47,7 +47,7 @@ function renderHome() {
 
   app.innerHTML = `
     <header class="s-appbar s-appbar--shadow">
-      <button type="button" data-settings aria-label="设置">${icon('si-setting')}</button>
+      <button type="button" data-settings aria-label="设置">${icon('si-setting', 's-icon s-icon--20')}</button>
       <span class="s-appbar__spacer"></span><span class="s-appbar__title">提示词仓库</span>
       <span class="s-appbar__spacer" style="width:48px;flex:none"></span>
       <div class="s-appbar__actions">
@@ -160,6 +160,7 @@ function renderSettings() {
 /* ---------- 路由 ---------- */
 function route() {
   closeSearch()
+  window.scrollTo(0, 0) // 新页面从顶部开始，避免继承上一页的滚动位置
   document.title = '提示词仓库'
   if (location.hash === '#/settings') return renderSettings()
   const m = /^#\/cat\/(.+)$/.exec(location.hash)
