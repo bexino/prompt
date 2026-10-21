@@ -44,7 +44,7 @@ npm run build # 构建到 dist/（base 为相对路径，可部署任意静态�
 
 ## 鸣谢
 
-[smartisan-ui-skill](https://github.com/lemonteaau/smartisan-ui-skill)
+[lemonteaau/smartisan-ui-skill](https://github.com/lemonteaau/smartisan-ui-skill)
 
 ## 许可证
 
