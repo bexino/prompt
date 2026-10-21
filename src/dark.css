@@ -1,0 +1,85 @@
+/* 深色模式覆盖层：只覆盖 token 与个别硬编码颜色，不改 smartisan.css 本体。
+   生效条件：html[data-theme="dark"]（由 src/theme.js 维护）。 */
+
+[data-theme="dark"] {
+  /* 灰阶反转：白面 → 深灰面 */
+  --s-white: #2a2a2c;
+  --s-grey-100: #232325;   /* 页面/容器底 */
+  --s-grey-200: #3a3a3c;   /* 分隔线 */
+  --s-grey-300: #454547;   /* 按钮描边 */
+  --s-grey-400: #4d4d4f;   /* 列表描边 */
+  --s-grey-500: #6b6b6d;   /* disabled */
+  --s-grey-600: #8f8f91;
+  --s-grey-700: #a9a9ab;
+  --s-grey-800: #c9c9cb;
+  --s-grey-900: #e9e9eb;
+
+  /* 白色渐变面 → 深色渐变面 */
+  --s-grad-white: linear-gradient(180deg, #333335, #303032);
+  --s-grad-white-pressed: linear-gradient(180deg, #262628, #2c2c2e);
+  --s-grad-sheet-header: linear-gradient(180deg, #2f2f31, #2a2a2c);
+  --s-grad-toast: linear-gradient(180deg, #3a3526, #38331f);
+  --s-grad-icon: linear-gradient(180deg, #9a9a9c, #a4a4a6);
+  --s-grad-radio-off: linear-gradient(180deg, #3a3a3c, #303032);
+
+  /* 其他表面 */
+  --s-board: #232325;
+  --s-page: var(--s-board);
+  --s-sheet-body: #29292b;
+  --s-appbar-border: #3f3f41;
+  --s-dialog-header-border: #3d3d3f;
+  --s-dialog-action: #2f2f31;
+  --s-dialog-action-pressed: #262628;
+  --s-dialog-action-border: #404042;
+  --s-dialog-action-border-pressed: #4a4a4c;
+  --s-placeholder: #5a5a5c;
+  --s-icon: #8b8b8d;
+  --s-icon-chevron: #6f6f71;
+  --s-icon-more: #77777a;
+  --s-icon-list-light: #4a4a4c;
+
+  /* 阴影在深色下弱化 */
+  --s-shadow-card: 0 10px 16px rgba(0, 0, 0, 0.30);
+  --s-shadow-btn: 0 4px 2px rgba(0, 0, 0, 0.35);
+  --s-inset-field: inset 0 4px 4px rgba(0, 0, 0, 0.25);
+  --s-inset-switch: inset 0 4px 12px rgba(0, 0, 0, 0.35);
+  --s-inset-tab: inset 0 4px 10px rgba(0, 0, 0, 0.30);
+  --s-inset-track: inset 0 4px 4px rgba(0, 0, 0, 0.30);
+
+  color-scheme: dark;
+}
+
+/* ---------- 本项目 style.css 里的硬编码浅色 ---------- */
+
+/* 页面/site 底色（style.css 用的是 --s-grey-100，自动跟随；阴影弱化） */
+[data-theme="dark"] .s-site { box-shadow: 0 0 24px rgba(0, 0, 0, .5); }
+
+/* count 徽章描边 */
+[data-theme="dark"] .s-count { border-color: #3c4a70; }
+
+/* dialog 正文 */
+[data-theme="dark"] .s-dialog--prompt { box-shadow: 0 10px 24px rgba(0, 0, 0, .55); }
+[data-theme="dark"] .s-dialog__desc code { background: #303032; border-color: #454547; }
+[data-theme="dark"] .s-dialog__desc pre { background: #2c2c2e; border-color: #454547; }
+[data-theme="dark"] .s-dialog__desc th { background: #323234; }
+[data-theme="dark"] .s-dialog__desc ul > li::before { background: #6ea8e8; }
+
+/* 提示词文本框 */
+[data-theme="dark"] .s-prompt-area { background: #2c2c2e; box-shadow: inset 0 1px 3px rgba(0, 0, 0, .35); }
+
+/* 搜索浮层与搜索框 */
+[data-theme="dark"] .s-search-overlay { box-shadow: 0 0 24px rgba(0, 0, 0, .5); }
+[data-theme="dark"] .s-search-field { background: #303032; border-color: #454547; }
+
+/* ---------- 标签切换器（.s-tabs） ---------- */
+[data-theme="dark"] .s-tabs > button { background: var(--s-white); color: var(--s-title-other); }
+[data-theme="dark"] .s-tabs > button[aria-selected="true"] {
+  color: #e9e9eb;
+  background: #5a5a5c;
+  box-shadow: var(--s-inset-tab), inset 0 0 0 var(--s-hair-xs) #666668;
+}
+
+/* ---------- 收藏 / Sheet / 设置页 ---------- */
+[data-theme="dark"] .s-fav-star { color: #d9a92f; }
+[data-theme="dark"] .s-sheet__confirm--danger { background: #d94840; color: #fff; }
+[data-theme="dark"] .s-danger-item .s-list-item__title { color: #ef7a72; }

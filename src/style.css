@@ -1,0 +1,291 @@
+@import './smartisan.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- site layout on top of Smartisan kit ---- */
+html, body { margin: 0; }
+
+body.s-page {
+  min-height: 100vh;
+  background: var(--s-grey-100);
+}
+
+.s-site {
+  max-width: 432px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--s-grey-100);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 24px rgba(0, 0, 0, .06);
+}
+
+/* sticky app bar */
+.s-site .s-appbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.s-content {
+  flex: 1;
+  padding: 14px 12px 32px;
+}
+
+/* count badge as list leading element */
+.s-count {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--s-blue-400);
+  background: var(--s-blue-100);
+  border: .5px solid #d6e0f8;
+}
+
+/* ---- dialog content: dialog 有高度上限，只有 body 区滚动 ---- */
+.s-dialog--prompt {
+  width: min(368px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  /* 不得超过遮罩内容区，否则标题/按钮会被顶出屏幕；长内容只有中间滚动区滚动 */
+  max-height: min(640px, 100%);
+  position: relative;
+  background: var(--s-white);
+  border-radius: var(--s-r-dialog, 12px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .18);
+}
+
+/* 标题与按钮组固定高度不被压缩，长内容只有中间滚动区滚动 */
+.s-dialog--prompt .s-dialog__header { flex: none; height: 48px; }
+.s-dialog--prompt .s-dialog__actions { flex: none; height: 54px; }
+
+.s-dialog__scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 20px 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: var(--s-white);
+}
+
+.s-dialog__desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--s-grey-900);
+  padding: 0 0 6px;
+  overflow-wrap: break-word;
+}
+/* markdown 元素 */
+.s-dialog__desc p { margin: 0 0 8px; }
+.s-dialog__desc p:last-child { margin-bottom: 0; }
+.s-dialog__desc h1, .s-dialog__desc h2, .s-dialog__desc h3 {
+  font-size: 15px; font-weight: 700; color: var(--s-grey-800); margin: 12px 0 6px;
+}
+.s-dialog__desc ul, .s-dialog__desc ol { margin: 0 0 8px; padding-left: 22px; }
+.s-dialog__desc ul { list-style: none; }
+.s-dialog__desc ul > li { position: relative; }
+.s-dialog__desc ul > li::before {
+  content: ''; position: absolute; left: -14px; top: .62em;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4a90d9;
+}
+.s-dialog__desc code {
+  font-family: 'Geist Mono', ui-monospace, 'Cascadia Mono', Consolas, 'Microsoft YaHei', 'Noto Sans CJK SC', monospace;
+  font-size: 12px; background: #f4f4f4; border: .5px solid var(--s-grey-300);
+  border-radius: 4px; padding: 1px 5px;
+}
+.s-dialog__desc pre {
+  margin: 0 0 8px; padding: 10px 12px; background: #fcfcfc;
+  border: .8px solid var(--s-grey-400); border-radius: 6px; overflow-x: auto;
+}
+.s-dialog__desc pre code { background: none; border: 0; padding: 0; }
+.s-dialog__desc blockquote {
+  margin: 0 0 8px; padding: 4px 12px; border-left: 3px solid var(--s-grey-400);
+  color: var(--s-subtitle-list);
+}
+.s-dialog__desc img { max-width: 100%; }
+/* 表格：允许横向滚动 */
+.s-dialog__desc .md-table-wrap {
+  overflow-x: auto; margin: 0 0 8px; max-width: 100%;
+  border: .5px solid var(--s-grey-400); border-radius: 6px;
+}
+.s-dialog__desc table {
+  border-collapse: collapse; font-size: 13px; white-space: nowrap;
+  width: max-content; min-width: 100%;
+}
+.s-dialog__desc th, .s-dialog__desc td {
+  border: .5px solid var(--s-grey-400); padding: 5px 10px; text-align: left;
+}
+.s-dialog__desc th { background: #f7f7f7; font-weight: 600; }
+
+.s-dialog__tabs-wrap { padding: 10px 0 12px; display: flex; justify-content: center; }
+/* label 按文字实际宽度，不强制全宽 */
+.s-dialog__tabs-wrap .s-tabs { width: auto; }
+.s-dialog__tabs-wrap .s-tabs > button { width: auto; padding: 0 16px; min-width: 60px; }
+
+.s-prompt-field { position: relative; padding-bottom: 16px; }
+
+/* 全高：不内部滚动，JS 按内容撑高，整体在 dialog 里滚动 */
+.s-prompt-area {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  height: auto;
+  min-height: 120px;
+  overflow: hidden;
+  resize: none;
+  font-family: 'Geist Mono', ui-monospace, 'Cascadia Mono', Consolas, 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--s-grey-900);
+  background: #fcfcfc;
+  border: .8px solid var(--s-grey-400);
+  border-radius: 6px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .05);
+  padding: 44px 12px 12px;  /* 顶部留空一行多，给文本框内的复制按钮让位，防止遮挡文字 */
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.s-prompt-area:focus { border-color: var(--s-blue-500); }
+
+/* 复制按钮：居中置于文本框内顶部；文本框顶部留空一行防止遮挡文字，
+   滚动时按钮随文本框一起在 dialog 里滚动 */
+.s-copy-anchor {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+}
+.s-copy-btn {
+  position: relative;
+  min-width: 0;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--s-font);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--s-blue-400);
+  background: none;
+  border: 0;
+  box-shadow: none;
+  cursor: pointer;
+  padding: 0 8px;
+  transition: none;
+}
+.s-copy-btn:active { background: none; opacity: 0.6; }
+
+/* copy button icon + label：图标与文字同为 Smartisan 蓝 */
+.s-copy-btn svg {
+  display: block;
+  color: var(--s-blue-400);
+  width: 16px;
+  height: 16px;
+}
+
+/* ---- toast：改为蓝色主题 ---- */
+.s-toast {
+  color: var(--s-white);
+  background: var(--s-grad-primary);
+  border-color: var(--s-blue-500);
+}
+
+/* ---- search overlay ---- */
+.s-search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  /* 全屏遮罩内容限宽居中：移动端、桌面端都不再全宽铺开 */
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--s-grey-100);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 24px rgba(0, 0, 0, .06);
+}
+
+/* 不透明遮罩铺满全屏，盖住下层页面，眼不见为净 */
+.s-search-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--s-grey-100);
+}
+
+.s-search-overlay .s-search { padding: 8px 12px; }
+
+.s-search-overlay__results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 12px 32px;
+}
+
+/* ---- PC 端：列表两列 + 固定宽度 ---- */
+@media (min-width: 768px) {
+  .s-site {
+    max-width: 720px;          /* 固定宽度，居中 */
+  }
+  .s-content .s-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+  /* 两列后去掉行间分隔线，每个 item 改为自带描边圆角的卡片 */
+  .s-content .s-list > .s-list-item {
+    box-shadow: none;
+    border: var(--s-hair) solid var(--s-border-list);
+    border-radius: var(--s-r-lg);
+  }
+  .s-content .s-list > .s-list-item[data-pressable]:active {
+    box-shadow: inset 0 0 0 var(--s-hair-xs) var(--s-blue-500);
+  }
+  /* 桌面端适当加宽提示词弹窗 */
+  .s-dialog--prompt {
+    width: min(560px, calc(100vw - 32px));
+  }
+}
+
+/* ---- 收藏区 ---- */
+.s-content .s-list-group + .s-list { margin-top: 14px; }
+.s-fav-star { color: #e8b93c; }
+
+/* ---- 底部 Sheet（删除/清空确认） ---- */
+.s-overlay--bottom {
+  align-items: flex-end;
+  padding: 0;
+}
+.s-sheet__message {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--s-grey-800);
+  text-align: center;
+  padding: 4px 0 6px;
+  overflow-wrap: break-word;
+}
+.s-sheet__confirm--danger {
+  background: #e1554d;
+  color: #fff;
+  border-radius: 8px;
+}
+/* sheet 默认贴满全宽：在桌面端限宽居中，与页面一致 */
+@media (min-width: 768px) {
+  .s-overlay--bottom .s-sheet { max-width: 560px; margin: 0 auto; }
+}
+
+/* ---- 设置页 ---- */
+.s-danger-item .s-list-item__title { color: #e1554d; }

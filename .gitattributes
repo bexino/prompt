@@ -1,0 +1,39 @@
+# 统一换行符：仓库内一律 LF，避免 Linux CI / Cloudflare Pages 上解析 md 时踩 CRLF 的坑。
+# 注意：本项目 md 文件必须保持 LF —— src/data.js 的 # Desc / # btn 解析依赖行尾。
+* text=auto eol=lf
+
+# 显式声明文本类型，保证 eol=lf 生效（否则二进制规则会跳过）
+*.md text eol=lf
+*.js text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+*.toml text eol=lf
+*.svg text eol=lf
+*.txt text eol=lf
+LICENSE text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+.node-version text eol=lf
+
+# 二进制
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.zip binary
+*.gz binary
+
+# 锁文件不要在 diff 里展开（保留 -diff 会让 PR 里看到巨大 diff，去掉便于审查）
+package-lock.json -diff linguist-generated=true
