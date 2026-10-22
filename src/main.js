@@ -33,10 +33,9 @@ function renderHome() {
 
   const favSection = favs.length ? `
     <div class="s-list-group">
-      <div class="s-list-group__header">${icon('si-star-fill', 's-icon s-icon--16 s-fav-star')}我的收藏</div>
       <div class="s-list">
         ${favs.map(f => listRow({
-          leading: icon('si-star-fill', 's-icon s-icon--20 s-fav-star'),
+          leading: `<span class="s-leading--star">${icon('si-star-fill', 's-icon s-icon--20 s-fav-star')}</span>`,
           title: f.title,
           subtitle: getCategory(f.category)?.title || f.category.replace(/^\d+\s*/, ''),
           detail: '',

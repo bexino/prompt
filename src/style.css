@@ -285,6 +285,16 @@ body.s-page {
 .s-content .s-list-group + .s-list { margin-top: 14px; }
 .s-fav-star { color: #e8b93c; }
 
+/* 收藏行前导星星：与分类行的 .s-count 徽章同宽，保证文字列对齐 */
+.s-leading--star {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ---- 底部 Sheet（删除/清空确认） ---- */
 .s-overlay--bottom {
   align-items: flex-end;
