@@ -9,7 +9,7 @@ A static site (提示词仓库 / "prompt repo") for browsing and copying prompt 
 ## Commands
 
 ```bash
-npm run dev      # dev server (also: preview via .claude/launch.json, "prompt-repo", port 5199)
+npm run dev      # dev server (also: preview via .claude/launch.json, "prompt-repo", port 5173)
 npm run build    # output in dist/, base is relative (./) so dist/ deploys anywhere
 npm run preview
 ```
@@ -25,7 +25,8 @@ No tests or linter configured.
 - **`src/main.js`** — hash routing: `#/` (category list) and `#/cat/<category>` (file list). Home list rows show the *category's own* numeric prefix as the badge (not file count).
 - **`src/ui.js`** — prompt dialog, search overlay, copy-to-clipboard + toast, marked rendering.
 - **`src/smartisan.css` / `smartisan.js` / `tailwind.preset.js`** — copied verbatim from the `smartisan-ui` skill (`C:\Users\Honor\.claude\skills\smartisan-ui\`). Do not edit smartisan.css; dark mode lives in `src/dark.css`.
-- **`src/theme.js` / `src/dark.css`** — three-state theme: auto (follows `prefers-color-scheme`) / day / dark, cycled by a home-page-only app bar button. Explicit choice is persisted as URL param `theme=day|dark`; no param = follow device. Applied via `html[data-theme]`; dark overrides token values and hardcoded light colors.
+- **`src/theme.js` / `src/dark.css`** — three-state theme: auto (follows `prefers-color-scheme`) / day / dark, set from the `#/settings` page (`renderSettings` in main.js). Explicit choice is persisted as URL param `theme=day|dark`; no param = follow device. Applied via `html[data-theme]`; dark overrides token values and hardcoded light colors. URL param `hide=theme` (comma-separated list; `hiddenSettings()` in main.js reads it via `urlParam()`) hides the theme group in settings — entry point only; a manually-specified `theme` param still applies.
+- **`src/url.js`** — URL-param reading that tolerates address-bar typos: standard `?hide=theme` plus path-segment form `/hide=theme#/` (typed without the `?`; only keys `theme`/`hide` are treated as params, other path segments untouched). `initUrl()` at startup rewrites path-form params back into the query string via replaceState.
 - **`index.html`** — inlined SVG icon sprite (`<symbol>` elements inside an outer `<svg>`); self-hosted Geist fonts via `<link href="./src/geist.css">`. Interface icons use the inline sprite.
 - **`src/geist.css` + `public/fonts/`** — self-hosted Geist / Geist Mono (woff2 variable, subsetted). No font CDN request at runtime, so the site renders identically offline. Font files come from npm `@fontsource-variable/geist` / `-geist-mono`; only the `*-wght-normal.woff2` subsets are vendored (no italics used). `scripts/verify-build.mjs` fails the build if an external font URL or Google Fonts reference reappears.
 

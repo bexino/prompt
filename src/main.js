@@ -4,6 +4,7 @@ import './dark.css'
 import { categories, getCategory, allFiles } from './data.js'
 import { openPrompt, openSearch, closeSearch, confirmSheet } from './ui.js'
 import { initTheme, setTheme, themeParam } from './theme.js'
+import { initUrl, urlParam } from './url.js'
 import { getFavs, favFiles, setFavs, clearFavs, exportCsv, importCsv } from './fav.js'
 
 const icon = (id, cls = 's-icon') =>
@@ -98,6 +99,13 @@ const THEME_OPTIONS = [
   { value: 'dark', icon: 'si-moon', label: '暗色' },
 ]
 
+// URL 参数 hide：隐藏设置页的指定分组，逗号分隔（如 hide=theme）。只藏入口，
+// theme=day|dark 参数本身不受影响；参数写法兼容见 url.js（?query 与路径段均可）。
+function hiddenSettings() {
+  const v = urlParam('hide')
+  return v ? new Set(v.split(',').map(s => s.trim()).filter(Boolean)) : new Set()
+}
+
 function renderSettings() {
   document.title = '设置 · 提示词仓库'
   const cur = themeParam()
@@ -109,6 +117,13 @@ function renderSettings() {
       <span class="s-list-item__detail">${icon(opt.value === cur ? 'si-c-radio-on' : 'si-c-radio-off')}</span>
     </div>`
 
+  const themeGroup = hiddenSettings().has('theme') ? '' : `
+      <div class="s-list-group">
+        <div class="s-list-group__header">主题切换</div>
+        <div class="s-list">${THEME_OPTIONS.map(themeRow).join('')}</div>
+        <div class="s-list-group__desc">默认跟随设备的外观设置</div>
+      </div>`
+
   app.innerHTML = `
     <header class="s-appbar s-appbar--shadow">
       <button type="button" data-back aria-label="返回">${icon('si-back', 's-icon s-icon--20')}</button>
@@ -116,11 +131,7 @@ function renderSettings() {
       <span class="s-appbar__spacer" style="width:48px;flex:none"></span>
     </header>
     <div class="s-content">
-      <div class="s-list-group">
-        <div class="s-list-group__header">主题切换</div>
-        <div class="s-list">${THEME_OPTIONS.map(themeRow).join('')}</div>
-        <div class="s-list-group__desc">默认跟随设备的外观设置</div>
-      </div>
+      ${themeGroup}
       <div class="s-list-group">
         <div class="s-list-group__header">收藏</div>
         <div class="s-list">
@@ -273,5 +284,6 @@ document.addEventListener('themechange', () => {
 })
 
 window.addEventListener('hashchange', route)
+initUrl() // 地址栏手输的 /theme=x、/hide=x 规范化回 ?query（须在 initTheme 读取参数前）
 initTheme()
 route()

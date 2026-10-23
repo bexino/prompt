@@ -2,10 +2,12 @@
 // 规则：URL 参数 theme=day|dark 显式指定；无参数 → 遵循设备 prefers-color-scheme。
 // 按钮 cyclic 切换 auto → day → dark → auto，切到 day/dark 时写回 URL 参数。
 
+import { urlParam } from './url.js'
+
 const mq = window.matchMedia('(prefers-color-scheme: dark)')
 
 export function themeParam() {
-  const t = new URLSearchParams(location.search).get('theme')
+  const t = urlParam('theme')
   return t === 'day' || t === 'dark' ? t : null   // null = 跟随设备
 }
 
