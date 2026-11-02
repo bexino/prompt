@@ -4,11 +4,11 @@
 Windows Registry Editor Version 5.00
 
 ; ============================================
-; 校验
+; Verify
 ; ============================================
 
 [HKEY_CURRENT_USER\Software\Classes\*\shell\VerifyHash]
-"MUIVerb"="校验"
+"MUIVerb"="Verify"
 "SubCommands"=""
 "Icon"="powershell.exe"
 
