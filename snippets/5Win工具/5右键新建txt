@@ -1,0 +1,26 @@
+# Desc
+
+- 类型：注册表文件 `.reg`
+
+# btn1
+
+```
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\.txt]
+@="txtfile"
+"Content Type"="text/plain"
+
+[HKEY_CLASSES_ROOT\.txt\ShellNew]
+"NullFile"=""
+
+[HKEY_CLASSES_ROOT\txtfile]
+@="Text Document"
+
+[HKEY_CLASSES_ROOT\txtfile\shell]
+
+[HKEY_CLASSES_ROOT\txtfile\shell\open]
+
+[HKEY_CLASSES_ROOT\txtfile\shell\open\command]
+@="NOTEPAD.EXE %1"
+```
