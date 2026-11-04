@@ -8,11 +8,11 @@
 # btn1 (Bash)
 
 ```
-git config --global user.name "你的名字" && git config --global user.email "你的邮箱"
+git config --global user.name "用户名" && git config --global user.email "邮箱"
 ```
 
 # btn2 (Powershell)
 
 ```
-git config --global user.name "你的名字" ; git config --global user.email "你的邮箱"
+git config --global user.name "用户名" ; git config --global user.email "邮箱"
 ```
